@@ -10,7 +10,9 @@ public class CharController : MonoBehaviour {
     bool bGrounded = false;
     
     [SerializeField] float speed = 1;
-    [SerializeField] [Range(1f, 20f)] float jumpPower;
+    [SerializeField] float jumpPower;
+    [SerializeField] float jumpCap = 3f;
+    [SerializeField] float fallMultiplier = 2f;
 
     // Use this for initialization
     void Start () {
@@ -19,9 +21,9 @@ public class CharController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         transform.position += new Vector3(input.Horizontal * speed * Time.deltaTime, 0f);
-        if(Physics2D.Raycast(transform.position, Vector2.down, 0.08f))
+        if(Physics2D.Raycast(transform.position + new Vector3(-0.04f, 0f, 0f), Vector2.down, 0.08f) || Physics2D.Raycast(transform.position + new Vector3(0.04f, 0f, 0f), Vector2.down, 0.08f))
         {
             bGrounded = true;
         }
@@ -31,9 +33,25 @@ public class CharController : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Space) && bGrounded)
         {
-            rb.velocity += new Vector2(0f, input.Jump * jumpPower);
+            Jump();
         }
-	}
+        if(Input.GetKey(KeyCode.Space))
+        {
+            rb.velocity += new Vector2(0f, fallMultiplier * Time.deltaTime);
+        }
+        else
+        {
+            rb.velocity -= new Vector2(0f, fallMultiplier * Time.deltaTime);
+        }
+    }
+
+    private void Jump()
+    {
+        while (rb.velocity.y <= jumpCap)
+        {
+            rb.velocity += new Vector2(0f, input.Jump * jumpPower * Time.deltaTime);
+        }
+    }
 
     //private void OnDrawGízmos()
     //{
