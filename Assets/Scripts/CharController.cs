@@ -8,6 +8,7 @@ public class CharController : MonoBehaviour {
     PlayerInput input;
     Rigidbody2D rb;
     bool bGrounded = false;
+    Animator anim;
     
     [SerializeField] float speed = 1;
     [SerializeField] float jumpPower;
@@ -18,6 +19,7 @@ public class CharController : MonoBehaviour {
     void Start () {
         input = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -26,10 +28,12 @@ public class CharController : MonoBehaviour {
         if(Physics2D.Raycast(transform.position + new Vector3(-0.04f, 0f, 0f), Vector2.down, 0.08f) || Physics2D.Raycast(transform.position + new Vector3(0.04f, 0f, 0f), Vector2.down, 0.08f))
         {
             bGrounded = true;
+            anim.SetBool("Grounded", true);
         }
         else
         {
             bGrounded = false;
+            anim.SetBool("Grounded", false);
         }
         if (Input.GetKeyDown(KeyCode.Space) && bGrounded)
         {
