@@ -5,4 +5,6 @@
     int Jump { get; }
 
     bool Dodge { get; }
+
+    bool Attack { get; }
 }

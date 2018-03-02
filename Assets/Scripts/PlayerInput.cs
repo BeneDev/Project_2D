@@ -39,4 +39,16 @@ public class PlayerInput : MonoBehaviour, IInput {
             return false;
         }
     }
+
+    public bool Attack
+    {
+        get
+        {
+            if(Input.GetButtonDown("Attack"))
+            {
+                return true;
+            }
+            return false;
+        }
+    }
 }

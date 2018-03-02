@@ -9,7 +9,7 @@ public class CharController : MonoBehaviour {
     Rigidbody2D rb;
     bool bGrounded = false;
     Animator anim;
-    CapsuleCollider2D collider;
+    CapsuleCollider2D coll;
     
     [SerializeField] float speed = 1;
     [SerializeField] float jumpPower;
@@ -23,7 +23,7 @@ public class CharController : MonoBehaviour {
         input = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        collider = GetComponent<CapsuleCollider2D>();
+        coll = GetComponent<CapsuleCollider2D>();
     }
 	
 	// Update is called once per frame
@@ -34,6 +34,7 @@ public class CharController : MonoBehaviour {
         CheckForJump();
         CheckForInput();
         CheckForDodge();
+        CheckForAttack();
     }
 
     #region Input
@@ -58,34 +59,50 @@ public class CharController : MonoBehaviour {
 
     #endregion
 
+    #region Attack
+
+    private void CheckForAttack()
+    {
+        if(input.Attack)
+        {
+            Attack();
+        }
+    }
+
+    private void Attack()
+    {
+        rb.velocity += new Vector2(1f * transform.localScale.x, 0);
+        anim.SetBool("Attacking", true);
+    }
+
+    private void EndAttack()
+    {
+        anim.SetBool("Attacking", false);
+    }
+
+    #endregion
+
     #region Dodge
 
     private void CheckForDodge()
     {
         if(input.Dodge && anim.GetBool("Dodging") == false)
         {
-            if (transform.localScale == new Vector3(1f, 1f, 1f))
-            {
-                Dodge(1);
-            }
-            else if(transform.localScale == new Vector3(-1f, 1f, 1f))
-            {
-                Dodge(-1);
-            }
+            Dodge();
         }
     }
 
-    private void Dodge(int direction)
+    private void Dodge()
     {
         anim.SetBool("Dodging", true);
-        collider.size = new Vector2(collider.size.x, collider.size.y / 2);
-        rb.velocity += new Vector2(dodgePower * speed * direction * Time.deltaTime, dodgeUpPower * Time.deltaTime);
+        coll.size = new Vector2(coll.size.x, coll.size.y / 2);
+        rb.velocity += new Vector2(dodgePower * transform.localScale.x * speed * Time.deltaTime, dodgeUpPower * Time.deltaTime);
     }
 
     private void EndDodge()
     {
         anim.SetBool("Dodging", false);
-        collider.size = new Vector2(collider.size.x, collider.size.y * 2);
+        coll.size = new Vector2(coll.size.x, coll.size.y * 2);
     }
 
     #endregion
