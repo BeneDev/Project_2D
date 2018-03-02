@@ -52,11 +52,11 @@ public class CharController : MonoBehaviour {
 
     private void CheckForJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && bGrounded)
+        if (Input.GetButtonDown("Jump") && bGrounded)
         {
             Jump();
         }
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetButton("Jump"))
         {
             rb.velocity += new Vector2(0f, fallMultiplier * Time.deltaTime);
         }
