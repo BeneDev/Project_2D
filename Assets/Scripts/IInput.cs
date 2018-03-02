@@ -2,5 +2,7 @@
 {
     float Horizontal { get; }
 
-    float Jump { get; }
+    int Jump { get; }
+
+    bool Dodge { get; }
 }

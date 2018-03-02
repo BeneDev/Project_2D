@@ -12,11 +12,31 @@ public class PlayerInput : MonoBehaviour, IInput {
         }
     }
 
-    public float Jump
+    public int Jump
     {
         get
         {
-            return 1f;
+            if (Input.GetButtonDown("Jump"))
+            {
+                return 2;
+            }
+            else if(Input.GetButton("Jump"))
+            {
+                return 1;
+            }
+            return 0;
+        }
+    }
+
+    public bool Dodge
+    {
+        get
+        {
+            if(Input.GetButtonDown("Dodge"))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
