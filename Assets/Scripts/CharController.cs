@@ -23,9 +23,52 @@ public class CharController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	void FixedUpdate ()
+    {
         transform.position += new Vector3(input.Horizontal * speed * Time.deltaTime, 0f);
-        if(Physics2D.Raycast(transform.position + new Vector3(-0.04f, 0f, 0f), Vector2.down, 0.08f) || Physics2D.Raycast(transform.position + new Vector3(0.04f, 0f, 0f), Vector2.down, 0.08f))
+        //rb.velocity += new Vector2(input.Horizontal * speed * Time.deltaTime, 0f);
+        CheckForGrounded();
+        CheckForJump();
+        CheckForInput();
+    }
+
+    private void CheckForInput()
+    {
+        if(input.Horizontal < 0)
+        {
+            transform.localScale = new Vector3(-1f, 1f, 1f);
+            anim.SetBool("Idling", false);
+        }
+        else if(input.Horizontal > 0)
+        {
+            transform.localScale = new Vector3(1f, 1f, 1f);
+            anim.SetBool("Idling", false);
+        }
+        else
+        {
+            anim.SetBool("Idling", true);
+        }
+    }
+
+    private void CheckForJump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && bGrounded)
+        {
+            Jump();
+        }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            rb.velocity += new Vector2(0f, fallMultiplier * Time.deltaTime);
+        }
+        else
+        {
+            rb.velocity -= new Vector2(0f, fallMultiplier * Time.deltaTime);
+        }
+    }
+
+    private void CheckForGrounded()
+    {
+        if (Physics2D.Raycast(transform.position + new Vector3(-0.04f, 0f, 0f), Vector2.down, 0.08f) || Physics2D.Raycast(transform.position + new Vector3(0.04f, 0f, 0f), Vector2.down, 0.08f))
         {
             bGrounded = true;
             anim.SetBool("Grounded", true);
@@ -34,18 +77,6 @@ public class CharController : MonoBehaviour {
         {
             bGrounded = false;
             anim.SetBool("Grounded", false);
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && bGrounded)
-        {
-            Jump();
-        }
-        if(Input.GetKey(KeyCode.Space))
-        {
-            rb.velocity += new Vector2(0f, fallMultiplier * Time.deltaTime);
-        }
-        else
-        {
-            rb.velocity -= new Vector2(0f, fallMultiplier * Time.deltaTime);
         }
     }
 
