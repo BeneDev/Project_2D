@@ -1379,10 +1379,8 @@ MonoBehaviour:
   jumpPower: 2.5
   jumpCap: 2.2
   fallMultiplier: 2.5
-  dodgePower: 100
+  dodgePower: 300
   dodgeUpPower: 75
-  normalMaterial: {fileID: 6200000, guid: 155f1918abbb8b1468b4c87e4ace3667, type: 2}
-  dodgeMaterial: {fileID: 6200000, guid: fbe87b9c443687541abbd5ba1abadf30, type: 2}
 --- !u!4 &428005950
 Transform:
   m_ObjectHideFlags: 0

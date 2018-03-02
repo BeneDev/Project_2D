@@ -17,9 +17,6 @@ public class CharController : MonoBehaviour {
     [SerializeField] float dodgePower = 100f;
     [SerializeField] float dodgeUpPower = 20f;
 
-    [SerializeField] PhysicsMaterial2D normalMaterial;
-    [SerializeField] PhysicsMaterial2D dodgeMaterial;
-
     // Use this for initialization
     void Start () {
         input = GetComponent<PlayerInput>();
@@ -64,7 +61,7 @@ public class CharController : MonoBehaviour {
 
     private void CheckForDodge()
     {
-        if(Input.GetButtonDown("Dodge"))
+        if(Input.GetButtonDown("Dodge") && anim.GetBool("Dodging") == false)
         {
             if (transform.localScale == new Vector3(1f, 1f, 1f))
             {
@@ -80,14 +77,12 @@ public class CharController : MonoBehaviour {
     private void Dodge(int direction)
     {
         anim.SetBool("Dodging", true);
-        rb.sharedMaterial = dodgeMaterial;
         rb.velocity += new Vector2(dodgePower * speed * direction * Time.deltaTime, dodgeUpPower * Time.deltaTime);
     }
 
     private void EndDodge()
     {
         anim.SetBool("Dodging", false);
-        rb.sharedMaterial = normalMaterial;
     }
 
     #endregion
