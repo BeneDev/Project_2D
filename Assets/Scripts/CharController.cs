@@ -11,7 +11,20 @@ public class CharController : MonoBehaviour {
     bool bOnWall = false;
     Animator anim;
     CapsuleCollider2D coll;
-    
+
+    public struct PlayerRaycasts
+    {
+        public RaycastHit2D bottomLeft;
+        public RaycastHit2D bottomRight;
+        public RaycastHit2D upperLeft;
+        public RaycastHit2D lowerLeft;
+        public RaycastHit2D upperRight;
+        public RaycastHit2D lowerRight;
+        public RaycastHit2D top;
+    }
+
+    private PlayerRaycasts raycasts;
+
     [SerializeField] float speed = 1;
     [SerializeField] float jumpPower;
     [SerializeField] float jumpCap = 3f;
@@ -31,13 +44,39 @@ public class CharController : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
     {
+        // Update all the different raycast hit values
+        raycasts.bottomLeft = Physics2D.Raycast(transform.position + Vector3.right * 0.01f, Vector2.down, 0.08f);
+        raycasts.bottomRight = Physics2D.Raycast(transform.position + Vector3.right * -0.02f, Vector2.down, 0.08f);
+
+        raycasts.upperLeft = Physics2D.Raycast(transform.position + Vector3.up * 0.03f, Vector2.left, 0.05f);
+        raycasts.lowerLeft = Physics2D.Raycast(transform.position + Vector3.up * -0.04f, Vector2.left, 0.05f);
+
+        raycasts.upperRight = Physics2D.Raycast(transform.position + Vector3.right * 0.03f, Vector2.right, 0.04f);
+        raycasts.lowerRight = Physics2D.Raycast(transform.position + Vector3.right * -0.04f, Vector2.right, 0.04f);
+
+        raycasts.top = Physics2D.Raycast(transform.position + Vector3.right * -0.005f, Vector2.up, 0.06f);
+
+
         transform.position += new Vector3(input.Horizontal * speed * Time.deltaTime, 0f);
-        //rb.velocity += new Vector2(input.Horizontal * speed * Time.deltaTime, 0f);
+
+        CheckGrounded();
+        CheckOnWall();
         CheckForJump();
         CheckForInput();
         CheckForDodge();
         CheckForAttack();
         CheckForWallSlide();
+    }
+
+    private void OnGUI()
+    {
+        GUILayout.Label(raycasts.bottomLeft.collider + " right");
+        GUILayout.Label(raycasts.bottomRight.collider+ " left");
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(transform.position + Vector3.right * -0.005f, Vector2.up * 0.06f);
     }
 
     #region Input
@@ -162,43 +201,29 @@ public class CharController : MonoBehaviour {
 
     #region Grounded
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void CheckGrounded()
     {
-        if (bGrounded == false)
+        if (raycasts.bottomLeft.collider.tag == "Ground" || raycasts.bottomRight.collider.tag == "Ground")
         {
-            if (collision.tag == "Ground")
-            {
-                bGrounded = true;
-                anim.SetBool("Grounded", true);
-            }
-            else if(collision.tag == "Wall" && HoldingInDirection())
-            {
-                bOnWall = true;
-            }
-            else
-            {
-                bOnWall = false;
-            }
+            bGrounded = true;
+            anim.SetBool("Grounded", true);
+        }
+        else
+        {
+            bGrounded = false;
+            anim.SetBool("Grounded", false);
         }
     }
 
-    private void CheckGrounded()
+    private void CheckOnWall()
     {
-        if(bGrounded == false)
+        if (HoldingInDirection())
         {
-            if(Physics2D.Raycast(transform.position, Vector2.down, 0.08f, 2))
-            {
-                bGrounded = true;
-                anim.SetBool("Grounded", true);
-            }
-            else if(HoldingInDirection())
-            {
-                bOnWall = true;
-            }
-            else
-            {
-                bOnWall = false;
-            }
+            bOnWall = true;
+        }
+        else
+        {
+            bOnWall = false;
         }
     }
 
@@ -213,13 +238,6 @@ public class CharController : MonoBehaviour {
             return true;
         }
         return false;
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        bGrounded = false;
-        bOnWall = false;
-        anim.SetBool("Grounded", false);
     }
 
     #endregion
