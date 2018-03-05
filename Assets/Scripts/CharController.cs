@@ -6,7 +6,6 @@ using UnityEngine;
 public class CharController : MonoBehaviour {
 
     PlayerInput input;
-    Rigidbody2D rb;
     bool bGrounded = false;
     bool bOnWall = false;
     Animator anim;
@@ -39,7 +38,6 @@ public class CharController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         input = GetComponent<PlayerInput>();
-        rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
 	
@@ -48,14 +46,14 @@ public class CharController : MonoBehaviour {
     {
         #region Raycasts Initialization
         // Update all the different raycast hit values
-        raycasts.bottomLeft = Physics2D.Raycast(transform.position + Vector3.right * 0.01f + Vector3.down * 0.04f, Vector2.down, 0.01f);
-        raycasts.bottomRight = Physics2D.Raycast(transform.position + Vector3.right * -0.02f + Vector3.down * 0.04f, Vector2.down, 0.01f);
+        raycasts.bottomRight = Physics2D.Raycast(transform.position + Vector3.right * 0.01f + Vector3.down * 0.04f, Vector2.down, 0.01f);
+        raycasts.bottomLeft = Physics2D.Raycast(transform.position + Vector3.right * -0.02f + Vector3.down * 0.04f, Vector2.down, 0.01f);
 
-        raycasts.upperLeft = Physics2D.Raycast(transform.position + Vector3.up * 0.03f, Vector2.left, 0.03f);
-        raycasts.lowerLeft = Physics2D.Raycast(transform.position + Vector3.up * -0.04f, Vector2.left, 0.03f);
+        raycasts.upperRight = Physics2D.Raycast(transform.position + Vector3.up * 0.03f + Vector3.right * 0.02f, Vector2.left, 0.01f);
+        raycasts.lowerRight = Physics2D.Raycast(transform.position + Vector3.up * -0.04f + Vector3.right * 0.02f, Vector2.left, 0.01f);
 
-        raycasts.upperRight = Physics2D.Raycast(transform.position + Vector3.up * 0.03f, Vector2.right, 0.02f);
-        raycasts.lowerRight = Physics2D.Raycast(transform.position + Vector3.up * -0.04f, Vector2.right, 0.02f);
+        raycasts.upperLeft = Physics2D.Raycast(transform.position + Vector3.up * 0.03f + Vector3.right * -0.03f, Vector2.right, 0.01f);
+        raycasts.lowerLeft = Physics2D.Raycast(transform.position + Vector3.up * -0.04f + Vector3.right * -0.03f, Vector2.right, 0.01f);
 
         raycasts.top = Physics2D.Raycast(transform.position + Vector3.right * -0.001f, Vector2.up, 0.02f);
         #endregion
@@ -92,15 +90,11 @@ public class CharController : MonoBehaviour {
     private void CheckForValidVelocity()
     {
         // Checking for colliders to the sides
-        if (raycasts.upperLeft.collider || raycasts.lowerLeft.collider && velocity.x < 0)
+        if (WallInWay())
         {
             velocity.x = 0f;
         }
-        else if (raycasts.upperRight.collider || raycasts.lowerRight.collider && velocity.x > 0)
-        {
-            velocity.x = 0f;
-        }
-
+        
         // Make sure, velocity in y axis does not get over limit
         if (velocity.y < veloYLimit)
         {
@@ -133,11 +127,11 @@ public class CharController : MonoBehaviour {
     //    GUILayout.Label(raycasts.bottomRight.collider+ " left");
     //}
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.DrawRay(transform.position + Vector3.right * -0.02f + Vector3.down * 0.04f, Vector2.down * 0.05f);
-    //    Gizmos.DrawRay(transform.position + Vector3.right * 0.01f + Vector3.down * 0.04f, Vector2.down * 0.05f);
-    //}
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(transform.position + Vector3.up * 0.03f + Vector3.right * -0.03f, Vector2.right * 0.01f);
+        Gizmos.DrawRay(transform.position + Vector3.up * -0.04f + Vector3.right * -0.03f, Vector2.right * 0.01f);
+    }
 
     #region Input
 
@@ -199,6 +193,26 @@ public class CharController : MonoBehaviour {
             appliedDodgeUpPower -= appliedDodgeUpPower / 10;
             Dodge();
         }
+    }
+
+    // Checks if there are walls in the direction the player is facing
+    private bool WallInWay()
+    {
+        if (transform.localScale.x < 0)
+        {
+            if (raycasts.upperLeft.collider || raycasts.lowerLeft.collider)
+            {
+                return true;
+            }
+        }
+        else if (transform.localScale.x > 0)
+        {
+            if (raycasts.upperRight.collider || raycasts.lowerRight.collider)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void Dodge()
