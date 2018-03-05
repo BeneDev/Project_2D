@@ -74,10 +74,10 @@ public class CharController : MonoBehaviour {
         GUILayout.Label(raycasts.bottomRight.collider+ " left");
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawRay(transform.position + Vector3.right * -0.005f, Vector2.up * 0.06f);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.DrawRay(transform.position + Vector3.right * -0.005f, Vector2.up * 0.06f);
+    //}
 
     #region Input
 
@@ -203,10 +203,21 @@ public class CharController : MonoBehaviour {
 
     private void CheckGrounded()
     {
-        if (raycasts.bottomLeft.collider.tag == "Ground" || raycasts.bottomRight.collider.tag == "Ground")
+        if (raycasts.bottomLeft.collider)
         {
-            bGrounded = true;
-            anim.SetBool("Grounded", true);
+            if (raycasts.bottomLeft.collider.tag == "Ground")
+            {
+                bGrounded = true;
+                anim.SetBool("Grounded", true);
+            }
+        }
+        else if (raycasts.bottomRight.collider)
+        {
+            if (raycasts.bottomRight.collider.tag == "Ground")
+            {
+                bGrounded = true;
+                anim.SetBool("Grounded", true);
+            }
         }
         else
         {
@@ -217,7 +228,7 @@ public class CharController : MonoBehaviour {
 
     private void CheckOnWall()
     {
-        if (HoldingInDirection())
+        if (HoldingInDirection() && raycasts.lowerLeft.collider || raycasts.upperLeft.collider || raycasts.lowerRight.collider || raycasts.upperRight.collider)
         {
             bOnWall = true;
         }
