@@ -47,8 +47,8 @@ public class CharController : MonoBehaviour {
     {
         #region Raycasts Initialization
         // Update all the different raycast hit values
-        raycasts.bottomLeft = Physics2D.Raycast(transform.position + Vector3.right * 0.01f, Vector2.down, 0.05f);
-        raycasts.bottomRight = Physics2D.Raycast(transform.position + Vector3.right * -0.02f, Vector2.down, 0.05f);
+        raycasts.bottomLeft = Physics2D.Raycast(transform.position + Vector3.right * 0.01f + Vector3.down * 0.04f, Vector2.down, 0.01f);
+        raycasts.bottomRight = Physics2D.Raycast(transform.position + Vector3.right * -0.02f + Vector3.down * 0.04f, Vector2.down, 0.01f);
 
         raycasts.upperLeft = Physics2D.Raycast(transform.position + Vector3.up * 0.03f, Vector2.left, 0.03f);
         raycasts.lowerLeft = Physics2D.Raycast(transform.position + Vector3.up * -0.04f, Vector2.left, 0.03f);
@@ -91,11 +91,11 @@ public class CharController : MonoBehaviour {
     private void CheckForValidVelocity()
     {
         // Checking for colliders to the sides
-        if (raycasts.upperLeft.collider && raycasts.lowerLeft.collider && velocity.x < 0)
+        if (raycasts.upperLeft.collider || raycasts.lowerLeft.collider && velocity.x < 0)
         {
             velocity.x = 0f;
         }
-        else if (raycasts.upperRight.collider && raycasts.lowerRight.collider && velocity.x > 0)
+        else if (raycasts.upperRight.collider || raycasts.lowerRight.collider && velocity.x > 0)
         {
             velocity.x = 0f;
         }
@@ -134,7 +134,8 @@ public class CharController : MonoBehaviour {
 
     //private void OnDrawGizmos()
     //{
-    //    Gizmos.DrawRay(transform.position + Vector3.right * -0.005f, Vector2.up * 0.06f);
+    //    Gizmos.DrawRay(transform.position + Vector3.right * -0.02f + Vector3.down * 0.04f, Vector2.down * 0.05f);
+    //    Gizmos.DrawRay(transform.position + Vector3.right * 0.01f + Vector3.down * 0.04f, Vector2.down * 0.05f);
     //}
 
     #region Input
