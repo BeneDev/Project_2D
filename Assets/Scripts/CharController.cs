@@ -171,7 +171,7 @@ public class CharController : MonoBehaviour {
                 bGrounded = true;
                 anim.SetBool("Grounded", true);
             }
-            else if(collision.tag == "Wall" && input.Horizontal < 0)
+            else if(collision.tag == "Wall" && holdingInDirection())
             {
                 bOnWall = true;
             }
@@ -180,6 +180,19 @@ public class CharController : MonoBehaviour {
                 bOnWall = false;
             }
         }
+    }
+
+    private bool holdingInDirection()
+    {
+        if (input.Horizontal < 0 && transform.localScale.x == -1)
+        {
+            return true;
+        }
+        else if (input.Horizontal > 0 && transform.localScale.x == 1)
+        {
+            return true;
+        }
+        return false;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
