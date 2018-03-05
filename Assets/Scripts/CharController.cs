@@ -31,6 +31,7 @@ public class CharController : MonoBehaviour {
     [SerializeField] float fallMultiplier = 2f;
     [SerializeField] float dodgePower = 100f;
     [SerializeField] float dodgeUpPower = 20f;
+    [SerializeField] float attackVelocity = 10f;
     [SerializeField] float wallSlideSpeed = 3f;
     [SerializeField] float gravity = 2f;
     [SerializeField] float veloYLimit = 10f;
@@ -63,37 +64,16 @@ public class CharController : MonoBehaviour {
         // Setting the x velocity
         velocity = new Vector3(input.Horizontal * speed * Time.deltaTime, velocity.y);
 
-        // Checking for colliders to the sides
-        if (raycasts.upperLeft.collider && raycasts.lowerLeft.collider && velocity.x < 0)
-        {
-            velocity.x = 0f;
-        } 
-        else if(raycasts.upperRight.collider && raycasts.lowerRight.collider && velocity.x > 0)
-        {
-            velocity.x = 0f;
-        }
-
-        // Make sure, velocity in y axis does not get over limit
-        if(velocity.y < veloYLimit)
-        {
-            velocity.y = veloYLimit;
-        }
-
-        // Checks if something is above the player and let him bounce down again relative to the force he went up with
-        if(raycasts.top.collider && velocity.y > 0)
-        {
-            velocity.y = -velocity.y/2;
-        }
-
-        transform.position += velocity;
-
-        if(transform.position.y < -10f)
-        {
-            Reset();
-        }
-
         CheckGrounded();
         CheckOnWall();
+
+        CheckForInput();
+        CheckForJump();
+        CheckForDodge();
+        CheckForAttack();
+        CheckForWallSlide();
+
+        CheckForValidVelocity();
 
         // Apply gravity
         if (!bGrounded)
@@ -101,24 +81,53 @@ public class CharController : MonoBehaviour {
             velocity += new Vector3(0, -gravity * Time.deltaTime);
         }
 
-        CheckForJump();
-        CheckForInput();
-        CheckForDodge();
-        CheckForAttack();
-        CheckForWallSlide();
+        // Apply the velocity to the transform after checking its validity
+        transform.position += velocity;
+
+        // Debug feature to test quickly
+        if (transform.position.y < -10f)
+        {
+            Reset();
+        }
     }
 
+    private void CheckForValidVelocity()
+    {
+        // Checking for colliders to the sides
+        if (raycasts.upperLeft.collider && raycasts.lowerLeft.collider && velocity.x < 0)
+        {
+            velocity.x = 0f;
+        }
+        else if (raycasts.upperRight.collider && raycasts.lowerRight.collider && velocity.x > 0)
+        {
+            velocity.x = 0f;
+        }
+
+        // Make sure, velocity in y axis does not get over limit
+        if (velocity.y < veloYLimit)
+        {
+            velocity.y = veloYLimit;
+        }
+
+        // Checks if something is above the player and let him bounce down again relative to the force he went up with
+        if (raycasts.top.collider && velocity.y > 0)
+        {
+            velocity.y = -velocity.y / 2;
+        }
+    }
+
+    // Resets the players velocity and position to test quickly
     private void Reset()
     {
         transform.position = Vector3.zero;
         velocity = Vector3.zero;
     }
 
-    private void OnGUI()
-    {
-        GUILayout.Label(raycasts.bottomLeft.collider + " right");
-        GUILayout.Label(raycasts.bottomRight.collider+ " left");
-    }
+    //private void OnGUI()
+    //{
+    //    GUILayout.Label(raycasts.bottomLeft.collider + " right");
+    //    GUILayout.Label(raycasts.bottomRight.collider+ " left");
+    //}
 
     //private void OnDrawGizmos()
     //{
@@ -159,7 +168,7 @@ public class CharController : MonoBehaviour {
 
     private void Attack()
     {
-        velocity += new Vector3(1f * transform.localScale.x * Time.deltaTime, 0);
+        velocity += new Vector3(attackVelocity * transform.localScale.x * Time.deltaTime, 0);
         anim.SetBool("Attacking", true);
     }
 
@@ -184,7 +193,7 @@ public class CharController : MonoBehaviour {
     {
         anim.SetBool("Dodging", true);
         coll.size = new Vector2(coll.size.x, coll.size.y / 2);
-        rb.velocity += new Vector2(dodgePower * transform.localScale.x * speed * Time.deltaTime, dodgeUpPower * Time.deltaTime);
+        velocity += new Vector3(dodgePower * transform.localScale.x * speed * Time.deltaTime, dodgeUpPower * Time.deltaTime);
     }
 
     private void EndDodge()
@@ -217,6 +226,7 @@ public class CharController : MonoBehaviour {
     {
         if(bGrounded)
         {
+            print("go up");
             velocity += new Vector3(0f, jumpPower * Time.deltaTime);
         }
         else if(bOnWall)
