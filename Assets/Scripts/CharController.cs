@@ -8,6 +8,7 @@ public class CharController : MonoBehaviour {
     PlayerInput input;
     Rigidbody2D rb;
     bool bGrounded = false;
+    bool bOnWall = false;
     Animator anim;
     CapsuleCollider2D coll;
     
@@ -17,6 +18,7 @@ public class CharController : MonoBehaviour {
     [SerializeField] float fallMultiplier = 2f;
     [SerializeField] float dodgePower = 100f;
     [SerializeField] float dodgeUpPower = 20f;
+    [SerializeField] float wallSlideSpeed = 3f;
 
     // Use this for initialization
     void Start () {
@@ -35,6 +37,7 @@ public class CharController : MonoBehaviour {
         CheckForInput();
         CheckForDodge();
         CheckForAttack();
+        CheckForWallSlide();
     }
 
     #region Input
@@ -111,7 +114,7 @@ public class CharController : MonoBehaviour {
 
     private void CheckForJump()
     {
-        if (input.Jump == 2 && bGrounded)
+        if (input.Jump == 2 && bGrounded || input.Jump == 2 && bOnWall)
         {
             Jump();
         }
@@ -127,9 +130,31 @@ public class CharController : MonoBehaviour {
 
     private void Jump()
     {
-        while (rb.velocity.y <= jumpCap)
+        if(bGrounded)
         {
-            rb.velocity += new Vector2(0f, jumpPower * Time.deltaTime);
+            while (rb.velocity.y <= jumpCap)
+            {
+                rb.velocity += new Vector2(0f, jumpPower * Time.deltaTime);
+            }
+        }
+        else if(bOnWall)
+        {
+            while (rb.velocity.y <= jumpCap)
+            {
+                rb.velocity += new Vector2(jumpPower/2 * -transform.localScale.x *Time.deltaTime, jumpPower * Time.deltaTime);
+            }
+        }
+    }
+
+    #endregion
+
+    #region OnWall
+
+    private void CheckForWallSlide()
+    {
+        if(bOnWall && rb.velocity.y < 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed * Time.deltaTime);
         }
     }
 
@@ -141,14 +166,26 @@ public class CharController : MonoBehaviour {
     {
         if (bGrounded == false)
         {
-            bGrounded = true;
-            anim.SetBool("Grounded", true);
+            if (collision.tag == "Ground")
+            {
+                bGrounded = true;
+                anim.SetBool("Grounded", true);
+            }
+            else if(collision.tag == "Wall" && input.Horizontal < 0)
+            {
+                bOnWall = true;
+            }
+            else
+            {
+                bOnWall = false;
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         bGrounded = false;
+        bOnWall = false;
         anim.SetBool("Grounded", false);
     }
 

@@ -416,6 +416,10 @@ Prefab:
       propertyPath: m_Name
       value: GroundTile (70)
       objectReference: {fileID: 0}
+    - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
   m_IsPrefabParent: 0
@@ -547,6 +551,10 @@ Prefab:
     - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
       propertyPath: m_Name
       value: GroundTile (62)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
+      propertyPath: m_TagString
+      value: Wall
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
@@ -991,6 +999,10 @@ Prefab:
       propertyPath: m_Name
       value: GroundTile (51)
       objectReference: {fileID: 0}
+    - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
   m_IsPrefabParent: 0
@@ -1294,6 +1306,7 @@ MonoBehaviour:
   fallMultiplier: 2.5
   dodgePower: 300
   dodgeUpPower: 75
+  wallSlideSpeed: 0
 --- !u!4 &428005950
 Transform:
   m_ObjectHideFlags: 0
@@ -1608,6 +1621,10 @@ Prefab:
     - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
       propertyPath: m_Name
       value: GroundTile (49)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
+      propertyPath: m_TagString
+      value: Wall
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
@@ -2209,6 +2226,10 @@ Prefab:
       propertyPath: m_Name
       value: GroundTile (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
   m_IsPrefabParent: 0
@@ -2229,7 +2250,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.7997089, y: 0}
+  m_Offset: {x: 0.7960147, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -2240,7 +2261,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.6794177, y: 0.08}
+  m_Size: {x: 1.6720294, y: 0.08}
   m_EdgeRadius: 0
 --- !u!4 &876700281 stripped
 Transform:
@@ -3445,7 +3466,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.83875704, y: 0}
+  m_Offset: {x: 0.8417124, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -3456,7 +3477,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.757514, y: 0.08}
+  m_Size: {x: 1.7516032, y: 0.08}
   m_EdgeRadius: 0
 --- !u!4 &1590187949 stripped
 Transform:
@@ -3791,6 +3812,10 @@ Prefab:
     - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
       propertyPath: m_Name
       value: GroundTile (50)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
+      propertyPath: m_TagString
+      value: Wall
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
@@ -4371,6 +4396,10 @@ Prefab:
       propertyPath: m_Size.x
       value: 1.1904246
       objectReference: {fileID: 0}
+    - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
   m_IsPrefabParent: 0
@@ -4543,6 +4572,10 @@ Prefab:
     - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
       propertyPath: m_Name
       value: GroundTile (34)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916064478160240, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
