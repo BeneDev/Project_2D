@@ -109,6 +109,11 @@ public class CharController : MonoBehaviour {
             velocity.y = veloYLimit;
         }
 
+        if(bOnWall && !bGrounded && HoldingInDirection())
+        {
+            velocity.y = -wallSlideSpeed;
+        }
+
         // Checks if something is above the player and let him bounce down again relative to the force he went up with
         if (raycasts.top.collider && velocity.y > 0)
         {
@@ -230,7 +235,7 @@ public class CharController : MonoBehaviour {
         }
         else if(bOnWall)
         {
-            velocity += new Vector3(jumpPower / 2 * -transform.localScale.x * Time.deltaTime, jumpPower * Time.deltaTime);
+            velocity += new Vector3(jumpPower / 10 * -transform.localScale.x * Time.deltaTime, jumpPower / 15 * Time.deltaTime);
         }
     }
 
@@ -291,11 +296,11 @@ public class CharController : MonoBehaviour {
 
     private bool HoldingInDirection()
     {
-        if (input.Horizontal < 0 && transform.localScale.x == -1)
+        if (input.Horizontal < 0 && transform.localScale.x < 0)
         {
             return true;
         }
-        else if (input.Horizontal > 0 && transform.localScale.x == 1)
+        else if (input.Horizontal > 0 && transform.localScale.x > 0)
         {
             return true;
         }

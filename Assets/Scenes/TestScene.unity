@@ -1341,11 +1341,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4677463194095806, guid: a87aaaef7ad3d574a8998b02a2e585fd, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.013548968
       objectReference: {fileID: 0}
     - target: {fileID: 4677463194095806, guid: a87aaaef7ad3d574a8998b02a2e585fd, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.99990827
       objectReference: {fileID: 0}
     - target: {fileID: 4677463194095806, guid: a87aaaef7ad3d574a8998b02a2e585fd, type: 2}
       propertyPath: m_RootOrder
@@ -1354,6 +1354,10 @@ Prefab:
     - target: {fileID: 1916064478160240, guid: a87aaaef7ad3d574a8998b02a2e585fd, type: 2}
       propertyPath: m_Name
       value: WallTile (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4677463194095806, guid: a87aaaef7ad3d574a8998b02a2e585fd, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 1.5530001
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a87aaaef7ad3d574a8998b02a2e585fd, type: 2}
@@ -3629,18 +3633,8 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114838042381127328, guid: a5d462e87b2abb043b0d95d760f5c25d,
         type: 2}
-      propertyPath: dodgePower
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 114838042381127328, guid: a5d462e87b2abb043b0d95d760f5c25d,
-        type: 2}
-      propertyPath: dodgeUpPower
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114838042381127328, guid: a5d462e87b2abb043b0d95d760f5c25d,
-        type: 2}
-      propertyPath: veloYLimit
-      value: -0.2
+      propertyPath: wallSlideSpeed
+      value: 0.0001
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a5d462e87b2abb043b0d95d760f5c25d, type: 2}
