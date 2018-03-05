@@ -229,23 +229,7 @@ public class CharController : MonoBehaviour {
         {
             velocity += new Vector3(0f, jumpPower * Time.deltaTime);
         }
-        else if(bOnWall)
-        {
-            velocity += new Vector3(jumpPower / 10 * -transform.localScale.x * Time.deltaTime, jumpPower / 15 * Time.deltaTime);
-        }
     }
-
-    #endregion
-
-    #region OnWall
-
-    //private void CheckForWallSlide()
-    //{
-    //    if(bOnWall && velocity.y < 0)
-    //    {
-    //        rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed * Time.deltaTime);
-    //    }
-    //}
 
     #endregion
 
