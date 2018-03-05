@@ -61,6 +61,13 @@ public class CharController : MonoBehaviour {
 
         CheckGrounded();
         CheckOnWall();
+
+        // Apply gravity
+        if (!bGrounded)
+        {
+            transform.position += new Vector3(0, -9.81f / 4 * Time.deltaTime);
+        }
+
         CheckForJump();
         CheckForInput();
         CheckForDodge();
