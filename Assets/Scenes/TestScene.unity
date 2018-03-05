@@ -3627,6 +3627,21 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114838042381127328, guid: a5d462e87b2abb043b0d95d760f5c25d,
+        type: 2}
+      propertyPath: dodgePower
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 114838042381127328, guid: a5d462e87b2abb043b0d95d760f5c25d,
+        type: 2}
+      propertyPath: dodgeUpPower
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114838042381127328, guid: a5d462e87b2abb043b0d95d760f5c25d,
+        type: 2}
+      propertyPath: veloYLimit
+      value: -0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a5d462e87b2abb043b0d95d760f5c25d, type: 2}
   m_IsPrefabParent: 0

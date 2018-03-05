@@ -27,7 +27,7 @@ public class CharController : MonoBehaviour {
     private PlayerRaycasts raycasts;
 
     [SerializeField] float speed = 1;
-    [SerializeField] float jumpPower;
+    [SerializeField] float jumpPower = 10;
     [SerializeField] float fallMultiplier = 2f;
     [SerializeField] float dodgePower = 100f;
     [SerializeField] float dodgeUpPower = 20f;
@@ -58,7 +58,7 @@ public class CharController : MonoBehaviour {
         raycasts.upperRight = Physics2D.Raycast(transform.position + Vector3.up * 0.03f, Vector2.right, 0.02f);
         raycasts.lowerRight = Physics2D.Raycast(transform.position + Vector3.up * -0.04f, Vector2.right, 0.02f);
 
-        raycasts.top = Physics2D.Raycast(transform.position + Vector3.right * -0.005f, Vector2.up, 0.06f);
+        raycasts.top = Physics2D.Raycast(transform.position + Vector3.right * -0.001f, Vector2.up, 0.02f);
         #endregion
 
         // Setting the x velocity
@@ -226,7 +226,6 @@ public class CharController : MonoBehaviour {
     {
         if(bGrounded)
         {
-            print("go up");
             velocity += new Vector3(0f, jumpPower * Time.deltaTime);
         }
         else if(bOnWall)

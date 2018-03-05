@@ -120,13 +120,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  jumpPower: 10
-  fallMultiplier: 0.05
+  jumpPower: 4.5
+  fallMultiplier: 0.0045
   dodgePower: 300
-  dodgeUpPower: 75
+  dodgeUpPower: 3
+  attackVelocity: 10
   wallSlideSpeed: 0.5
-  gravity: 0.1
-  veloYLimit: -0.3
+  gravity: 0.022
+  veloYLimit: -0.004
 --- !u!212 &212588372083321244
 SpriteRenderer:
   m_ObjectHideFlags: 1
