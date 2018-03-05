@@ -11,6 +11,7 @@ public class CharController : MonoBehaviour {
     bool bOnWall = false;
     Animator anim;
     CapsuleCollider2D coll;
+    private Vector3 velocity;
 
     public struct PlayerRaycasts
     {
@@ -27,12 +28,12 @@ public class CharController : MonoBehaviour {
 
     [SerializeField] float speed = 1;
     [SerializeField] float jumpPower;
-    [SerializeField] float jumpCap = 3f;
     [SerializeField] float fallMultiplier = 2f;
     [SerializeField] float dodgePower = 100f;
     [SerializeField] float dodgeUpPower = 20f;
     [SerializeField] float wallSlideSpeed = 3f;
     [SerializeField] float gravity = 2f;
+    [SerializeField] float veloYLimit = 10f;
 
     // Use this for initialization
     void Start () {
@@ -45,9 +46,10 @@ public class CharController : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
     {
+        #region Raycasts Initialization
         // Update all the different raycast hit values
-        raycasts.bottomLeft = Physics2D.Raycast(transform.position + Vector3.right * 0.01f, Vector2.down, 0.08f);
-        raycasts.bottomRight = Physics2D.Raycast(transform.position + Vector3.right * -0.02f, Vector2.down, 0.08f);
+        raycasts.bottomLeft = Physics2D.Raycast(transform.position + Vector3.right * 0.01f, Vector2.down, 0.05f);
+        raycasts.bottomRight = Physics2D.Raycast(transform.position + Vector3.right * -0.02f, Vector2.down, 0.05f);
 
         raycasts.upperLeft = Physics2D.Raycast(transform.position + Vector3.up * 0.03f, Vector2.left, 0.03f);
         raycasts.lowerLeft = Physics2D.Raycast(transform.position + Vector3.up * -0.04f, Vector2.left, 0.03f);
@@ -56,14 +58,32 @@ public class CharController : MonoBehaviour {
         raycasts.lowerRight = Physics2D.Raycast(transform.position + Vector3.up * -0.04f, Vector2.right, 0.02f);
 
         raycasts.top = Physics2D.Raycast(transform.position + Vector3.right * -0.005f, Vector2.up, 0.06f);
+        #endregion
 
-        if (!raycasts.upperLeft.collider && !raycasts.lowerLeft.collider && input.Horizontal < 0)
+        // Setting the x velocity
+        velocity = new Vector3(input.Horizontal * speed * Time.deltaTime, velocity.y);
+
+        // Checking for colliders to the sides
+        if (raycasts.upperLeft.collider && raycasts.lowerLeft.collider && velocity.x < 0)
         {
-            transform.position += new Vector3(input.Horizontal * speed * Time.deltaTime, 0f);
+            velocity.x = 0f;
         } 
-        else if(!raycasts.upperRight.collider && !raycasts.lowerRight.collider && input.Horizontal > 0)
+        else if(raycasts.upperRight.collider && raycasts.lowerRight.collider && velocity.x > 0)
         {
-            transform.position += new Vector3(input.Horizontal * speed * Time.deltaTime, 0f);
+            velocity.x = 0f;
+        }
+
+        // Make sure, velocity in y axis does not get over limit
+        if(velocity.y < veloYLimit)
+        {
+            velocity.y = veloYLimit;
+        }
+
+        transform.position += velocity;
+
+        if(transform.position.y < -10f)
+        {
+            Reset();
         }
 
         CheckGrounded();
@@ -72,7 +92,7 @@ public class CharController : MonoBehaviour {
         // Apply gravity
         if (!bGrounded)
         {
-            transform.position += new Vector3(0, -gravity * Time.deltaTime);
+            velocity += new Vector3(0, -gravity * Time.deltaTime);
         }
 
         CheckForJump();
@@ -80,6 +100,12 @@ public class CharController : MonoBehaviour {
         CheckForDodge();
         CheckForAttack();
         CheckForWallSlide();
+    }
+
+    private void Reset()
+    {
+        transform.position = Vector3.zero;
+        velocity = Vector3.zero;
     }
 
     private void OnGUI()
@@ -127,7 +153,7 @@ public class CharController : MonoBehaviour {
 
     private void Attack()
     {
-        transform.position += new Vector3(1f * transform.localScale.x * Time.deltaTime, 0);
+        velocity += new Vector3(1f * transform.localScale.x * Time.deltaTime, 0);
         anim.SetBool("Attacking", true);
     }
 
@@ -173,11 +199,11 @@ public class CharController : MonoBehaviour {
         }
         if (input.Jump == 1 && !bGrounded)
         {
-            transform.position += new Vector3(0f, fallMultiplier * Time.deltaTime);
+            velocity += new Vector3(0f, fallMultiplier * Time.deltaTime);
         }
         else if(!bGrounded)
         {
-            transform.position -= new Vector3(0f, fallMultiplier * Time.deltaTime);
+            velocity -= new Vector3(0f, fallMultiplier * Time.deltaTime);
         }
     }
 
@@ -185,11 +211,11 @@ public class CharController : MonoBehaviour {
     {
         if(bGrounded)
         {
-            transform.position += new Vector3(0f, jumpPower * Time.deltaTime);
+            velocity += new Vector3(0f, jumpPower * Time.deltaTime);
         }
         else if(bOnWall)
         {
-            transform.position += new Vector3(jumpPower / 2 * -transform.localScale.x * Time.deltaTime, jumpPower * Time.deltaTime);
+            velocity += new Vector3(jumpPower / 2 * -transform.localScale.x * Time.deltaTime, jumpPower * Time.deltaTime);
         }
     }
 
@@ -216,6 +242,7 @@ public class CharController : MonoBehaviour {
             if (raycasts.bottomLeft.collider.tag == "Ground")
             {
                 bGrounded = true;
+                velocity.y = 0f;
                 anim.SetBool("Grounded", true);
             }
         }
@@ -224,6 +251,7 @@ public class CharController : MonoBehaviour {
             if (raycasts.bottomRight.collider.tag == "Ground")
             {
                 bGrounded = true;
+                velocity.y = 0f;
                 anim.SetBool("Grounded", true);
             }
         }
