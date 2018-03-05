@@ -171,7 +171,7 @@ public class CharController : MonoBehaviour {
                 bGrounded = true;
                 anim.SetBool("Grounded", true);
             }
-            else if(collision.tag == "Wall" && holdingInDirection())
+            else if(collision.tag == "Wall" && HoldingInDirection())
             {
                 bOnWall = true;
             }
@@ -182,7 +182,27 @@ public class CharController : MonoBehaviour {
         }
     }
 
-    private bool holdingInDirection()
+    private void CheckGrounded()
+    {
+        if(bGrounded == false)
+        {
+            if(Physics2D.Raycast(transform.position, Vector2.down, 0.08f, 2))
+            {
+                bGrounded = true;
+                anim.SetBool("Grounded", true);
+            }
+            else if(HoldingInDirection())
+            {
+                bOnWall = true;
+            }
+            else
+            {
+                bOnWall = false;
+            }
+        }
+    }
+
+    private bool HoldingInDirection()
     {
         if (input.Horizontal < 0 && transform.localScale.x == -1)
         {
