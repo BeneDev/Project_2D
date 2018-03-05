@@ -32,6 +32,7 @@ public class CharController : MonoBehaviour {
     [SerializeField] float dodgePower = 100f;
     [SerializeField] float dodgeUpPower = 20f;
     [SerializeField] float wallSlideSpeed = 3f;
+    [SerializeField] float gravity = 2f;
 
     // Use this for initialization
     void Start () {
@@ -48,16 +49,22 @@ public class CharController : MonoBehaviour {
         raycasts.bottomLeft = Physics2D.Raycast(transform.position + Vector3.right * 0.01f, Vector2.down, 0.08f);
         raycasts.bottomRight = Physics2D.Raycast(transform.position + Vector3.right * -0.02f, Vector2.down, 0.08f);
 
-        raycasts.upperLeft = Physics2D.Raycast(transform.position + Vector3.up * 0.03f, Vector2.left, 0.05f);
-        raycasts.lowerLeft = Physics2D.Raycast(transform.position + Vector3.up * -0.04f, Vector2.left, 0.05f);
+        raycasts.upperLeft = Physics2D.Raycast(transform.position + Vector3.up * 0.03f, Vector2.left, 0.03f);
+        raycasts.lowerLeft = Physics2D.Raycast(transform.position + Vector3.up * -0.04f, Vector2.left, 0.03f);
 
-        raycasts.upperRight = Physics2D.Raycast(transform.position + Vector3.right * 0.03f, Vector2.right, 0.04f);
-        raycasts.lowerRight = Physics2D.Raycast(transform.position + Vector3.right * -0.04f, Vector2.right, 0.04f);
+        raycasts.upperRight = Physics2D.Raycast(transform.position + Vector3.up * 0.03f, Vector2.right, 0.02f);
+        raycasts.lowerRight = Physics2D.Raycast(transform.position + Vector3.up * -0.04f, Vector2.right, 0.02f);
 
         raycasts.top = Physics2D.Raycast(transform.position + Vector3.right * -0.005f, Vector2.up, 0.06f);
 
-
-        transform.position += new Vector3(input.Horizontal * speed * Time.deltaTime, 0f);
+        if (!raycasts.upperLeft.collider && !raycasts.lowerLeft.collider && input.Horizontal < 0)
+        {
+            transform.position += new Vector3(input.Horizontal * speed * Time.deltaTime, 0f);
+        } 
+        else if(!raycasts.upperRight.collider && !raycasts.lowerRight.collider && input.Horizontal > 0)
+        {
+            transform.position += new Vector3(input.Horizontal * speed * Time.deltaTime, 0f);
+        }
 
         CheckGrounded();
         CheckOnWall();
@@ -65,7 +72,7 @@ public class CharController : MonoBehaviour {
         // Apply gravity
         if (!bGrounded)
         {
-            transform.position += new Vector3(0, -9.81f / 4 * Time.deltaTime);
+            transform.position += new Vector3(0, -gravity * Time.deltaTime);
         }
 
         CheckForJump();
@@ -120,7 +127,7 @@ public class CharController : MonoBehaviour {
 
     private void Attack()
     {
-        rb.velocity += new Vector2(1f * transform.localScale.x, 0);
+        transform.position += new Vector3(1f * transform.localScale.x * Time.deltaTime, 0);
         anim.SetBool("Attacking", true);
     }
 
@@ -164,13 +171,13 @@ public class CharController : MonoBehaviour {
         {
             Jump();
         }
-        if (input.Jump == 1)
+        if (input.Jump == 1 && !bGrounded)
         {
-            rb.velocity += new Vector2(0f, fallMultiplier * Time.deltaTime);
+            transform.position += new Vector3(0f, fallMultiplier * Time.deltaTime);
         }
-        else
+        else if(!bGrounded)
         {
-            rb.velocity -= new Vector2(0f, fallMultiplier * Time.deltaTime);
+            transform.position -= new Vector3(0f, fallMultiplier * Time.deltaTime);
         }
     }
 
@@ -178,17 +185,11 @@ public class CharController : MonoBehaviour {
     {
         if(bGrounded)
         {
-            while (rb.velocity.y <= jumpCap)
-            {
-                rb.velocity += new Vector2(0f, jumpPower * Time.deltaTime);
-            }
+            transform.position += new Vector3(0f, jumpPower * Time.deltaTime);
         }
         else if(bOnWall)
         {
-            while (rb.velocity.y <= jumpCap)
-            {
-                rb.velocity += new Vector2(jumpPower/2 * -transform.localScale.x *Time.deltaTime, jumpPower * Time.deltaTime);
-            }
+            transform.position += new Vector3(jumpPower / 2 * -transform.localScale.x * Time.deltaTime, jumpPower * Time.deltaTime);
         }
     }
 
