@@ -292,9 +292,10 @@ public class CharController : MonoBehaviour {
     // Checks if the player is on the ground or not
     private void CheckGrounded()
     {
-        // When the bottom left 
+        // When the bottom left collider hit something
         if (raycasts.bottomLeft.collider)
         {
+            // And the actual object, which is hit, is tagged as ground
             if (raycasts.bottomLeft.collider.tag == "Ground")
             {
                 bGrounded = true;
@@ -302,8 +303,10 @@ public class CharController : MonoBehaviour {
                 anim.SetBool("Grounded", true);
             }
         }
+        // When the bottom right collider hit something
         else if (raycasts.bottomRight.collider)
         {
+            // And the actual object, which is hit, is tagged as ground
             if (raycasts.bottomRight.collider.tag == "Ground")
             {
                 bGrounded = true;
@@ -311,6 +314,7 @@ public class CharController : MonoBehaviour {
                 anim.SetBool("Grounded", true);
             }
         }
+        // Otherwise the player is not grounded
         else
         {
             bGrounded = false;
@@ -321,7 +325,8 @@ public class CharController : MonoBehaviour {
     // Checks if the player is up against a wall
     private void CheckOnWall()
     {
-        if (HoldingInDirection() && raycasts.lowerLeft.collider || raycasts.upperLeft.collider || raycasts.lowerRight.collider || raycasts.upperRight.collider)
+        // When the player is against a wall
+        if (raycasts.lowerLeft.collider || raycasts.upperLeft.collider || raycasts.lowerRight.collider || raycasts.upperRight.collider)
         {
             bOnWall = true;
         }
