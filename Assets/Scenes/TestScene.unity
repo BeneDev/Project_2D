@@ -3627,57 +3627,7 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1636671919393970, guid: a5d462e87b2abb043b0d95d760f5c25d, type: 2}
-      propertyPath: m_Layer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114838042381127328, guid: a5d462e87b2abb043b0d95d760f5c25d,
-        type: 2}
-      propertyPath: wallSlideSpeed
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 70449407185876258, guid: a5d462e87b2abb043b0d95d760f5c25d,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 50529664604380448, guid: a5d462e87b2abb043b0d95d760f5c25d,
-        type: 2}
-      propertyPath: m_Simulated
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 50529664604380448, guid: a5d462e87b2abb043b0d95d760f5c25d,
-        type: 2}
-      propertyPath: m_BodyType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114838042381127328, guid: a5d462e87b2abb043b0d95d760f5c25d,
-        type: 2}
-      propertyPath: fallMultiplier
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 114838042381127328, guid: a5d462e87b2abb043b0d95d760f5c25d,
-        type: 2}
-      propertyPath: jumpPower
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 70449407185876258, guid: a5d462e87b2abb043b0d95d760f5c25d,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114838042381127328, guid: a5d462e87b2abb043b0d95d760f5c25d,
-        type: 2}
-      propertyPath: veloYLimit
-      value: -0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114838042381127328, guid: a5d462e87b2abb043b0d95d760f5c25d,
-        type: 2}
-      propertyPath: gravity
-      value: 0.2
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 61321956203143042, guid: a5d462e87b2abb043b0d95d760f5c25d, type: 2}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a5d462e87b2abb043b0d95d760f5c25d, type: 2}
   m_IsPrefabParent: 0
 --- !u!1001 &1522459995

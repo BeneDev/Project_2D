@@ -79,6 +79,12 @@ public class CharController : MonoBehaviour {
             velocity.y = veloYLimit;
         }
 
+        // Checks if something is above the player and let him bounce down again relative to the force he went up with
+        if(raycasts.top.collider && velocity.y > 0)
+        {
+            velocity.y = -velocity.y/2;
+        }
+
         transform.position += velocity;
 
         if(transform.position.y < -10f)
