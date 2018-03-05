@@ -10,7 +10,6 @@ public class CharController : MonoBehaviour {
     bool bGrounded = false;
     bool bOnWall = false;
     Animator anim;
-    CapsuleCollider2D coll;
     private Vector3 velocity;
 
     public struct PlayerRaycasts
@@ -41,7 +40,6 @@ public class CharController : MonoBehaviour {
         input = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        coll = GetComponent<CapsuleCollider2D>();
     }
 	
 	// Update is called once per frame
@@ -71,7 +69,6 @@ public class CharController : MonoBehaviour {
         CheckForJump();
         CheckForDodge();
         CheckForAttack();
-        CheckForWallSlide();
 
         CheckForValidVelocity();
 
@@ -109,7 +106,8 @@ public class CharController : MonoBehaviour {
             velocity.y = veloYLimit;
         }
 
-        if(bOnWall && !bGrounded && HoldingInDirection())
+        // Check for possible Wallslide
+        if(bOnWall && !bGrounded && HoldingInDirection() && velocity.y < 0)
         {
             velocity.y = -wallSlideSpeed;
         }
@@ -197,14 +195,12 @@ public class CharController : MonoBehaviour {
     private void Dodge()
     {
         anim.SetBool("Dodging", true);
-        coll.size = new Vector2(coll.size.x, coll.size.y / 2);
         velocity += new Vector3(dodgePower * transform.localScale.x * speed * Time.deltaTime, dodgeUpPower * Time.deltaTime);
     }
 
     private void EndDodge()
     {
         anim.SetBool("Dodging", false);
-        coll.size = new Vector2(coll.size.x, coll.size.y * 2);
     }
 
     #endregion
@@ -243,13 +239,13 @@ public class CharController : MonoBehaviour {
 
     #region OnWall
 
-    private void CheckForWallSlide()
-    {
-        if(bOnWall && rb.velocity.y < 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed * Time.deltaTime);
-        }
-    }
+    //private void CheckForWallSlide()
+    //{
+    //    if(bOnWall && velocity.y < 0)
+    //    {
+    //        rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed * Time.deltaTime);
+    //    }
+    //}
 
     #endregion
 
