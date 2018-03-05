@@ -30,6 +30,7 @@ public class CharController : MonoBehaviour {
     [SerializeField] float fallMultiplier = 2f;
     [SerializeField] float dodgePower = 100f;
     [SerializeField] float dodgeUpPower = 20f;
+    private float appliedDodgeUpPower;
     [SerializeField] float attackVelocity = 10f;
     [SerializeField] float wallSlideSpeed = 3f;
     [SerializeField] float gravity = 2f;
@@ -189,14 +190,20 @@ public class CharController : MonoBehaviour {
     {
         if(input.Dodge && anim.GetBool("Dodging") == false)
         {
+            anim.SetBool("Dodging", true);
+            appliedDodgeUpPower = dodgeUpPower;
+            Dodge();
+        }
+        if(anim.GetBool("Dodging") == true)
+        {
+            appliedDodgeUpPower -= appliedDodgeUpPower / 10;
             Dodge();
         }
     }
 
     private void Dodge()
     {
-        anim.SetBool("Dodging", true);
-        velocity += new Vector3(dodgePower * transform.localScale.x * speed * Time.deltaTime, dodgeUpPower * Time.deltaTime);
+        velocity += new Vector3(dodgePower * transform.localScale.x * speed * Time.deltaTime, appliedDodgeUpPower * Time.deltaTime);
     }
 
     private void EndDodge()

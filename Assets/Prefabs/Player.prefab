@@ -21,10 +21,8 @@ GameObject:
   - component: {fileID: 4126290024369402}
   - component: {fileID: 114838042381127328}
   - component: {fileID: 114808618702958712}
-  - component: {fileID: 50529664604380448}
   - component: {fileID: 95410615359101532}
   - component: {fileID: 212588372083321244}
-  - component: {fileID: 70449407185876258}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -45,41 +43,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &50529664604380448
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1636671919393970}
-  m_BodyType: 0
-  m_Simulated: 0
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 155f1918abbb8b1468b4c87e4ace3667, type: 2}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!70 &70449407185876258
-CapsuleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1636671919393970}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.0093264785, y: -0.0021668673}
-  m_Size: {x: 0.03815688, y: 0.06517668}
-  m_Direction: 0
 --- !u!95 &95410615359101532
 Animator:
   serializedVersion: 3
@@ -122,8 +85,8 @@ MonoBehaviour:
   speed: 1
   jumpPower: 4.5
   fallMultiplier: 0.0045
-  dodgePower: 300
-  dodgeUpPower: 3
+  dodgePower: 2
+  dodgeUpPower: 0.3
   attackVelocity: 10
   wallSlideSpeed: 0.0001
   gravity: 0.022
