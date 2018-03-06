@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour {
 
+    #region Fields
+
     // Enemy Attributes
     private int health = 20;
     private int attack = 2;
@@ -16,28 +18,43 @@ public class EnemyController : MonoBehaviour {
     [SerializeField] float hitRange = 2f;
     [SerializeField] float knockBackStrength = 3f;
 
-	// Use this for initialization
-	void Start () {
+    #endregion
+
+    void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
 	}
 	
-	// Update is called once per frame
 	void Update () {
+        // Store the vector towards the player
         toPlayer = player.transform.position - transform.position;
+
+        // Attacks the player if he within reach
         if(toPlayer.magnitude <= hitRange)
         {
             player.GetComponent<CharController>().TakeDamage(attack, new Vector3(toPlayer.normalized.x * knockBackStrength, knockBackStrength / 50));
         }
+        // Die if health is gone
 		if(health <= 0)
         {
-            Destroy(gameObject);
+            Die();
         }
 	}
 
+    #region Helper Functions
+
+    // TODO Play also right animation
+    private void Die()
+    {
+        Destroy(gameObject);
+    }
+
+    // Subtract damage and knockback to the enemy
     public void TakeDamage(int damageToTake, Vector3 knockback)
     {
         health -= damageToTake;
         transform.position += knockback;
     }
-    
+
+    #endregion
+
 }

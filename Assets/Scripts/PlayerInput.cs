@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour, IInput {
 
+    // Prevents the controller from reading tiny input, caused by old sticks
     [Range(0, 1)] [SerializeField] float controllerThreshhold;
 
+    #region Axis
+
+    // The input for horizontal movement
     public float Horizontal
     {
         get
@@ -18,6 +22,7 @@ public class PlayerInput : MonoBehaviour, IInput {
         }
     }
 
+    // The input for vertical movement
     public float Vertical
     {
         get
@@ -30,6 +35,11 @@ public class PlayerInput : MonoBehaviour, IInput {
         }
     }
 
+    #endregion
+
+    #region Actions
+
+    // Check if jump button is pressed or holded
     public int Jump
     {
         get
@@ -46,6 +56,7 @@ public class PlayerInput : MonoBehaviour, IInput {
         }
     }
 
+    // Looks for Input for Dodge
     public bool Dodge
     {
         get
@@ -58,6 +69,7 @@ public class PlayerInput : MonoBehaviour, IInput {
         }
     }
 
+    // Looks for Input for Attack
     public bool Attack
     {
         get
@@ -69,4 +81,6 @@ public class PlayerInput : MonoBehaviour, IInput {
             return false;
         }
     }
+
+    #endregion
 }

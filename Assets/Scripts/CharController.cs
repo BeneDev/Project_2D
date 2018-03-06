@@ -5,26 +5,32 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerInput))]
 public class CharController : MonoBehaviour {
 
+    #region Fields
+
+    // Delegate for Healht changes
     public event System.Action<int> OnHealthChanged;
 
-    PlayerInput input;
-    bool bGrounded = false;
-    bool bOnWall = false;
+    PlayerInput input; // Stores the input giving class
+    Animator anim; 
+
+    bool bGrounded = false; // Stores if the player is on the ground or not
+    bool bOnWall = false; // Stores if the player is on a wall or not
     bool bKnockedBack = false; // Stores when the player is knocked back to prevent him from moving
     bool bAlreadyHit = false; // Makes sure, the player only hits one time with one attack
-    Animator anim;
-    private Vector3 velocity; // The value, which is solely allowed to manipulate the transform directly
-    Vector3 knockBackForce;
 
-    RaycastHit2D hit;
+    Vector3 velocity; // The value, which is solely allowed to manipulate the transform directly
+    Vector3 knockBackForce; // The actual force with which the player is getting knocked back when being hit
 
-    private EnemyController enemy;
+    RaycastHit2D hit; // The ray cast hit in which the enemy under attack gets stored in 
 
     // The attributes of the player
     [SerializeField] int maxHealth = 100;
-
     private int health = 100;
+
+    [SerializeField] int baseAttack = 5;
     private int attack = 5;
+
+    [SerializeField] int baseDefense = 5;
     private int defense = 5;
 
     struct PlayerRaycasts // To store the informations of raycasts around the player to calculate physics
@@ -37,6 +43,7 @@ public class CharController : MonoBehaviour {
         public RaycastHit2D lowerRight;
         public RaycastHit2D top;
     }
+    private PlayerRaycasts raycasts; // Stores the actual information of the raycasts to calculate physics
 
     public enum State
     {
@@ -44,30 +51,37 @@ public class CharController : MonoBehaviour {
         dodging,
         attacking,
         knockedBack
-    };
+    }; // State machine for the player
+    public State playerState = State.freeToMove; // Stores the current state of the player
 
-    public State playerState = State.freeToMove;
-
-    private PlayerRaycasts raycasts;
-
+    // Walking speed of the Player
     [SerializeField] float speed = 1;
+
+    // Fields to manipulate the jump
     [SerializeField] float jumpPower = 10;
-    [SerializeField] float fallMultiplier = 2f;
-    [SerializeField] float dodgePower = 100f;
-    [SerializeField] float dodgeUpPower = 20f;
-    private float appliedDodgeUpPower;
-    [SerializeField] float dodgeCooldown = 1f;
-    bool bDodgable = true;
-    [SerializeField] float attackReach = 0.2f;
-    [SerializeField] Vector2 attackVelo;
-    Vector3 appliedAttackVelo;
-    [SerializeField] float attackCooldown = 1f;
-    bool bAttackable = true;
-    [SerializeField] float knockBackStrength = 3f;
-    [SerializeField] float wallSlideSpeed = 3f;
+    [SerializeField] float fallMultiplier = 2f; // The higher this value, the slower the player will fall after jumping up, when still holding jump and the faster he will fall when not holding it
     [SerializeField] float gravity = 2f;
-    [SerializeField] float veloYLimit = 10f;
-    
+    [SerializeField] float veloYLimit = 10f; // The player cannot fall faster than this value to prevent him falling through hitboxes
+
+    // Fields to manipulate the Dodge
+    [SerializeField] float dodgePower = 100f; // Force forward when dodging
+    [SerializeField] float dodgeUpPower = 20f; // This defines the applied Dodge Up Power
+    private float appliedDodgeUpPower; // The actual force getting applied upwards when dodging
+    [SerializeField] float dodgeCooldown = 1f;
+    bool bDodgable = true; // Stores wether the player is able to dodge or not
+
+    // Fields to manipulate the attack
+    [SerializeField] float attackReach = 0.2f; // How far the attack hitbox reaches
+    [SerializeField] Vector2 attackVelo; // this defines how big the actually applied force while attatcking will be
+    Vector3 appliedAttackVelo; // the actual velocity which is applied to the player when attacking
+    [SerializeField] float attackCooldown = 1f;
+    bool bAttackable = true; // Stores wether the player is able to attack or not
+    [SerializeField] float knockBackStrength = 3f; // The amount of knockback the player is applying to hit enemies
+
+    [SerializeField] float wallSlideSpeed = 3f; // How fast the player slides down a wall while holding towards it
+
+    #endregion
+
     void Start () {
         input = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
@@ -79,7 +93,7 @@ public class CharController : MonoBehaviour {
 	void FixedUpdate ()
     {
         #region Raycasts Initialization
-        // Update all the different raycast hit values
+        // Update all the different raycast hit values to calculate physics
         raycasts.bottomRight = Physics2D.Raycast(transform.position + Vector3.right * 0.01f + Vector3.down * 0.04f, Vector2.down, 0.01f);
         raycasts.bottomLeft = Physics2D.Raycast(transform.position + Vector3.right * -0.02f + Vector3.down * 0.04f, Vector2.down, 0.01f);
 
@@ -92,9 +106,9 @@ public class CharController : MonoBehaviour {
         raycasts.top = Physics2D.Raycast(transform.position + Vector3.right * -0.001f, Vector2.up, 0.02f);
         #endregion
 
+        // Setting the x velocity when player is not knocked back
         if (!bKnockedBack)
         {
-            // Setting the x velocity
             velocity = new Vector3(input.Horizontal * speed * Time.deltaTime, velocity.y);
         }
 
@@ -133,6 +147,7 @@ public class CharController : MonoBehaviour {
             appliedAttackVelo.y -= appliedAttackVelo.y / 100;
         }
 
+        // Apply knockback when the player is currently getting knocked back
         if(bKnockedBack)
         {
             velocity += knockBackForce * Time.deltaTime;
@@ -144,8 +159,8 @@ public class CharController : MonoBehaviour {
         // Apply the velocity to the transform
         transform.position += velocity;
 
-        // Debug feature to test quickly
-        if (transform.position.y < -10f)
+        // Reset the player to Debug quickly
+        if (transform.position.y < -5f)
         {
             Reset();
         }
@@ -248,7 +263,7 @@ public class CharController : MonoBehaviour {
 
     #region Input
     
-    // Checks if the Player is giving directional input to walk or not
+    // Checks if the Player is giving directional input to walk or not and turn him accordingly
     private void CheckForInput()
     {
         if(input.Horizontal < 0)
@@ -271,7 +286,7 @@ public class CharController : MonoBehaviour {
 
     #region Attack
 
-    // Make the player attack
+    // Make the player attack, setting the direction of attack, hitbox and animation fields
     private void Attack()
     {
         Vector2 attackDirection = new Vector2(input.Horizontal, input.Vertical);
@@ -290,7 +305,7 @@ public class CharController : MonoBehaviour {
         playerState = State.attacking;
     }
 
-    // Check if an enemy is hit with the ray in the direction of the attack
+    // Check if an enemy is hit with the ray in the direction of the attack and damages him if so
     private void AttackHitboxOut(Vector2 direction)
     {
         hit = Physics2D.Raycast(transform.position, direction, attackReach);
@@ -315,6 +330,7 @@ public class CharController : MonoBehaviour {
         StartCoroutine(AttackCooldown());
     }
 
+    // Waits for the attack to be available again
     IEnumerator AttackCooldown()
     {
         yield return new WaitForSeconds(attackCooldown);
@@ -357,6 +373,7 @@ public class CharController : MonoBehaviour {
         StartCoroutine(DodgeCooldown());
     }
 
+    // Wait for the dodge to be available again
     IEnumerator DodgeCooldown()
     {
         yield return new WaitForSeconds(dodgeCooldown);
@@ -404,19 +421,20 @@ public class CharController : MonoBehaviour {
     {
         if (playerState != State.attacking && playerState != State.dodging)
         {
+            // Wait for the knockback to stop and giving the player free to move again
             StartCoroutine(UntilKnockBackStops(0.05f));
             bKnockedBack = true;
             health -= damage;
-            // TODO Fix UI
             if (OnHealthChanged != null)
             {
                 OnHealthChanged(health);
             }
+            // Set the knockback force to be applied
             knockBackForce = knockBack;
-            print("new health player = " + health.ToString());
         }
     }
 
+    // Wait until able to move freely again
     IEnumerator UntilKnockBackStops(float seconds)
     {
         yield return new WaitForSeconds(seconds);
