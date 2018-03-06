@@ -37,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1636671919393970}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.046, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -82,14 +82,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 811e684c12cee1f46b729fd855823b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 0}
   maxHealth: 100
+  playerState: 0
   speed: 1
   jumpPower: 4.2
   fallMultiplier: 0.0048
   dodgePower: 2
   dodgeUpPower: 0.3
-  attackVelo: {x: 5, y: 5}
+  dodgeCooldown: 0.2
+  attackVelo: {x: 5, y: 2}
+  attackCooldown: 0.6
+  knockBackStrength: 3
   wallSlideSpeed: 0.0001
   gravity: 0.02
   veloYLimit: -0.004

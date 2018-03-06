@@ -56,6 +56,8 @@ public class CharController : MonoBehaviour {
     [SerializeField] float dodgePower = 100f;
     [SerializeField] float dodgeUpPower = 20f;
     private float appliedDodgeUpPower;
+    [SerializeField] float dodgeCooldown = 1f;
+    bool bDodgable = true;
     [SerializeField] Vector2 attackVelo;
     Vector3 appliedAttackVelo;
     [SerializeField] float attackCooldown = 1f;
@@ -325,7 +327,7 @@ public class CharController : MonoBehaviour {
     // Set up the dodging process
     private void CheckForDodge()
     {
-        if(input.Dodge && playerState != State.dodging)
+        if(input.Dodge && playerState != State.dodging && bDodgable)
         {
             anim.SetBool("Dodging", true);
             playerState = State.dodging;
@@ -343,6 +345,7 @@ public class CharController : MonoBehaviour {
     private void Dodge()
     {
         velocity += new Vector3(dodgePower * transform.localScale.x * speed * Time.deltaTime, appliedDodgeUpPower * Time.deltaTime);
+        bDodgable = false;
     }
 
     // End the Dodge process
@@ -350,6 +353,13 @@ public class CharController : MonoBehaviour {
     {
         anim.SetBool("Dodging", false);
         playerState = State.freeToMove;
+        StartCoroutine(DodgeCooldown());
+    }
+
+    IEnumerator DodgeCooldown()
+    {
+        yield return new WaitForSeconds(dodgeCooldown);
+        bDodgable = true;
     }
 
     #endregion
