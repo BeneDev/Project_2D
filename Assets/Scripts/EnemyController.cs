@@ -34,10 +34,10 @@ public class EnemyController : MonoBehaviour {
         }
 	}
 
-    public void TakeDamage(int damageToTake)
+    public void TakeDamage(int damageToTake, Vector3 knockback)
     {
         health -= damageToTake;
-        print("new health = " + health.ToString());
+        transform.position += knockback;
     }
     
 }

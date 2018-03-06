@@ -10,11 +10,13 @@ public class CharController : MonoBehaviour {
     PlayerInput input;
     bool bGrounded = false;
     bool bOnWall = false;
-    bool bKnockedBack = false;
-    bool alreadyHit = false;
+    bool bKnockedBack = false; // Stores when the player is knocked back to prevent him from moving
+    bool bAlreadyHit = false; // Makes sure, the player only hits one time with one attack
     Animator anim;
     private Vector3 velocity; // The value, which is solely allowed to manipulate the transform directly
     Vector3 knockBackForce;
+
+    RaycastHit2D hit;
 
     private EnemyController enemy;
 
@@ -55,7 +57,10 @@ public class CharController : MonoBehaviour {
     [SerializeField] float dodgeUpPower = 20f;
     private float appliedDodgeUpPower;
     [SerializeField] Vector2 attackVelo;
-    private Vector2 appliedAttackVelo;
+    Vector3 appliedAttackVelo;
+    [SerializeField] float attackCooldown = 1f;
+    bool bAttackable = true;
+    [SerializeField] float knockBackStrength = 3f;
     [SerializeField] float wallSlideSpeed = 3f;
     [SerializeField] float gravity = 2f;
     [SerializeField] float veloYLimit = 10f;
@@ -103,9 +108,10 @@ public class CharController : MonoBehaviour {
             // Start the dodging process if wanted
             CheckForDodge();
             // Checks if the player wants to attack of not
-            if (input.Attack)
+            if (input.Attack && bAttackable == true)
             {
                 Attack();
+                appliedAttackVelo = new Vector3(input.Horizontal * appliedAttackVelo.x * Time.deltaTime, input.Vertical * appliedAttackVelo.y * Time.deltaTime);
             }
         }
 
@@ -119,7 +125,7 @@ public class CharController : MonoBehaviour {
         if (playerState == State.attacking)
         {
             velocity = Vector2.zero;
-            velocity += new Vector3(input.Horizontal * appliedAttackVelo.x * Time.deltaTime, input.Vertical * appliedAttackVelo.y * Time.deltaTime);
+            velocity += appliedAttackVelo;
             appliedAttackVelo.x -= appliedAttackVelo.x / 100;
             appliedAttackVelo.y -= appliedAttackVelo.y / 100;
         }
@@ -276,6 +282,7 @@ public class CharController : MonoBehaviour {
             AttackHitboxOut(attackDirection);
         }
         appliedAttackVelo = attackVelo;
+        bAttackable = false;
         anim.SetBool("Attacking", true);
         playerState = State.attacking;
     }
@@ -283,13 +290,15 @@ public class CharController : MonoBehaviour {
     // Check if an enemy is hit with the ray in the direction of the attack
     private void AttackHitboxOut(Vector2 direction)
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 0.08f);
-        if (hit.collider && alreadyHit == false)
+        hit = Physics2D.Raycast(transform.position, direction, 0.08f);
+        if (hit.collider && bAlreadyHit == false)
         {
             if(hit.collider.tag == "Enemy")
             {
-                hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(attack);
-                alreadyHit = true;
+                // Calculate the direction, the player has to knock the opponent away
+                Vector3 knockDirection = hit.collider.gameObject.transform.position - transform.position;
+                hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(attack, knockDirection * knockBackStrength);
+                bAlreadyHit = true;
             }
         }
     }
@@ -299,7 +308,14 @@ public class CharController : MonoBehaviour {
     {
         anim.SetBool("Attacking", false);
         playerState = State.freeToMove;
-        alreadyHit = false;
+        bAlreadyHit = false;
+        StartCoroutine(AttackCooldown());
+    }
+
+    IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        bAttackable = true;
     }
 
     #endregion
