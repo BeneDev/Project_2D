@@ -6,11 +6,11 @@ public class EnemyController : MonoBehaviour {
 
     // Enemy Attributes
     private int health = 20;
-    public int attack = 2;
+    private int attack = 2;
     private int defense = 2;
 
     // Variables to find the player
-    private CharController player;
+    private GameObject player;
     private Vector3 toPlayer;
 
     [SerializeField] float hitRange = 2f;
@@ -18,7 +18,7 @@ public class EnemyController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        player = FindObjectOfType<CharController>();
+        player = GameObject.FindGameObjectWithTag("Player");
 	}
 	
 	// Update is called once per frame

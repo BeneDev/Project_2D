@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerInput))]
 public class CharController : MonoBehaviour {
 
+    public event System.Action<int> OnHealthChanged;
+
     PlayerInput input;
     bool bGrounded = false;
     bool bOnWall = false;
@@ -14,7 +16,7 @@ public class CharController : MonoBehaviour {
     private Vector3 velocity; // The value, which is solely allowed to manipulate the transform directly
     Vector3 knockBackForce;
 
-    public EnemyController enemy;
+    private EnemyController enemy;
 
     // The attributes of the player
     [SerializeField] int maxHealth = 100;
@@ -89,16 +91,19 @@ public class CharController : MonoBehaviour {
         CheckGrounded();
         CheckOnWall();
 
-        // Checking for actions, the player can do
-        CheckForInput();
-        // Start the jumping process if wanted
-        CheckForJump();
-        // Start the dodging process if wanted
-        CheckForDodge();
-        // Checks if the player wants to attack of not
-        if (input.Attack)
+        if (!bKnockedBack)
         {
-            Attack();
+            // Checking for actions, the player can do
+            CheckForInput();
+            // Start the jumping process if wanted
+            CheckForJump();
+            // Start the dodging process if wanted
+            CheckForDodge();
+            // Checks if the player wants to attack of not
+            if (input.Attack)
+            {
+                Attack();
+            }
         }
 
         // Apply gravity
@@ -116,7 +121,7 @@ public class CharController : MonoBehaviour {
             appliedAttackVelo.y -= appliedAttackVelo.y / 100;
         }
 
-        if(playerState == State.knockedBack)
+        if(bKnockedBack)
         {
             velocity += knockBackForce * Time.deltaTime;
         }
@@ -372,6 +377,10 @@ public class CharController : MonoBehaviour {
             StartCoroutine(UntilKnockBackStops(0.05f));
             bKnockedBack = true;
             health -= damage;
+            //if (OnHealthChanged != null)
+            //{
+            //    OnHealthChanged(health);
+            //}
             knockBackForce = knockBack;
             print("new health player = " + health.ToString());
         }
