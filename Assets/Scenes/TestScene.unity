@@ -3299,6 +3299,11 @@ Prefab:
       propertyPath: knockBackStrength
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 114832975290760664, guid: a32658b960a61df44956c517f3d7d87b,
+        type: 2}
+      propertyPath: hitRange
+      value: 0.08
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
   m_IsPrefabParent: 0
@@ -3899,7 +3904,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4126290024369402, guid: a5d462e87b2abb043b0d95d760f5c25d, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.046
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4126290024369402, guid: a5d462e87b2abb043b0d95d760f5c25d, type: 2}
       propertyPath: m_LocalPosition.z

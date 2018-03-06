@@ -406,6 +406,7 @@ public class CharController : MonoBehaviour {
             StartCoroutine(UntilKnockBackStops(0.05f));
             bKnockedBack = true;
             health -= damage;
+            // TODO Fix UI
             //if (OnHealthChanged != null)
             //{
             //    OnHealthChanged(health);
