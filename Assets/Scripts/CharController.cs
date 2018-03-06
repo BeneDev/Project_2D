@@ -12,6 +12,8 @@ public class CharController : MonoBehaviour {
     private Vector3 velocity; // The value, which is solely allowed to manipulate the transform directly
     private bool alreadyHit = false;
 
+    public EnemyController enemy;
+
     // The attributes of the player
     [SerializeField] int maxHealth = 100;
 
@@ -148,39 +150,6 @@ public class CharController : MonoBehaviour {
         {
             velocity.y = -velocity.y / 2;
         }
-    }
-
-    private RaycastHit2D? AnyRaycast()
-    {
-        if (raycasts.bottomLeft.collider != null)
-        {
-            return raycasts.bottomLeft;
-        }
-        else if (raycasts.bottomRight.collider != null)
-        {
-            return raycasts.bottomRight;
-        }
-        else if (raycasts.upperLeft.collider != null)
-        {
-            return raycasts.upperLeft;
-        }
-        else if (raycasts.lowerLeft.collider != null)
-        {
-            return raycasts.lowerLeft;
-        }
-        else if (raycasts.upperRight.collider != null)
-        {
-            return raycasts.upperRight;
-        }
-        else if (raycasts.lowerRight.collider != null)
-        {
-            return raycasts.bottomLeft;
-        }
-        else if (raycasts.top.collider != null)
-        {
-            return raycasts.bottomLeft;
-        }
-        return null;
     }
 
     // Checks if there are walls in the direction the player is facing
@@ -373,17 +342,11 @@ public class CharController : MonoBehaviour {
 
     #region Damage Calculation
 
-    private void TakeDamage()
+    public void TakeDamage(int damage, Vector3 knockBack)
     {
-        RaycastHit2D hit = (RaycastHit2D)AnyRaycast();
-        if(hit.collider != null)
-        {
-            if(hit.collider.tag == "Enemy")
-            {
-                print("Ouch");
-                health -= hit.collider.gameObject.GetComponent<EnemyController>().attack;
-            }
-        }
+        health -= damage;
+        transform.position += knockBack * Time.deltaTime;
+        print("new health player = " + health.ToString());
     }
 
 #endregion

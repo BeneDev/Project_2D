@@ -82,12 +82,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 811e684c12cee1f46b729fd855823b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
+  maxHealth: 100
   speed: 1
   jumpPower: 4.2
   fallMultiplier: 0.0048
   dodgePower: 2
   dodgeUpPower: 0.3
-  attackVelocity: 10
+  attackVelo: {x: 5, y: 5}
   wallSlideSpeed: 0.0001
   gravity: 0.02
   veloYLimit: -0.004
