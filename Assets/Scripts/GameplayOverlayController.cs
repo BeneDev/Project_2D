@@ -12,16 +12,7 @@ public class GameplayOverlayController : MonoBehaviour {
     {
         healthText = GetComponent<Text>();
         player = GameObject.FindGameObjectWithTag("Player");
-    }
-
-    private void OnEnable()
-    {
         player.GetComponent<CharController>().OnHealthChanged += UpdateLabel;
-    }
-
-    private void OnDisable()
-    {
-        player.GetComponent<CharController>().OnHealthChanged -= UpdateLabel;
     }
 
     private void UpdateLabel(int newHealth)

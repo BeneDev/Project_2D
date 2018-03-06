@@ -90,9 +90,10 @@ MonoBehaviour:
   dodgePower: 2
   dodgeUpPower: 0.3
   dodgeCooldown: 0.2
+  attackReach: 0.2
   attackVelo: {x: 5, y: 2}
   attackCooldown: 0.6
-  knockBackStrength: 3
+  knockBackStrength: 0.3
   wallSlideSpeed: 0.0001
   gravity: 0.02
   veloYLimit: -0.004

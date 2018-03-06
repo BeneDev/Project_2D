@@ -58,6 +58,7 @@ public class CharController : MonoBehaviour {
     private float appliedDodgeUpPower;
     [SerializeField] float dodgeCooldown = 1f;
     bool bDodgable = true;
+    [SerializeField] float attackReach = 0.2f;
     [SerializeField] Vector2 attackVelo;
     Vector3 appliedAttackVelo;
     [SerializeField] float attackCooldown = 1f;
@@ -292,14 +293,14 @@ public class CharController : MonoBehaviour {
     // Check if an enemy is hit with the ray in the direction of the attack
     private void AttackHitboxOut(Vector2 direction)
     {
-        hit = Physics2D.Raycast(transform.position, direction, 0.08f);
+        hit = Physics2D.Raycast(transform.position, direction, attackReach);
         if (hit.collider && bAlreadyHit == false)
         {
             if(hit.collider.tag == "Enemy")
             {
                 // Calculate the direction, the player has to knock the opponent away
                 Vector3 knockDirection = hit.collider.gameObject.transform.position - transform.position;
-                hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(attack, knockDirection * knockBackStrength);
+                hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(attack, knockDirection.normalized * knockBackStrength);
                 bAlreadyHit = true;
             }
         }
@@ -407,10 +408,10 @@ public class CharController : MonoBehaviour {
             bKnockedBack = true;
             health -= damage;
             // TODO Fix UI
-            //if (OnHealthChanged != null)
-            //{
-            //    OnHealthChanged(health);
-            //}
+            if (OnHealthChanged != null)
+            {
+                OnHealthChanged(health);
+            }
             knockBackForce = knockBack;
             print("new health player = " + health.ToString());
         }
