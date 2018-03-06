@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour {
 
     private int health = 20;
-    private int attack = 2;
+    public int attack = 2;
     private int defense = 2;
 
 

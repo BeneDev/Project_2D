@@ -13,6 +13,8 @@ public class CharController : MonoBehaviour {
     private bool alreadyHit = false;
 
     // The attributes of the player
+    [SerializeField] int maxHealth = 100;
+
     private int health = 100;
     private int attack = 5;
     private int defense = 5;
@@ -36,6 +38,8 @@ public class CharController : MonoBehaviour {
     [SerializeField] float dodgePower = 100f;
     [SerializeField] float dodgeUpPower = 20f;
     private float appliedDodgeUpPower;
+    [SerializeField] Vector2 attackVelo;
+    private Vector2 appliedAttackVelo;
     [SerializeField] float wallSlideSpeed = 3f;
     [SerializeField] float gravity = 2f;
     [SerializeField] float veloYLimit = 10f;
@@ -43,6 +47,9 @@ public class CharController : MonoBehaviour {
     void Start () {
         input = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
+
+        // Make the player have full health
+        health = maxHealth;
     }
 	
 	void FixedUpdate ()
@@ -80,9 +87,6 @@ public class CharController : MonoBehaviour {
             Attack();
         }
 
-        // Checking if the calculated velocity is fine with the world and restrictions
-        CheckForValidVelocity();
-
         // Apply gravity
         if (!bGrounded)
         {
@@ -92,7 +96,13 @@ public class CharController : MonoBehaviour {
         if (anim.GetBool("Attacking") == true)
         {
             velocity = Vector2.zero;
+            velocity += new Vector3(input.Horizontal * appliedAttackVelo.x * Time.deltaTime, input.Vertical * appliedAttackVelo.y * Time.deltaTime);
+            appliedAttackVelo.x -= appliedAttackVelo.x / 100;
+            appliedAttackVelo.y -= appliedAttackVelo.y / 100;
         }
+
+        // Checking if the calculated velocity is fine with the world and restrictions
+        CheckForValidVelocity();
 
         // Apply the velocity to the transform
         transform.position += velocity;
@@ -109,6 +119,12 @@ public class CharController : MonoBehaviour {
     // Make sure the velocity does not violate the laws of physics in this game
     private void CheckForValidVelocity()
     {
+        // Check for ground under the player
+        if(bGrounded && velocity.y < 0)
+        {
+            velocity.y = 0;
+        }
+
         // Checking for colliders to the sides
         if (WallInWay())
         {
@@ -132,6 +148,39 @@ public class CharController : MonoBehaviour {
         {
             velocity.y = -velocity.y / 2;
         }
+    }
+
+    private RaycastHit2D? AnyRaycast()
+    {
+        if (raycasts.bottomLeft.collider != null)
+        {
+            return raycasts.bottomLeft;
+        }
+        else if (raycasts.bottomRight.collider != null)
+        {
+            return raycasts.bottomRight;
+        }
+        else if (raycasts.upperLeft.collider != null)
+        {
+            return raycasts.upperLeft;
+        }
+        else if (raycasts.lowerLeft.collider != null)
+        {
+            return raycasts.lowerLeft;
+        }
+        else if (raycasts.upperRight.collider != null)
+        {
+            return raycasts.upperRight;
+        }
+        else if (raycasts.lowerRight.collider != null)
+        {
+            return raycasts.bottomLeft;
+        }
+        else if (raycasts.top.collider != null)
+        {
+            return raycasts.bottomLeft;
+        }
+        return null;
     }
 
     // Checks if there are walls in the direction the player is facing
@@ -231,6 +280,7 @@ public class CharController : MonoBehaviour {
             attackDirection = new Vector2(transform.localScale.x, 0f);
             AttackHitboxOut(attackDirection);
         }
+        appliedAttackVelo = attackVelo;
         anim.SetBool("Attacking", true);
     }
 
@@ -320,6 +370,23 @@ public class CharController : MonoBehaviour {
     }
 
     #endregion
+
+    #region Damage Calculation
+
+    private void TakeDamage()
+    {
+        RaycastHit2D hit = (RaycastHit2D)AnyRaycast();
+        if(hit.collider != null)
+        {
+            if(hit.collider.tag == "Enemy")
+            {
+                print("Ouch");
+                health -= hit.collider.gameObject.GetComponent<EnemyController>().attack;
+            }
+        }
+    }
+
+#endregion
 
     #region Grounded and OnWall
 
