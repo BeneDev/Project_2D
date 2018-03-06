@@ -8,9 +8,11 @@ public class CharController : MonoBehaviour {
     PlayerInput input;
     bool bGrounded = false;
     bool bOnWall = false;
+    bool bKnockedBack = false;
+    bool alreadyHit = false;
     Animator anim;
     private Vector3 velocity; // The value, which is solely allowed to manipulate the transform directly
-    private bool alreadyHit = false;
+    Vector3 knockBackForce;
 
     public EnemyController enemy;
 
@@ -101,6 +103,11 @@ public class CharController : MonoBehaviour {
             velocity += new Vector3(input.Horizontal * appliedAttackVelo.x * Time.deltaTime, input.Vertical * appliedAttackVelo.y * Time.deltaTime);
             appliedAttackVelo.x -= appliedAttackVelo.x / 100;
             appliedAttackVelo.y -= appliedAttackVelo.y / 100;
+        }
+
+        if(bKnockedBack)
+        {
+            velocity += knockBackForce * Time.deltaTime;
         }
 
         // Checking if the calculated velocity is fine with the world and restrictions
@@ -342,11 +349,23 @@ public class CharController : MonoBehaviour {
 
     #region Damage Calculation
 
+    // Damages the player 
     public void TakeDamage(int damage, Vector3 knockBack)
     {
-        health -= damage;
-        transform.position += knockBack * Time.deltaTime;
-        print("new health player = " + health.ToString());
+        if (anim.GetBool("Attacking") == false)
+        {
+            StartCoroutine(UntilKnockBackStops(0.05f));
+            bKnockedBack = true;
+            health -= damage;
+            knockBackForce = knockBack;
+            print("new health player = " + health.ToString());
+        }
+    }
+
+    IEnumerator UntilKnockBackStops(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        bKnockedBack = false;
     }
 
 #endregion

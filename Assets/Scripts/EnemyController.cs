@@ -26,7 +26,7 @@ public class EnemyController : MonoBehaviour {
         toPlayer = player.transform.position - transform.position;
         if(toPlayer.magnitude <= hitRange)
         {
-            player.GetComponent<CharController>().TakeDamage(attack, new Vector3(toPlayer.normalized.x * knockBackStrength, knockBackStrength));
+            player.GetComponent<CharController>().TakeDamage(attack, new Vector3(toPlayer.normalized.x * knockBackStrength, knockBackStrength / 50));
         }
 		if(health <= 0)
         {
