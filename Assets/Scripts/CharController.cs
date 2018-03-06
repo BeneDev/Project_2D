@@ -36,7 +36,6 @@ public class CharController : MonoBehaviour {
     [SerializeField] float dodgePower = 100f;
     [SerializeField] float dodgeUpPower = 20f;
     private float appliedDodgeUpPower;
-    [SerializeField] float attackVelocity = 10f;
     [SerializeField] float wallSlideSpeed = 3f;
     [SerializeField] float gravity = 2f;
     [SerializeField] float veloYLimit = 10f;
@@ -88,6 +87,11 @@ public class CharController : MonoBehaviour {
         if (!bGrounded)
         {
             velocity += new Vector3(0, -gravity * Time.deltaTime);
+        }
+
+        if (anim.GetBool("Attacking") == true)
+        {
+            velocity = Vector2.zero;
         }
 
         // Apply the velocity to the transform
@@ -217,7 +221,6 @@ public class CharController : MonoBehaviour {
     // Make the player attack
     private void Attack()
     {
-        velocity += new Vector3(attackVelocity * transform.localScale.x * Time.deltaTime, 0);
         Vector2 attackDirection = new Vector2(input.Horizontal, input.Vertical);
         if (attackDirection.x != 0 || attackDirection.y != 0)
         {
@@ -231,6 +234,7 @@ public class CharController : MonoBehaviour {
         anim.SetBool("Attacking", true);
     }
 
+    // Check if an enemy is hit with the ray in the direction of the attack
     private void AttackHitboxOut(Vector2 direction)
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 0.08f);
