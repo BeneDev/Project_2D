@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour {
     private int defense = 2;
 
     // Variables to find the player
-    private GameObject player;
+    private CharController player;
     private Vector3 toPlayer;
 
     [SerializeField] float hitRange = 2f;
@@ -18,7 +18,7 @@ public class EnemyController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = FindObjectOfType<CharController>();
 	}
 	
 	// Update is called once per frame
