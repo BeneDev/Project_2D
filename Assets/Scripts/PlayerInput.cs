@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour, IInput {
 
+    [Range(0, 1)] [SerializeField] float controllerThreshhold;
+
     public float Horizontal
     {
         get
         {
-            return Input.GetAxis("Horizontal");
+            if (Input.GetAxis("Horizontal") >= controllerThreshhold || Input.GetAxis("Horizontal") <= -controllerThreshhold)
+            {
+                return Input.GetAxis("Horizontal");
+            }
+            return 0f;
         }
     }
 
@@ -16,7 +22,11 @@ public class PlayerInput : MonoBehaviour, IInput {
     {
         get
         {
-            return Input.GetAxis("Vertical");
+            if (Input.GetAxis("Vertical") >= controllerThreshhold || Input.GetAxis("Vertical") <= -controllerThreshhold)
+            {
+                return Input.GetAxis("Vertical");
+            }
+            return 0f;
         }
     }
 

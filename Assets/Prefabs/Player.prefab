@@ -71,6 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42a10e8887c719f45a5908ef0f653c2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controllerThreshhold: 0.25
 --- !u!114 &114838042381127328
 MonoBehaviour:
   m_ObjectHideFlags: 1
