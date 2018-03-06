@@ -23,7 +23,7 @@ public class CharController : MonoBehaviour {
     private int attack = 5;
     private int defense = 5;
 
-    public struct PlayerRaycasts // To store the informations of raycasts around the player to calculate physics
+    struct PlayerRaycasts // To store the informations of raycasts around the player to calculate physics
     {
         public RaycastHit2D bottomLeft;
         public RaycastHit2D bottomRight;
@@ -33,6 +33,16 @@ public class CharController : MonoBehaviour {
         public RaycastHit2D lowerRight;
         public RaycastHit2D top;
     }
+
+    public enum State
+    {
+        freeToMove,
+        dodging,
+        attacking,
+        knockedBack
+    };
+
+    public State playerState = State.freeToMove;
 
     private PlayerRaycasts raycasts;
 
@@ -97,7 +107,8 @@ public class CharController : MonoBehaviour {
             velocity += new Vector3(0, -gravity * Time.deltaTime);
         }
 
-        if (anim.GetBool("Attacking") == true)
+        // Apply attack velocity when attacking
+        if (playerState == State.attacking)
         {
             velocity = Vector2.zero;
             velocity += new Vector3(input.Horizontal * appliedAttackVelo.x * Time.deltaTime, input.Vertical * appliedAttackVelo.y * Time.deltaTime);
@@ -105,7 +116,7 @@ public class CharController : MonoBehaviour {
             appliedAttackVelo.y -= appliedAttackVelo.y / 100;
         }
 
-        if(bKnockedBack)
+        if(playerState == State.knockedBack)
         {
             velocity += knockBackForce * Time.deltaTime;
         }
@@ -258,6 +269,7 @@ public class CharController : MonoBehaviour {
         }
         appliedAttackVelo = attackVelo;
         anim.SetBool("Attacking", true);
+        playerState = State.attacking;
     }
 
     // Check if an enemy is hit with the ray in the direction of the attack
@@ -278,6 +290,7 @@ public class CharController : MonoBehaviour {
     private void EndAttack()
     {
         anim.SetBool("Attacking", false);
+        playerState = State.freeToMove;
         alreadyHit = false;
     }
 
@@ -288,13 +301,14 @@ public class CharController : MonoBehaviour {
     // Set up the dodging process
     private void CheckForDodge()
     {
-        if(input.Dodge && anim.GetBool("Dodging") == false)
+        if(input.Dodge && playerState != State.dodging)
         {
             anim.SetBool("Dodging", true);
+            playerState = State.dodging;
             appliedDodgeUpPower = dodgeUpPower;
             Dodge();
         }
-        if(anim.GetBool("Dodging") == true)
+        if(playerState == State.dodging)
         {
             appliedDodgeUpPower -= appliedDodgeUpPower / 10;
             Dodge();
@@ -311,6 +325,7 @@ public class CharController : MonoBehaviour {
     private void EndDodge()
     {
         anim.SetBool("Dodging", false);
+        playerState = State.freeToMove;
     }
 
     #endregion
@@ -352,7 +367,7 @@ public class CharController : MonoBehaviour {
     // Damages the player 
     public void TakeDamage(int damage, Vector3 knockBack)
     {
-        if (anim.GetBool("Attacking") == false)
+        if (playerState != State.attacking && playerState != State.dodging)
         {
             StartCoroutine(UntilKnockBackStops(0.05f));
             bKnockedBack = true;
@@ -384,6 +399,7 @@ public class CharController : MonoBehaviour {
                 bGrounded = true;
                 velocity.y = 0f;
                 anim.SetBool("Grounded", true);
+                playerState = State.freeToMove;
             }
         }
         // When the bottom right collider hit something
@@ -395,6 +411,7 @@ public class CharController : MonoBehaviour {
                 bGrounded = true;
                 velocity.y = 0f;
                 anim.SetBool("Grounded", true);
+                playerState = State.freeToMove;
             }
         }
         // Otherwise the player is not grounded
