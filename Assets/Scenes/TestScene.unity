@@ -1733,6 +1733,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 20819041897139762, guid: 48cb41d4825d59345a64e4667d1e9a4a,
+        type: 2}
+      propertyPath: orthographic size
+      value: 0.62
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 48cb41d4825d59345a64e4667d1e9a4a, type: 2}
   m_IsPrefabParent: 0
@@ -3113,6 +3118,48 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1001 &1286544200
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4460513871060094, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0.55815583
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460513871060094, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.06257241
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460513871060094, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460513871060094, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460513871060094, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460513871060094, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460513871060094, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460513871060094, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
   m_IsPrefabParent: 0
 --- !u!1001 &1294920773
 Prefab:

@@ -10,6 +10,12 @@ public class CharController : MonoBehaviour {
     bool bOnWall = false;
     Animator anim;
     private Vector3 velocity; // The value, which is solely allowed to manipulate the transform directly
+    private bool alreadyHit = false;
+
+    // The attributes of the player
+    private int health = 100;
+    private int attack = 5;
+    private int defense = 5;
 
     public struct PlayerRaycasts // To store the informations of raycasts around the player to calculate physics
     {
@@ -212,13 +218,37 @@ public class CharController : MonoBehaviour {
     private void Attack()
     {
         velocity += new Vector3(attackVelocity * transform.localScale.x * Time.deltaTime, 0);
+        Vector2 attackDirection = new Vector2(input.Horizontal, input.Vertical);
+        if (attackDirection.x != 0 || attackDirection.y != 0)
+        {
+            AttackHitboxOut(attackDirection);
+        }
+        else
+        {
+            attackDirection = new Vector2(transform.localScale.x, 0f);
+            AttackHitboxOut(attackDirection);
+        }
         anim.SetBool("Attacking", true);
+    }
+
+    private void AttackHitboxOut(Vector2 direction)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 0.08f);
+        if (hit.collider && alreadyHit == false)
+        {
+            if(hit.collider.tag == "Enemy")
+            {
+                hit.collider.gameObject.GetComponent<EnemyController>().TakeDamage(attack);
+                alreadyHit = true;
+            }
+        }
     }
 
     // End the attack
     private void EndAttack()
     {
         anim.SetBool("Attacking", false);
+        alreadyHit = false;
     }
 
     #endregion

@@ -12,6 +12,14 @@ public class PlayerInput : MonoBehaviour, IInput {
         }
     }
 
+    public float Vertical
+    {
+        get
+        {
+            return Input.GetAxis("Vertical");
+        }
+    }
+
     public int Jump
     {
         get
