@@ -86,8 +86,8 @@ MonoBehaviour:
   maxHealth: 100
   playerState: 0
   speed: 1
-  jumpPower: 4.2
-  fallMultiplier: 0.0048
+  jumpPower: 3.2
+  fallMultiplier: 0.005
   dodgePower: 2
   dodgeUpPower: 0.3
   dodgeCooldown: 0.2
