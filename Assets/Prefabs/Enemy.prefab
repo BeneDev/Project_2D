@@ -99,9 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b62fa399b55a514fa12db636b53f8a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack: 2
   hitRange: 0.09
-  knockBackStrength: 0.3
+  knockBackStrength: 3
 --- !u!212 &212492262211764102
 SpriteRenderer:
   m_ObjectHideFlags: 1

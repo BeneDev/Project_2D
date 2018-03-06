@@ -84,8 +84,11 @@ public class CharController : MonoBehaviour {
         raycasts.top = Physics2D.Raycast(transform.position + Vector3.right * -0.001f, Vector2.up, 0.02f);
         #endregion
 
-        // Setting the x velocity
-        velocity = new Vector3(input.Horizontal * speed * Time.deltaTime, velocity.y);
+        if (!bKnockedBack)
+        {
+            // Setting the x velocity
+            velocity = new Vector3(input.Horizontal * speed * Time.deltaTime, velocity.y);
+        }
 
         // Checking for collider close to the player
         CheckGrounded();
