@@ -192,6 +192,7 @@ public class CharController : MonoBehaviour {
             if(input.Heal && HealthJuice > 0 && Health < maxHealth)
             {
                 playerState = State.healing;
+                velocity = Vector3.zero;
                 Heal();
             }
             else if(playerState == State.healing)
@@ -306,7 +307,7 @@ public class CharController : MonoBehaviour {
         }
 
         // Check if something is above the player and let him bounce down again relative to the force he went up with
-        if (raycasts.top.collider && velocity.y > 0)
+        if (RaycastForTag("Ground", raycasts.top) && velocity.y > 0)
         {
             velocity.y = -velocity.y / 2;
         }

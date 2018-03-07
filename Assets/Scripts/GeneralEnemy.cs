@@ -11,12 +11,18 @@ public class GeneralEnemy : MonoBehaviour {
     [SerializeField] protected int attack = 2;
     [SerializeField] protected int defense = 2;
 
+    // The amount of particles getting instantiated when the enemy dies
+    [SerializeField] int particleCountAtDeath = 1;
     // The particle getting instantiated when the enemy dies
     [SerializeField] GameObject juiceParticle;
+    // The offset a Juice Particle can have 
+    [SerializeField] float spawnOffset = 0.3f;
 
     // Variables to find the player
     private GameObject player;
     private Vector3 toPlayer;
+
+    Rigidbody2D rb;
 
     [SerializeField] float hitRange = 2f;
     [SerializeField] float knockBackStrength = 3f;
@@ -38,6 +44,7 @@ public class GeneralEnemy : MonoBehaviour {
     public virtual void GeneralInitialization()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        rb = GetComponent<Rigidbody2D>();
     }
 
     public virtual void GeneralBehavior()
@@ -58,7 +65,10 @@ public class GeneralEnemy : MonoBehaviour {
     {
         if (juiceParticle)
         {
-            Instantiate(juiceParticle, transform.position, transform.rotation);
+            for (int i = 0; i < particleCountAtDeath; i++)
+            {
+                Instantiate(juiceParticle, transform.position + new Vector3(Random.Range(-spawnOffset, spawnOffset), Random.Range(-spawnOffset, spawnOffset)), transform.rotation);
+            }
         }
         Destroy(gameObject);
     }
@@ -69,7 +79,11 @@ public class GeneralEnemy : MonoBehaviour {
         health -= damageToTake;
         if (health > 0)
         {
-            transform.position += knockback;
+            // TODO Dont let the enemy goes through collider when knockback is applied
+            if (Physics2D.Raycast(transform.position, knockback, knockback.magnitude).collider.tag != "Ground")
+            {
+                transform.position += knockback;
+            }
         }
         else
         {
