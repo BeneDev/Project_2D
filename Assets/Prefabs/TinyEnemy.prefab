@@ -22,11 +22,11 @@ GameObject:
   - component: {fileID: 212492262211764102}
   - component: {fileID: 61430170223064534}
   - component: {fileID: 50403307587917416}
-  - component: {fileID: 114832975290760664}
+  - component: {fileID: 114534482401201980}
   m_Layer: 0
   m_Name: TinyEnemy
   m_TagString: Enemy
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -36,7 +36,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1207506286974544}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.55815583, y: 0.06257241, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -88,7 +88,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.08, y: 0.08}
   m_EdgeRadius: 0
---- !u!114 &114832975290760664
+--- !u!114 &114534482401201980
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -96,18 +96,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1207506286974544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b62fa399b55a514fa12db636b53f8a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 76f7144b7bc17b04fb07966cdea9ce20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitRange: 0.09
-  knockBackStrength: 3
+  health: 20
+  attack: 20
+  defense: 2
+  hitRange: 0.1
+  knockBackStrength: 5
 --- !u!212 &212492262211764102
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1207506286974544}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1

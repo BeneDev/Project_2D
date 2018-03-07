@@ -8,8 +8,6 @@ public class GameManager : MonoBehaviour {
 
     public Vector3 currentCheckpoint;
 
-    // TODO Level loading and all kinds of this stuff would be implemented here
-
     // Make the GameManger Instance a Singleton 
     private void Awake()
     {

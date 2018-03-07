@@ -120,9 +120,7 @@ public class CharController : MonoBehaviour {
             velocity = new Vector3(input.Horizontal * speed * Time.deltaTime, velocity.y);
         }
 
-        // Checking for collider close to the player
         CheckGrounded();
-        CheckOnWall();
 
         if (!bKnockedBack)
         {
@@ -185,6 +183,12 @@ public class CharController : MonoBehaviour {
             Respawn();
         }
 
+        if(AnyRaycastForTag("Checkpoint") != null)
+        {
+            RaycastHit2D newCheckpoint = (RaycastHit2D)AnyRaycastForTag("Checkpoint");
+            GameManager.Instance.currentCheckpoint = newCheckpoint.collider.gameObject.transform.position;
+        }
+
         // Respawns the player if health is gone
         if(health <= 0)
         {
@@ -198,6 +202,7 @@ public class CharController : MonoBehaviour {
     private void Respawn()
     {
         transform.position = GameManager.Instance.currentCheckpoint;
+        bKnockedBack = false;
         health = maxHealth;
         OnHealthChanged(health);
     }
@@ -241,18 +246,21 @@ public class CharController : MonoBehaviour {
     {
         if (transform.localScale.x < 0)
         {
-            if (raycasts.upperLeft.collider || raycasts.lowerLeft.collider)
+            if (RaycastForTag("Ground", raycasts.upperLeft, raycasts.lowerLeft))//raycasts.upperLeft.collider || raycasts.lowerLeft.collider)
             {
+                bOnWall = true;
                 return true;
             }
         }
         else if (transform.localScale.x > 0)
         {
-            if (raycasts.upperRight.collider || raycasts.lowerRight.collider)
+            if (RaycastForTag("Ground", raycasts.upperRight, raycasts.lowerRight))//raycasts.upperRight.collider || raycasts.lowerRight.collider)
             {
+                bOnWall = true;
                 return true;
             }
         }
+        bOnWall = false;
         return false;
     }
 
@@ -268,6 +276,243 @@ public class CharController : MonoBehaviour {
             return true;
         }
         return false;
+    }
+
+    // TODO Make just one method which takes n number of raycasthits and makes an array, going through that array then and doing the same work
+    #region RaycastForTag and Overloads
+
+    private bool RaycastForTag(string tag, RaycastHit2D one)
+    {
+        if(one.collider != null)
+        {
+            if(one.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool RaycastForTag(string tag, RaycastHit2D one, RaycastHit2D two)
+    {
+        if (one.collider != null)
+        {
+            if (one.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (two.collider != null)
+        {
+            if (two.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool RaycastForTag(string tag, RaycastHit2D one, RaycastHit2D two, RaycastHit2D three)
+    {
+        if (one.collider != null)
+        {
+            if (one.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (two.collider != null)
+        {
+            if (two.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (three.collider != null)
+        {
+            if(three.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool RaycastForTag(string tag, RaycastHit2D one, RaycastHit2D two, RaycastHit2D three, RaycastHit2D four)
+    {
+        if (one.collider != null)
+        {
+            if (one.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (two.collider != null)
+        {
+            if (two.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (three.collider != null)
+        {
+            if (three.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (four.collider != null)
+        {
+            if (four.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool RaycastForTag(string tag, RaycastHit2D one, RaycastHit2D two, RaycastHit2D three, RaycastHit2D four, RaycastHit2D five)
+    {
+        if (one.collider != null)
+        {
+            if (one.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (two.collider != null)
+        {
+            if (two.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (three.collider != null)
+        {
+            if (three.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (four.collider != null)
+        {
+            if (four.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (five.collider != null)
+        {
+            if (five.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool RaycastForTag(string tag, RaycastHit2D one, RaycastHit2D two, RaycastHit2D three, RaycastHit2D four, RaycastHit2D five, RaycastHit2D six)
+    {
+        if (one.collider != null)
+        {
+            if (one.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (two.collider != null)
+        {
+            if (two.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (three.collider != null)
+        {
+            if (three.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (four.collider != null)
+        {
+            if (four.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (five.collider != null)
+        {
+            if (five.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        else if (six.collider != null)
+        {
+            if (six.collider.tag == tag)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    #endregion
+    
+    // Check every raycast from the raycasts struct and return the first one, which found an object which matched the tag 
+    private RaycastHit2D? AnyRaycastForTag(string tag)
+    {
+        if (raycasts.bottomLeft.collider != null)
+        {
+            if (raycasts.bottomLeft.collider.tag == tag)
+            {
+                return raycasts.bottomLeft;
+            }
+        }
+        if (raycasts.bottomRight.collider != null)
+        {
+            if (raycasts.bottomRight.collider.tag == tag)
+            {
+                return raycasts.bottomRight;
+            }
+        }
+        if (raycasts.upperLeft.collider != null)
+        {
+            if (raycasts.upperLeft.collider.tag == tag)
+            {
+                return raycasts.upperLeft;
+            }
+        }
+        if (raycasts.lowerLeft.collider != null)
+        {
+            if (raycasts.lowerLeft.collider.tag == tag)
+            {
+                return raycasts.lowerLeft;
+            }
+        }
+        if (raycasts.upperRight.collider != null)
+        {
+            if (raycasts.upperRight.collider.tag == tag)
+            {
+                return raycasts.upperRight;
+            }
+        }
+        if (raycasts.lowerRight.collider != null)
+        {
+            if (raycasts.lowerRight.collider.tag == tag)
+            {
+                return raycasts.lowerRight;
+            }
+        }
+        if (raycasts.top.collider != null)
+        {
+            if (raycasts.top.collider.tag == tag)
+            {
+                return raycasts.top;
+            }
+        }
+        return null;
     }
 
     #endregion
@@ -468,52 +713,23 @@ public class CharController : MonoBehaviour {
 
 #endregion
 
-    #region Grounded and OnWall
+    #region Grounded
 
     // Checks if the player is on the ground or not
     private void CheckGrounded()
     {
-        // When the bottom left collider hit something
-        if (raycasts.bottomLeft.collider)
+        // When the bottom left collider hit something tagged as ground
+        if (RaycastForTag("Ground", raycasts.bottomLeft) || RaycastForTag("Ground", raycasts.bottomRight))
         {
-            // And the actual object, which is hit, is tagged as ground
-            if (raycasts.bottomLeft.collider.tag == "Ground")
-            {
-                bGrounded = true;
-                velocity.y = 0f;
-                anim.SetBool("Grounded", true);
-            }
-        }
-        // When the bottom right collider hit something
-        else if (raycasts.bottomRight.collider)
-        {
-            // And the actual object, which is hit, is tagged as ground
-            if (raycasts.bottomRight.collider.tag == "Ground")
-            {
-                bGrounded = true;
-                velocity.y = 0f;
-                anim.SetBool("Grounded", true);
-            }
+            bGrounded = true;
+            velocity.y = 0f;
+            anim.SetBool("Grounded", true);
         }
         // Otherwise the player is not grounded
         else
         {
             bGrounded = false;
             anim.SetBool("Grounded", false);
-        }
-    }
-
-    // Checks if the player is up against a wall
-    private void CheckOnWall()
-    {
-        // When the player is against a wall
-        if (raycasts.lowerLeft.collider || raycasts.upperLeft.collider || raycasts.lowerRight.collider || raycasts.upperRight.collider)
-        {
-            bOnWall = true;
-        }
-        else
-        {
-            bOnWall = false;
         }
     }
 

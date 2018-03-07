@@ -84,10 +84,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  baseAttack: 5
+  baseDefense: 5
   playerState: 0
   speed: 1
   jumpPower: 3.2
   fallMultiplier: 0.005
+  gravity: 0.02
+  veloYLimit: -0.004
+  knockBackCapY: 2
   dodgePower: 2
   dodgeUpPower: 0.3
   dodgeCooldown: 0.2
@@ -96,8 +101,6 @@ MonoBehaviour:
   attackCooldown: 0.2
   knockBackStrength: 0.3
   wallSlideSpeed: 0.0001
-  gravity: 0.02
-  veloYLimit: -0.004
 --- !u!212 &212588372083321244
 SpriteRenderer:
   m_ObjectHideFlags: 1

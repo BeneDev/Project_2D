@@ -6,8 +6,8 @@ TagManager:
   tags:
   - Wall
   - Ground
-  - InstaDeath
   - Enemy
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
@@ -17,7 +17,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Traversible
   - 
   - 
   - 
