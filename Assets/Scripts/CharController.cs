@@ -77,7 +77,7 @@ public class CharController : MonoBehaviour {
     [SerializeField] float attackCooldown = 1f;
     bool bAttackable = true; // Stores wether the player is able to attack or not
     [SerializeField] float knockBackStrength = 3f; // The amount of knockback the player is applying to hit enemies
-    Vector2 attackDirection;
+    Vector2 attackDirection; // The direction for the raycast, checking for enemies to hit
 
     [SerializeField] float wallSlideSpeed = 3f; // How fast the player slides down a wall while holding towards it
 
@@ -134,7 +134,7 @@ public class CharController : MonoBehaviour {
             if (input.Attack && bAttackable == true)
             {
                 Attack();
-                if (input.Horizontal != 0f && input.Vertical != 0f)
+                if (input.Horizontal != 0f || input.Vertical != 0f)
                 {
                     appliedAttackVelo = new Vector3(input.Horizontal * appliedAttackVelo.x * Time.deltaTime, input.Vertical * appliedAttackVelo.y * Time.deltaTime);
                 }
@@ -303,8 +303,11 @@ public class CharController : MonoBehaviour {
     // Make the player attack, setting the direction of attack, hitbox and animation fields
     private void Attack()
     {
-        attackDirection = new Vector2(input.Horizontal, input.Vertical);
-        if (attackDirection.x == 0 && attackDirection.y == 0)
+        if (input.Horizontal != 0f || input.Vertical != 0f)
+        {
+            attackDirection = new Vector2(input.Horizontal, input.Vertical);
+        }
+        else
         {
             attackDirection = new Vector2(transform.localScale.x, 0f);
         }
