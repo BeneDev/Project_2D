@@ -182,11 +182,25 @@ public class CharController : MonoBehaviour {
         // Reset the player to Debug quickly
         if (transform.position.y < -5f)
         {
-            Reset();
+            Respawn();
+        }
+
+        // Respawns the player if health is gone
+        if(health <= 0)
+        {
+            Respawn();
         }
     }
 
     #region Helper Methods
+
+    // Respawns the player at the currently activated checkpoint
+    private void Respawn()
+    {
+        transform.position = GameManager.Instance.currentCheckpoint;
+        health = maxHealth;
+        OnHealthChanged(health);
+    }
 
     // Make sure the velocity does not violate the laws of physics in this game
     private void CheckForValidVelocity()
@@ -259,13 +273,6 @@ public class CharController : MonoBehaviour {
     #endregion
 
     #region Debugging Tools
-
-    // Resets the players velocity and position to test quickly
-    private void Reset()
-    {
-        transform.position = Vector3.zero;
-        velocity = Vector3.zero;
-    }
 
     //private void OnGUI()
     //{

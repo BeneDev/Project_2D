@@ -7,9 +7,9 @@ public class GeneralEnemy : MonoBehaviour {
     #region Fields
 
     // Enemy Attributes
-    private int health = 20;
-    private int attack = 2;
-    private int defense = 2;
+    [SerializeField] protected int health = 20;
+    [SerializeField] protected int attack = 2;
+    [SerializeField] protected int defense = 2;
 
     // Variables to find the player
     private GameObject player;
