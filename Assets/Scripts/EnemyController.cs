@@ -31,7 +31,7 @@ public class EnemyController : MonoBehaviour {
         // Attacks the player if he within reach
         if(toPlayer.magnitude <= hitRange)
         {
-            player.GetComponent<CharController>().TakeDamage(attack, new Vector3(toPlayer.normalized.x * knockBackStrength, knockBackStrength / 50));
+            player.GetComponent<CharController>().TakeDamage(attack, new Vector3(toPlayer.normalized.x * knockBackStrength, toPlayer.normalized.y * knockBackStrength));
         }
         // Die if health is gone
 		if(health <= 0)
