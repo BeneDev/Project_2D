@@ -124,6 +124,9 @@ public class CharController : MonoBehaviour {
     [SerializeField] float knockBackStrength = 3f; // The amount of knockback the player is applying to hit enemies
     Vector2 attackDirection; // The direction for the raycast, checking for enemies to hit
 
+    [SerializeField] int healDuration = 5; // The frames one has to wait in between one transfer of Health juice to health
+    private int healCounter = 0; // The actual counter for the heal duration
+
     [SerializeField] float wallSlideSpeed = 3f; // How fast the player slides down a wall while holding towards it
 
     #endregion
@@ -187,6 +190,7 @@ public class CharController : MonoBehaviour {
             // Checks for input for healing
             if(input.Heal && HealthJuice > 0 && Health < maxHealth)
             {
+                playerState = State.healing;
                 Heal();
             }
             else if(playerState == State.healing)
@@ -610,9 +614,16 @@ public class CharController : MonoBehaviour {
 
     private void Heal()
     {
-        playerState = State.healing;
-        HealthJuice--;
-        Health++;
+        if(healCounter < healDuration)
+        {
+            healCounter++;
+        }
+        else
+        {
+            healCounter = 0;
+            HealthJuice--;
+            Health++;
+        }
     }
 
     #endregion
