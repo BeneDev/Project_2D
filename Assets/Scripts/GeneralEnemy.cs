@@ -80,10 +80,7 @@ public class GeneralEnemy : MonoBehaviour {
         if (health > 0)
         {
             // TODO Dont let the enemy goes through collider when knockback is applied
-            if (Physics2D.Raycast(transform.position, knockback, knockback.magnitude).collider.tag != "Ground")
-            {
-                transform.position += knockback;
-            }
+            transform.position += knockback;
         }
         else
         {
