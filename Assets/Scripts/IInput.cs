@@ -9,4 +9,6 @@
     bool Dodge { get; }
 
     bool Attack { get; }
+
+    bool Heal { get; }
 }

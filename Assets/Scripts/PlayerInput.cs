@@ -82,5 +82,17 @@ public class PlayerInput : MonoBehaviour, IInput {
         }
     }
 
+    public bool Heal
+    {
+        get
+        {
+            if(Input.GetButton("Heal"))
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
     #endregion
 }

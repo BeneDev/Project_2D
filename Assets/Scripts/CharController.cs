@@ -92,7 +92,8 @@ public class CharController : MonoBehaviour {
         freeToMove,
         dodging,
         attacking,
-        knockedBack
+        knockedBack,
+        healing
     }; // State machine for the player
     public State playerState = State.freeToMove; // Stores the current state of the player
 
@@ -155,7 +156,7 @@ public class CharController : MonoBehaviour {
         #endregion
 
         // Setting the x velocity when player is not knocked back
-        if (!bKnockedBack && playerState != State.attacking)
+        if (!bKnockedBack && playerState != State.attacking && playerState != State.healing)
         {
             velocity = new Vector3(input.Horizontal * speed * Time.deltaTime, velocity.y);
         }
@@ -182,6 +183,15 @@ public class CharController : MonoBehaviour {
                 {
                     appliedAttackVelo = new Vector3(transform.localScale.x * appliedAttackVelo.x * Time.deltaTime, 0f);
                 }
+            }
+            // Checks for input for healing
+            if(input.Heal && HealthJuice > 0 && Health < maxHealth)
+            {
+                Heal();
+            }
+            else if(playerState == State.healing)
+            {
+                playerState = State.freeToMove;
             }
         }
 
@@ -592,6 +602,17 @@ public class CharController : MonoBehaviour {
         {
             anim.SetBool("Idling", true);
         }
+    }
+
+    #endregion
+
+    #region Healing
+
+    private void Heal()
+    {
+        playerState = State.healing;
+        HealthJuice--;
+        Health++;
     }
 
     #endregion
