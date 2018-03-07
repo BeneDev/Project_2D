@@ -77,6 +77,7 @@ public class CharController : MonoBehaviour {
     [SerializeField] float attackCooldown = 1f;
     bool bAttackable = true; // Stores wether the player is able to attack or not
     [SerializeField] float knockBackStrength = 3f; // The amount of knockback the player is applying to hit enemies
+    Vector2 attackDirection;
 
     [SerializeField] float wallSlideSpeed = 3f; // How fast the player slides down a wall while holding towards it
 
@@ -85,6 +86,11 @@ public class CharController : MonoBehaviour {
     void Start () {
         input = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
+
+        if (OnHealthChanged != null)
+        {
+            OnHealthChanged(health);
+        }
 
         // Make the player have full health
         health = maxHealth;
@@ -107,7 +113,7 @@ public class CharController : MonoBehaviour {
         #endregion
 
         // Setting the x velocity when player is not knocked back
-        if (!bKnockedBack)
+        if (!bKnockedBack && playerState != State.attacking)
         {
             velocity = new Vector3(input.Horizontal * speed * Time.deltaTime, velocity.y);
         }
@@ -128,7 +134,14 @@ public class CharController : MonoBehaviour {
             if (input.Attack && bAttackable == true)
             {
                 Attack();
-                appliedAttackVelo = new Vector3(input.Horizontal * appliedAttackVelo.x * Time.deltaTime, input.Vertical * appliedAttackVelo.y * Time.deltaTime);
+                if (input.Horizontal != 0f && input.Vertical != 0f)
+                {
+                    appliedAttackVelo = new Vector3(input.Horizontal * appliedAttackVelo.x * Time.deltaTime, input.Vertical * appliedAttackVelo.y * Time.deltaTime);
+                }
+                else
+                {
+                    appliedAttackVelo = new Vector3(transform.localScale.x * appliedAttackVelo.x * Time.deltaTime, 0f);
+                }
             }
         }
 
@@ -145,6 +158,7 @@ public class CharController : MonoBehaviour {
             velocity += appliedAttackVelo;
             appliedAttackVelo.x -= appliedAttackVelo.x / 100;
             appliedAttackVelo.y -= appliedAttackVelo.y / 100;
+            AttackHitboxOut(attackDirection);
         }
 
         // Apply knockback when the player is currently getting knocked back
@@ -289,15 +303,10 @@ public class CharController : MonoBehaviour {
     // Make the player attack, setting the direction of attack, hitbox and animation fields
     private void Attack()
     {
-        Vector2 attackDirection = new Vector2(input.Horizontal, input.Vertical);
-        if (attackDirection.x != 0 || attackDirection.y != 0)
-        {
-            AttackHitboxOut(attackDirection);
-        }
-        else
+        attackDirection = new Vector2(input.Horizontal, input.Vertical);
+        if (attackDirection.x == 0 && attackDirection.y == 0)
         {
             attackDirection = new Vector2(transform.localScale.x, 0f);
-            AttackHitboxOut(attackDirection);
         }
         appliedAttackVelo = attackVelo;
         bAttackable = false;
@@ -457,7 +466,6 @@ public class CharController : MonoBehaviour {
                 bGrounded = true;
                 velocity.y = 0f;
                 anim.SetBool("Grounded", true);
-                playerState = State.freeToMove;
             }
         }
         // When the bottom right collider hit something
@@ -469,7 +477,6 @@ public class CharController : MonoBehaviour {
                 bGrounded = true;
                 velocity.y = 0f;
                 anim.SetBool("Grounded", true);
-                playerState = State.freeToMove;
             }
         }
         // Otherwise the player is not grounded
