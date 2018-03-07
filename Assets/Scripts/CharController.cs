@@ -23,12 +23,31 @@ public class CharController : MonoBehaviour {
         }
     }
 
+    int HealthJuice
+    {
+        get
+        {
+            return healthJuice;
+        }
+        set
+        {
+            healthJuice = value;
+            if (OnHealthJuiceChanged != null)
+            {
+                OnHealthJuiceChanged(healthJuice);
+            }
+        }
+    }
+
     #endregion
 
     #region Fields
 
     // Delegate for Healht changes
     public event System.Action<int> OnHealthChanged;
+
+    // Delegate for Healht  Juice changes
+    public event System.Action<int> OnHealthJuiceChanged;
 
     PlayerInput input; // Stores the input giving class
     Animator anim; 
@@ -46,6 +65,9 @@ public class CharController : MonoBehaviour {
     // The attributes of the player
     [SerializeField] int maxHealth = 100;
     private int health = 100;
+
+    [SerializeField] int maxHealthJuice = 100;
+    private int healthJuice = 100;
 
     [SerializeField] int baseAttack = 5;
     private int attack = 5;
@@ -111,6 +133,9 @@ public class CharController : MonoBehaviour {
 
         // Make the player have full health
         Health = maxHealth;
+
+        // Make the player have full health Juice
+        HealthJuice = maxHealthJuice;
     }
 	
 	void FixedUpdate ()
@@ -219,6 +244,7 @@ public class CharController : MonoBehaviour {
         transform.position = GameManager.Instance.currentCheckpoint;
         bKnockedBack = false;
         Health = maxHealth;
+        HealthJuice = maxHealthJuice;
     }
 
     // Make sure the velocity does not violate the laws of physics in this game
