@@ -5,6 +5,26 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerInput))]
 public class CharController : MonoBehaviour {
 
+    #region Properties
+
+    int Health
+    {
+        get
+        {
+            return health;
+        }
+        set
+        {
+            health = value;
+            if (OnHealthChanged != null)
+            {
+                OnHealthChanged(health);
+            }
+        }
+    }
+
+    #endregion
+
     #region Fields
 
     // Delegate for Healht changes
@@ -89,13 +109,8 @@ public class CharController : MonoBehaviour {
         input = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
 
-        if (OnHealthChanged != null)
-        {
-            OnHealthChanged(health);
-        }
-
         // Make the player have full health
-        health = maxHealth;
+        Health = maxHealth;
     }
 	
 	void FixedUpdate ()
@@ -190,7 +205,7 @@ public class CharController : MonoBehaviour {
         }
 
         // Respawns the player if health is gone
-        if(health <= 0)
+        if(Health <= 0)
         {
             Respawn();
         }
@@ -203,8 +218,7 @@ public class CharController : MonoBehaviour {
     {
         transform.position = GameManager.Instance.currentCheckpoint;
         bKnockedBack = false;
-        health = maxHealth;
-        OnHealthChanged(health);
+        Health = maxHealth;
     }
 
     // Make sure the velocity does not violate the laws of physics in this game
@@ -694,11 +708,7 @@ public class CharController : MonoBehaviour {
             // Wait for the knockback to stop and giving the player free to move again
             StartCoroutine(UntilKnockBackStops(0.05f));
             bKnockedBack = true;
-            health -= damage;
-            if (OnHealthChanged != null)
-            {
-                OnHealthChanged(health);
-            }
+            Health -= damage;
             // Set the knockback force to be applied
             knockBackForce = knockBack;
         }
