@@ -126,6 +126,7 @@ public class CharController : MonoBehaviour {
 
     [SerializeField] int healDuration = 5; // The frames one has to wait in between one transfer of Health juice to health
     private int healCounter = 0; // The actual counter for the heal duration
+    [SerializeField] int juiceRegenValue = 10;
 
     [SerializeField] float wallSlideSpeed = 3f; // How fast the player slides down a wall while holding towards it
 
@@ -223,6 +224,22 @@ public class CharController : MonoBehaviour {
                 knockBackForce.y = knockBackCapY;
             }
             velocity = knockBackForce * Time.deltaTime;
+        }
+
+        if(AnyRaycastForTag("Juice") != null)
+        {
+            if(HealthJuice + juiceRegenValue < maxHealthJuice)
+            {
+                HealthJuice += juiceRegenValue;
+                RaycastHit2D hitJuiceParticle = (RaycastHit2D)AnyRaycastForTag("Juice");
+                Destroy(hitJuiceParticle.collider.gameObject);
+            }
+            else if(HealthJuice != maxHealth)
+            {
+                HealthJuice = maxHealthJuice;
+                RaycastHit2D hitJuiceParticle = (RaycastHit2D)AnyRaycastForTag("Juice");
+                Destroy(hitJuiceParticle.collider.gameObject);
+            }
         }
 
         // Checking if the calculated velocity is fine with the world and restrictions
