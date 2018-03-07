@@ -3316,6 +3316,11 @@ Prefab:
       propertyPath: hitRange
       value: 0.08
       objectReference: {fileID: 0}
+    - target: {fileID: 114832975290760664, guid: a32658b960a61df44956c517f3d7d87b,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
   m_IsPrefabParent: 0
@@ -3503,6 +3508,24 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 157dc4cff2daea94188fbe4c21bf9fdf, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1318929305 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1207506286974544, guid: a32658b960a61df44956c517f3d7d87b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1286544200}
+--- !u!114 &1318929311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1318929305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76f7144b7bc17b04fb07966cdea9ce20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitRange: 0.08
+  knockBackStrength: 5
 --- !u!1 &1325535455
 GameObject:
   m_ObjectHideFlags: 0
