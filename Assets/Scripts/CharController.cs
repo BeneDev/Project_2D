@@ -63,6 +63,8 @@ public class CharController : MonoBehaviour {
     [SerializeField] float gravity = 2f;
     [SerializeField] float veloYLimit = 10f; // The player cannot fall faster than this value to prevent him falling through hitboxes
 
+    [SerializeField] float knockBackCapY = 2f;
+
     // Fields to manipulate the Dodge
     [SerializeField] float dodgePower = 100f; // Force forward when dodging
     [SerializeField] float dodgeUpPower = 20f; // This defines the applied Dodge Up Power
@@ -164,7 +166,11 @@ public class CharController : MonoBehaviour {
         // Apply knockback when the player is currently getting knocked back
         if(bKnockedBack)
         {
-            velocity += knockBackForce * Time.deltaTime;
+            if(knockBackForce.y > knockBackCapY)
+            {
+                knockBackForce.y = knockBackCapY;
+            }
+            velocity = knockBackForce * Time.deltaTime;
         }
 
         // Checking if the calculated velocity is fine with the world and restrictions

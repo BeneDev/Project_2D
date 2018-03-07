@@ -31,7 +31,7 @@ public class EnemyController : MonoBehaviour {
         // Attacks the player if he within reach
         if(toPlayer.magnitude <= hitRange)
         {
-            player.GetComponent<CharController>().TakeDamage(attack, new Vector3(toPlayer.normalized.x * knockBackStrength, toPlayer.normalized.y * knockBackStrength));
+            player.GetComponent<CharController>().TakeDamage(attack, CalculateKnockback());
         }
         // Die if health is gone
 		if(health <= 0)
@@ -46,6 +46,39 @@ public class EnemyController : MonoBehaviour {
     private void Die()
     {
         Destroy(gameObject);
+    }
+
+    private Vector3 CalculateKnockback()
+    {
+        Vector3 knockBack = toPlayer.normalized * knockBackStrength;
+        if(GetOnlyValue(toPlayer.x) <= 0.065f)
+        {
+            if(toPlayer.x > 0)
+            {
+                toPlayer.x = 0.1f;
+            }
+            else
+            {
+                toPlayer.x = -0.1f;
+            }
+        }
+        return knockBack;
+    }
+
+    private float GetOnlyValue(float number)
+    {
+        if(number > 0)
+        {
+            return number;
+        }
+        else if(number < 0)
+        {
+            return -number;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     // Subtract damage and knockback to the enemy
