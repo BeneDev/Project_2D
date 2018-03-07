@@ -11,6 +11,9 @@ public class GeneralEnemy : MonoBehaviour {
     [SerializeField] protected int attack = 2;
     [SerializeField] protected int defense = 2;
 
+    // The particle getting instantiated when the enemy dies
+    [SerializeField] GameObject juiceParticle;
+
     // Variables to find the player
     private GameObject player;
     private Vector3 toPlayer;
@@ -48,16 +51,15 @@ public class GeneralEnemy : MonoBehaviour {
             player.GetComponent<CharController>().TakeDamage(attack, CalculateKnockback());
             // TODO play the right animation and maybe make dedicated attack for enemies
         }
-        // Die if health is gone
-        if (health <= 0)
-        {
-            Die();
-        }
     }
 
     // TODO Play also right animation
     public virtual void Die()
     {
+        if (juiceParticle)
+        {
+            Instantiate(juiceParticle, transform.position, transform.rotation);
+        }
         Destroy(gameObject);
     }
 
@@ -65,7 +67,14 @@ public class GeneralEnemy : MonoBehaviour {
     public virtual void TakeDamage(int damageToTake, Vector3 knockback)
     {
         health -= damageToTake;
-        transform.position += knockback;
+        if (health > 0)
+        {
+            transform.position += knockback;
+        }
+        else
+        {
+            Die();
+        }
     }
 
     public Vector3 CalculateKnockback()
