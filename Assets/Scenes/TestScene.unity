@@ -1915,6 +1915,11 @@ Prefab:
       propertyPath: m_Name
       value: TinyEnemy (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 212492262211764102, guid: a32658b960a61df44956c517f3d7d87b,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
   m_IsPrefabParent: 0

@@ -43,7 +43,7 @@ public class CharController : MonoBehaviour {
 
     #region Fields
 
-    // Delegate for Healht changes
+    // Delegate for Health changes
     public event System.Action<int> OnHealthChanged;
 
     // Delegate for Healht  Juice changes

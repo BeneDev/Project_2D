@@ -4,7 +4,30 @@ using UnityEngine;
 
 public class GeneralEnemy : MonoBehaviour {
 
+    #region Properties
+
+    public int Health
+    {
+        get
+        {
+            return health;
+        }
+        set
+        {
+            health = value;
+            if(OnEnemyHealthChanged != null)
+            {
+                OnEnemyHealthChanged(health);
+            }
+        }
+    }
+
+    #endregion
+
     #region Fields
+
+    // Delegate for health changes on the enemy
+    public event System.Action<int> OnEnemyHealthChanged;
 
     // Enemy Attributes
     [SerializeField] protected int health = 20;
@@ -79,20 +102,34 @@ public class GeneralEnemy : MonoBehaviour {
     // Subtract damage and knockback to the enemy
     public virtual void TakeDamage(int damageToTake, Vector3 knockback)
     {
-        health -= damageToTake;
-        if (health > 0)
+        // When the damage is greater than defense, do that remaining damage
+        if (damageToTake - defense > 0)
         {
-            // TODO Dont let the enemy goes through collider when knockback is applied
+            Health -= damageToTake - defense;
+        }
+        // Otherwise deal just one damage
+        else
+        {
+            Health--;
+        }
+        if (Health > 0)
+        {
+            // Dont let the enemy goes through collider when knockback is applied
             if(!Physics2D.Raycast(transform.position, knockback, knockback.magnitude, layersToCollideWith))
             {
                 transform.position += knockback;
             }
             else
             {
-                // TODO Get Knocked back onto the wall
+                // Get Knocked back onto the wall
                 while(!Physics2D.Raycast(transform.position, knockback, knockback.magnitude / 10, layersToCollideWith))
                 {
                     transform.position += knockback / 10;
+                }
+                Health -= damageToTake;
+                if(Health <= 0)
+                {
+                    Die();
                 }
             }
         }
