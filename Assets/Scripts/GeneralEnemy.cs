@@ -70,7 +70,7 @@ public class GeneralEnemy : MonoBehaviour {
         {
             for (int i = 0; i < particleCountAtDeath; i++)
             {
-                Instantiate(juiceParticle, transform.position + new Vector3(Random.Range(-spawnOffset, spawnOffset), Random.Range(-spawnOffset, spawnOffset)), transform.rotation);
+                Instantiate(juiceParticle, transform.position + new Vector3(Random.Range(-spawnOffset, spawnOffset), Random.Range(0f, spawnOffset)), transform.rotation);
             }
         }
         Destroy(gameObject);
@@ -86,6 +86,14 @@ public class GeneralEnemy : MonoBehaviour {
             if(!Physics2D.Raycast(transform.position, knockback, knockback.magnitude, layersToCollideWith))
             {
                 transform.position += knockback;
+            }
+            else
+            {
+                // TODO Get Knocked back onto the wall
+                while(!Physics2D.Raycast(transform.position, knockback, knockback.magnitude / 10, layersToCollideWith))
+                {
+                    transform.position += knockback / 10;
+                }
             }
         }
         else
