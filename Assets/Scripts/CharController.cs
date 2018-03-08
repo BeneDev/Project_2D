@@ -351,186 +351,21 @@ public class CharController : MonoBehaviour {
     }
 
     // TODO Make just one method which takes n number of raycasthits and makes an array, going through that array then and doing the same work
-    #region RaycastForTag and Overloads
-
-    private bool RaycastForTag(string tag, RaycastHit2D one)
+    private bool RaycastForTag(string tag, params RaycastHit2D[] rayArray)
     {
-        if(one.collider != null)
+        for (int i = 0; i < rayArray.Length; i++)
         {
-            if(one.collider.tag == tag)
+            if (rayArray[i].collider != null)
             {
-                return true;
+                if (rayArray[i].collider.tag == tag)
+                {
+                    return true;
+                }
             }
         }
         return false;
     }
-
-    private bool RaycastForTag(string tag, RaycastHit2D one, RaycastHit2D two)
-    {
-        if (one.collider != null)
-        {
-            if (one.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (two.collider != null)
-        {
-            if (two.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private bool RaycastForTag(string tag, RaycastHit2D one, RaycastHit2D two, RaycastHit2D three)
-    {
-        if (one.collider != null)
-        {
-            if (one.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (two.collider != null)
-        {
-            if (two.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (three.collider != null)
-        {
-            if(three.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private bool RaycastForTag(string tag, RaycastHit2D one, RaycastHit2D two, RaycastHit2D three, RaycastHit2D four)
-    {
-        if (one.collider != null)
-        {
-            if (one.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (two.collider != null)
-        {
-            if (two.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (three.collider != null)
-        {
-            if (three.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (four.collider != null)
-        {
-            if (four.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private bool RaycastForTag(string tag, RaycastHit2D one, RaycastHit2D two, RaycastHit2D three, RaycastHit2D four, RaycastHit2D five)
-    {
-        if (one.collider != null)
-        {
-            if (one.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (two.collider != null)
-        {
-            if (two.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (three.collider != null)
-        {
-            if (three.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (four.collider != null)
-        {
-            if (four.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (five.collider != null)
-        {
-            if (five.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private bool RaycastForTag(string tag, RaycastHit2D one, RaycastHit2D two, RaycastHit2D three, RaycastHit2D four, RaycastHit2D five, RaycastHit2D six)
-    {
-        if (one.collider != null)
-        {
-            if (one.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (two.collider != null)
-        {
-            if (two.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (three.collider != null)
-        {
-            if (three.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (four.collider != null)
-        {
-            if (four.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (five.collider != null)
-        {
-            if (five.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        else if (six.collider != null)
-        {
-            if (six.collider.tag == tag)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    #endregion
+    
     
     // Check every raycast from the raycasts struct and return the first one, which found an object which matched the tag 
     private RaycastHit2D? AnyRaycastForTag(string tag)
