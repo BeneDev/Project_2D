@@ -14,20 +14,18 @@ public class GeneralEnemy : MonoBehaviour {
         }
         set
         {
-            health = value;
-            if(OnEnemyHealthChanged != null)
+            if(damageNumber)
             {
-                OnEnemyHealthChanged(health);
+                DamageNumberController number = Instantiate(damageNumber, transform.position, transform.rotation);
+                number.Init((health - value).ToString(), gameObject);
             }
+            health = value;
         }
     }
 
     #endregion
 
     #region Fields
-
-    // Delegate for health changes on the enemy
-    public event System.Action<int> OnEnemyHealthChanged;
 
     // Enemy Attributes
     [SerializeField] protected int health = 20;
@@ -40,6 +38,9 @@ public class GeneralEnemy : MonoBehaviour {
     [SerializeField] GameObject juiceParticle;
     // The offset a Juice Particle can have 
     [SerializeField] float spawnOffset = 0.3f;
+
+    // The canvas used to show damage numbers
+    [SerializeField] DamageNumberController damageNumber;
 
     // Variables to find the player
     private GameObject player;

@@ -103,8 +103,11 @@ MonoBehaviour:
   attack: 20
   defense: 2
   particleCountAtDeath: 1
-  juiceParticle: {fileID: 0}
+  juiceParticle: {fileID: 1330060540211550, guid: b1b0e35129c28e644bfbd5c734de1576,
+    type: 2}
   spawnOffset: 0.2
+  damageNumber: {fileID: 114238172993012594, guid: 5c34c3404ee0a384a86f51f3dcf3f73e,
+    type: 2}
   hitRange: 0.1
   knockBackStrength: 5
   layersToCollideWith:

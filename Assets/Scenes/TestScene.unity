@@ -503,7 +503,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &123628275
 Prefab:
@@ -1905,20 +1905,9 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114534482401201980, guid: a32658b960a61df44956c517f3d7d87b,
-        type: 2}
-      propertyPath: juiceParticle
-      value: 
-      objectReference: {fileID: 1330060540211550, guid: b1b0e35129c28e644bfbd5c734de1576,
-        type: 2}
     - target: {fileID: 1207506286974544, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
       propertyPath: m_Name
       value: TinyEnemy (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 212492262211764102, guid: a32658b960a61df44956c517f3d7d87b,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
@@ -2437,7 +2426,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4245647824328870, guid: 39a0be06810c862438439af8b47b7ba5, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 39a0be06810c862438439af8b47b7ba5, type: 2}
@@ -3836,12 +3825,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114534482401201980, guid: a32658b960a61df44956c517f3d7d87b,
-        type: 2}
-      propertyPath: juiceParticle
-      value: 
-      objectReference: {fileID: 1330060540211550, guid: b1b0e35129c28e644bfbd5c734de1576,
-        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a32658b960a61df44956c517f3d7d87b, type: 2}
   m_IsPrefabParent: 0
