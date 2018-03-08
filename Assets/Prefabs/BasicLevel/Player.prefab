@@ -99,9 +99,10 @@ MonoBehaviour:
   dodgeCooldown: 0.2
   attackReach: 0.2
   attackVelo: {x: 5, y: 2}
-  attackCooldown: 0.2
+  attackCooldown: 0.1
   knockBackStrength: 0.3
   healDuration: 30
+  juiceRegenValue: 10
   wallSlideSpeed: 0.0001
 --- !u!212 &212588372083321244
 SpriteRenderer:
