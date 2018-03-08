@@ -27,6 +27,9 @@ public class GeneralEnemy : MonoBehaviour {
     [SerializeField] float hitRange = 2f;
     [SerializeField] float knockBackStrength = 3f;
 
+    // The layer mask used to collide with only walls
+    [SerializeField] LayerMask layersToCollideWith;
+
     #endregion
 
     void Start ()
@@ -80,7 +83,10 @@ public class GeneralEnemy : MonoBehaviour {
         if (health > 0)
         {
             // TODO Dont let the enemy goes through collider when knockback is applied
-            transform.position += knockback;
+            if(!Physics2D.Raycast(transform.position, knockback, knockback.magnitude, layersToCollideWith))
+            {
+                transform.position += knockback;
+            }
         }
         else
         {

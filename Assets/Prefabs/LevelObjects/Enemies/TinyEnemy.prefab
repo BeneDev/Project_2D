@@ -107,6 +107,9 @@ MonoBehaviour:
   spawnOffset: 0.2
   hitRange: 0.1
   knockBackStrength: 5
+  layersToCollideWith:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!212 &212492262211764102
 SpriteRenderer:
   m_ObjectHideFlags: 1
