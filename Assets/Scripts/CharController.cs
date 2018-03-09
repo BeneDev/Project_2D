@@ -50,7 +50,9 @@ public class CharController : MonoBehaviour {
     public event System.Action<int> OnHealthJuiceChanged;
 
     PlayerInput input; // Stores the input giving class
-    Animator anim; 
+    Animator anim;
+
+    [SerializeField] LayerMask layersToCollideWith;
 
     bool bGrounded = false; // Stores if the player is on the ground or not
     bool bOnWall = false; // Stores if the player is on a wall or not
@@ -128,6 +130,10 @@ public class CharController : MonoBehaviour {
     private int healCounter = 0; // The actual counter for the heal duration
     [SerializeField] int juiceRegenValue = 10;
 
+    [SerializeField] float invincibilityTime = 1f; // The amount of seconds, the player is invincible after getting hit
+    private float invincibilityCounter = 0f; // This counts down until player can be hit again. Only if this value is 0, the player can be hit.
+
+
     [SerializeField] float wallSlideSpeed = 3f; // How fast the player slides down a wall while holding towards it
 
     #endregion
@@ -142,8 +148,20 @@ public class CharController : MonoBehaviour {
         // Make the player have full health Juice
         HealthJuice = maxHealthJuice;
     }
-	
-	void FixedUpdate ()
+
+    private void Update()
+    {
+        if(invincibilityCounter > 0)
+        {
+            invincibilityCounter -= Time.deltaTime;
+        }
+        else if(invincibilityCounter != 0)
+        {
+            invincibilityCounter = 0;
+        }
+    }
+
+    void FixedUpdate ()
     {
         #region Raycasts Initialization
         // Update all the different raycast hit values to calculate physics
@@ -228,11 +246,22 @@ public class CharController : MonoBehaviour {
         // Apply knockback when the player is currently getting knocked back
         if(bKnockedBack)
         {
-            if(knockBackForce.y > knockBackCapY)
+            if (knockBackForce.y > knockBackCapY)
             {
                 knockBackForce.y = knockBackCapY;
             }
-            velocity = knockBackForce * Time.deltaTime;
+            if (!Physics2D.Raycast(transform.position, knockBackForce, knockBackForce.magnitude, layersToCollideWith))
+            {
+                velocity = knockBackForce * Time.deltaTime;
+            }
+            else
+            {
+                // Get Knocked back onto the wall
+                while (!Physics2D.Raycast(transform.position, knockBackForce, knockBackForce.magnitude / 10, layersToCollideWith))
+                {
+                    velocity = knockBackForce / 10 * Time.deltaTime;
+                }
+            }
         }
 
         if(AnyRaycastForTag("Juice") != null)
@@ -622,12 +651,13 @@ public class CharController : MonoBehaviour {
     // Damages the player 
     public void TakeDamage(int damage, Vector3 knockBack)
     {
-        if (playerState != State.attacking && playerState != State.dodging)
+        if (playerState != State.attacking && playerState != State.dodging && invincibilityCounter == 0f)
         {
             // Wait for the knockback to stop and giving the player free to move again
             StartCoroutine(UntilKnockBackStops(0.05f));
             bKnockedBack = true;
             Health -= damage;
+            invincibilityCounter = invincibilityTime;
             // Set the knockback force to be applied
             knockBackForce = knockBack;
         }
