@@ -109,7 +109,8 @@ public class CharController : MonoBehaviour {
     [SerializeField] float gravity = 2f;
     [SerializeField] float veloYLimit = 10f; // The player cannot fall faster than this value to prevent him falling through hitboxes
 
-    [SerializeField] float knockBackCapY = 2f;
+    [SerializeField] float knockBackCapY = 2f; // the highest velocity the player can be vertically knocked back
+    [SerializeField] float knockBackDuration = 0.05f; // The amount of seconds, the player will be knocked back
 
     // Fields to manipulate the Dodge
     [SerializeField] float dodgePower = 100f; // Force forward when dodging
@@ -260,7 +261,22 @@ public class CharController : MonoBehaviour {
             {
                 knockBackForce.y = knockBackCapY;
             }
-            velocity = knockBackForce * Time.deltaTime;
+            if(knockBackForce.y < 0)
+            {
+                knockBackForce.y = 0;
+            }
+            if (!Physics2D.Raycast(transform.position, knockBackForce, knockBackForce.magnitude, layersToCollideWith))
+            {
+                transform.position += knockBackForce;
+            }
+            else
+            {
+                // Get Knocked back onto the wall
+                while (!Physics2D.Raycast(transform.position, knockBackForce, knockBackForce.magnitude / 10, layersToCollideWith))
+                {
+                    transform.position += knockBackForce / 10;
+                }
+            }
         }
 
         if(WhichRaycastForTag("Juice", anyRaycast) != null)
@@ -612,7 +628,7 @@ public class CharController : MonoBehaviour {
         if (playerState != State.attacking && playerState != State.dodging)
         {
             // Wait for the knockback to stop and giving the player free to move again
-            StartCoroutine(UntilKnockBackStops(0.05f));
+            StartCoroutine(UntilKnockBackStops(knockBackDuration));
             bKnockedBack = true;
             if (invincibilityCounter == 0)
             {

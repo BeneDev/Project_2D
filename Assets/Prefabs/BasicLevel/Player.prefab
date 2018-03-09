@@ -97,6 +97,7 @@ MonoBehaviour:
   gravity: 0.02
   veloYLimit: -0.004
   knockBackCapY: 2
+  knockBackDuration: 0.3
   dodgePower: 2
   dodgeUpPower: 0.3
   dodgeCooldown: 0.1
@@ -106,6 +107,7 @@ MonoBehaviour:
   knockBackStrength: 0.3
   healDuration: 30
   juiceRegenValue: 10
+  invincibilityTime: 1
   wallSlideSpeed: 0.0001
 --- !u!212 &212588372083321244
 SpriteRenderer:
