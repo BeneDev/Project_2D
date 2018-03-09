@@ -265,6 +265,7 @@ public class CharController : MonoBehaviour {
             {
                 knockBackForce.y = 0;
             }
+            // Check if knockback would let player end up in wall, if not apply it
             if (!Physics2D.Raycast(transform.position, knockBackForce, knockBackForce.magnitude, layersToCollideWith))
             {
                 transform.position += knockBackForce;

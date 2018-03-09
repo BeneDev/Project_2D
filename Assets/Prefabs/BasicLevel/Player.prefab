@@ -97,7 +97,7 @@ MonoBehaviour:
   gravity: 0.02
   veloYLimit: -0.004
   knockBackCapY: 2
-  knockBackDuration: 0.3
+  knockBackDuration: 0.15
   dodgePower: 2
   dodgeUpPower: 0.3
   dodgeCooldown: 0.1

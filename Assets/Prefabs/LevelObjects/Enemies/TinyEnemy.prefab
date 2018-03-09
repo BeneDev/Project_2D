@@ -109,7 +109,7 @@ MonoBehaviour:
   damageNumber: {fileID: 114238172993012594, guid: 5c34c3404ee0a384a86f51f3dcf3f73e,
     type: 2}
   hitRange: 0.1
-  knockBackStrength: 0.01
+  knockBackStrength: 0.003
   layersToCollideWith:
     serializedVersion: 2
     m_Bits: 512
