@@ -88,6 +88,7 @@ public class CharController : MonoBehaviour {
         public RaycastHit2D top;
     }
     private PlayerRaycasts raycasts; // Stores the actual information of the raycasts to calculate physics
+    private RaycastHit2D[] anyRaycast = new RaycastHit2D[7];
 
     public enum State
     {
@@ -176,6 +177,14 @@ public class CharController : MonoBehaviour {
         raycasts.lowerLeft = Physics2D.Raycast(transform.position + Vector3.up * -0.04f + Vector3.right * -0.03f, Vector2.right, 0.01f);
 
         raycasts.top = Physics2D.Raycast(transform.position + Vector3.right * -0.001f, Vector2.up, 0.02f);
+
+        anyRaycast[0] = raycasts.bottomRight;
+        anyRaycast[1] = raycasts.bottomLeft;
+        anyRaycast[2] = raycasts.lowerLeft;
+        anyRaycast[3] = raycasts.upperLeft;
+        anyRaycast[4] = raycasts.lowerRight;
+        anyRaycast[5] = raycasts.upperRight;
+        anyRaycast[6] = raycasts.top;
         #endregion
 
         // Setting the x velocity when player is not knocked back
@@ -254,18 +263,18 @@ public class CharController : MonoBehaviour {
             velocity = knockBackForce * Time.deltaTime;
         }
 
-        if(AnyRaycastForTag("Juice") != null)
+        if(WhichRaycastForTag("Juice", anyRaycast) != null)
         {
             if(HealthJuice + juiceRegenValue < maxHealthJuice)
             {
                 HealthJuice += juiceRegenValue;
-                RaycastHit2D hitJuiceParticle = (RaycastHit2D)AnyRaycastForTag("Juice");
+                RaycastHit2D hitJuiceParticle = (RaycastHit2D)WhichRaycastForTag("Juice", anyRaycast);
                 Destroy(hitJuiceParticle.collider.gameObject);
             }
             else if(HealthJuice != maxHealth)
             {
                 HealthJuice = maxHealthJuice;
-                RaycastHit2D hitJuiceParticle = (RaycastHit2D)AnyRaycastForTag("Juice");
+                RaycastHit2D hitJuiceParticle = (RaycastHit2D)WhichRaycastForTag("Juice", anyRaycast);
                 Destroy(hitJuiceParticle.collider.gameObject);
             }
         }
@@ -282,9 +291,9 @@ public class CharController : MonoBehaviour {
             Respawn();
         }
 
-        if(AnyRaycastForTag("Checkpoint") != null)
+        if(WhichRaycastForTag("Checkpoint", anyRaycast) != null)
         {
-            RaycastHit2D newCheckpoint = (RaycastHit2D)AnyRaycastForTag("Checkpoint");
+            RaycastHit2D newCheckpoint = (RaycastHit2D)WhichRaycastForTag("Checkpoint", anyRaycast);
             GameManager.Instance.currentCheckpoint = newCheckpoint.collider.gameObject.transform.position;
         }
 
@@ -377,7 +386,6 @@ public class CharController : MonoBehaviour {
         return false;
     }
 
-    // TODO Make just one method which takes n number of raycasthits and makes an array, going through that array then and doing the same work
     private bool RaycastForTag(string tag, params RaycastHit2D[] rayArray)
     {
         for (int i = 0; i < rayArray.Length; i++)
@@ -393,57 +401,17 @@ public class CharController : MonoBehaviour {
         return false;
     }
     
-    
     // Check every raycast from the raycasts struct and return the first one, which found an object which matched the tag 
-    private RaycastHit2D? AnyRaycastForTag(string tag)
+    private RaycastHit2D? WhichRaycastForTag(string tag, params RaycastHit2D[] rayArray)
     {
-        if (raycasts.bottomLeft.collider != null)
+        for (int i = 0; i < rayArray.Length; i++)
         {
-            if (raycasts.bottomLeft.collider.tag == tag)
+            if (rayArray[i].collider != null)
             {
-                return raycasts.bottomLeft;
-            }
-        }
-        if (raycasts.bottomRight.collider != null)
-        {
-            if (raycasts.bottomRight.collider.tag == tag)
-            {
-                return raycasts.bottomRight;
-            }
-        }
-        if (raycasts.upperLeft.collider != null)
-        {
-            if (raycasts.upperLeft.collider.tag == tag)
-            {
-                return raycasts.upperLeft;
-            }
-        }
-        if (raycasts.lowerLeft.collider != null)
-        {
-            if (raycasts.lowerLeft.collider.tag == tag)
-            {
-                return raycasts.lowerLeft;
-            }
-        }
-        if (raycasts.upperRight.collider != null)
-        {
-            if (raycasts.upperRight.collider.tag == tag)
-            {
-                return raycasts.upperRight;
-            }
-        }
-        if (raycasts.lowerRight.collider != null)
-        {
-            if (raycasts.lowerRight.collider.tag == tag)
-            {
-                return raycasts.lowerRight;
-            }
-        }
-        if (raycasts.top.collider != null)
-        {
-            if (raycasts.top.collider.tag == tag)
-            {
-                return raycasts.top;
+                if (rayArray[i].collider.tag == tag)
+                {
+                    return rayArray[i];
+                }
             }
         }
         return null;
