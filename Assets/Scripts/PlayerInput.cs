@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The Script, returning the input, used to the CharController Script, which converts the given information into actions the player can do
+/// </summary>
 public class PlayerInput : MonoBehaviour, IInput {
 
     // Prevents the controller from reading tiny input, caused by old sticks

@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This Script takes in the Input from the PlayerInput Script, and handles the player, interacting with the physics system and overall world
+/// </summary>
+
 [RequireComponent(typeof(PlayerInput))]
 public class CharController : MonoBehaviour {
 
@@ -140,6 +144,9 @@ public class CharController : MonoBehaviour {
 
     #endregion
 
+    /// <summary>
+    /// Getting some references and setting the Health and HealthJuice values right
+    /// </summary>
     void Start () {
         input = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
@@ -151,6 +158,9 @@ public class CharController : MonoBehaviour {
         HealthJuice = maxHealthJuice;
     }
 
+    /// <summary>
+    /// Counting down the Invincibility Counter
+    /// </summary>
     private void Update()
     {
         // Count down invincibility counter when he is over 0
@@ -164,6 +174,9 @@ public class CharController : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Handling Physics, Actions and States of the player
+    /// </summary>
     void FixedUpdate ()
     {
         #region Raycasts Initialization
@@ -198,8 +211,11 @@ public class CharController : MonoBehaviour {
 
         if (!bKnockedBack)
         {
-            // Checking for actions, the player can do
-            CheckForInput();
+            if (playerState != State.healing)
+            {
+                // Checking for actions, the player can do
+                CheckForInput();
+            }
             // Start the jumping process if wanted
             CheckForJump();
             // Start the dodging process if wanted
@@ -222,6 +238,7 @@ public class CharController : MonoBehaviour {
             {
                 playerState = State.healing;
                 velocity = Vector3.zero;
+                // TODO set anim boolean to healing to change animation when there is one
                 Heal();
             }
             else if(playerState == State.healing)
@@ -323,7 +340,9 @@ public class CharController : MonoBehaviour {
 
     #region Helper Methods
 
-    // Respawns the player at the currently activated checkpoint
+    /// <summary>
+    ///  Respawns the player at the currently activated checkpoint
+    /// </summary>
     private void Respawn()
     {
         transform.position = GameManager.Instance.currentCheckpoint;
@@ -332,7 +351,9 @@ public class CharController : MonoBehaviour {
         HealthJuice = maxHealthJuice;
     }
 
-    // Make sure the velocity does not violate the laws of physics in this game
+    /// <summary>
+    /// Make sure the velocity does not violate the laws of physics in this game
+    /// </summary>
     private void CheckForValidVelocity()
     {
         // Check for ground under the player
@@ -366,7 +387,10 @@ public class CharController : MonoBehaviour {
         }
     }
 
-    // Checks if there are walls in the direction the player is facing
+    /// <summary>
+    /// Checks if there are walls in the direction the player is facing
+    /// </summary>
+    /// <returns> True if there is a wall. False when there is none</returns>
     private bool WallInWay()
     {
         if (transform.localScale.x < 0)
@@ -389,7 +413,10 @@ public class CharController : MonoBehaviour {
         return false;
     }
 
-    // Checks if the player is holding the direction, hes facing in
+    /// <summary>
+    /// Checks if the player is holding the direction, hes facing in
+    /// </summary>
+    /// <returns> True if the player is holding in the direction, he is facing. False if he is not.</returns>
     private bool HoldingInDirection()
     {
         if (input.Horizontal < 0 && transform.localScale.x < 0)
@@ -403,6 +430,12 @@ public class CharController : MonoBehaviour {
         return false;
     }
 
+    /// <summary>
+    /// Checks if there is a raycast of the given in parameters hitting an object with the right tag
+    /// </summary>
+    /// <param name="tag"></param>
+    /// <param name="rayArray"></param>
+    /// <returns> True if there was any raycast hitting an object with the right tag. False if there was none.</returns>
     private bool RaycastForTag(string tag, params RaycastHit2D[] rayArray)
     {
         for (int i = 0; i < rayArray.Length; i++)
@@ -417,8 +450,13 @@ public class CharController : MonoBehaviour {
         }
         return false;
     }
-    
-    // Check every raycast from the raycasts struct and return the first one, which found an object which matched the tag 
+
+    /// <summary>
+    /// Check every raycast from the raycasts struct and return the first one, which found an object which matched the tag 
+    /// </summary>
+    /// <param name="tag"></param>
+    /// <param name="rayArray"></param>
+    /// <returns> The first raycast who hit an object with the right tag</returns>
     private RaycastHit2D? WhichRaycastForTag(string tag, params RaycastHit2D[] rayArray)
     {
         for (int i = 0; i < rayArray.Length; i++)
@@ -453,8 +491,10 @@ public class CharController : MonoBehaviour {
     #endregion
 
     #region Input
-    
-    // Checks if the Player is giving directional input to walk or not and turn him accordingly
+
+    /// <summary>
+    /// Checks if the Player is giving directional input to walk or not and turn him accordingly
+    /// </summary>
     private void CheckForInput()
     {
         if(input.Horizontal < 0)
@@ -477,6 +517,9 @@ public class CharController : MonoBehaviour {
 
     #region Healing
 
+    /// <summary>
+    /// If the Health is not up to its maximum, the player takes one health juice and heals himself, gaining one health point. The healCounter prevents the healing from taking place too fast
+    /// </summary>
     private void Heal()
     {
         if(healCounter < healDuration)
@@ -495,7 +538,9 @@ public class CharController : MonoBehaviour {
 
     #region Attack
 
-    // Make the player attack, setting the direction of attack, hitbox and animation fields
+    /// <summary>
+    /// Make the player attack, setting the direction of attack, hitbox and animation fields
+    /// </summary>
     private void Attack()
     {
         if (input.Horizontal != 0f || input.Vertical != 0f)
@@ -512,7 +557,10 @@ public class CharController : MonoBehaviour {
         playerState = State.attacking;
     }
 
-    // Check if an enemy is hit with the ray in the direction of the attack and damages him if so
+    /// <summary>
+    /// Check if an enemy is hit with the ray in the direction of the attack and damages him if so
+    /// </summary>
+    /// <param name="direction"></param>
     private void AttackHitboxOut(Vector2 direction)
     {
         hit = Physics2D.Raycast(transform.position, direction, attackReach);
@@ -528,7 +576,9 @@ public class CharController : MonoBehaviour {
         }
     }
 
-    // End the attack
+    /// <summary>
+    /// End the attack and setting the right state, animation boolean and starting the cooldown
+    /// </summary>
     private void EndAttack()
     {
         anim.SetBool("Attacking", false);
@@ -537,7 +587,10 @@ public class CharController : MonoBehaviour {
         StartCoroutine(AttackCooldown());
     }
 
-    // Waits for the attack to be available again
+    /// <summary>
+    /// Waits for the attack to be available again
+    /// </summary>
+    /// <returns></returns>
     IEnumerator AttackCooldown()
     {
         yield return new WaitForSeconds(attackCooldown);
@@ -548,7 +601,9 @@ public class CharController : MonoBehaviour {
 
     #region Dodge
 
-    // Set up the dodging process
+    /// <summary>
+    /// Set up the dodging process
+    /// </summary>
     private void CheckForDodge()
     {
         if(input.Dodge && playerState != State.dodging && bDodgable)
@@ -565,14 +620,18 @@ public class CharController : MonoBehaviour {
         }
     }
 
-    // The actual application of force whilst dodging
+    /// <summary>
+    /// The actual application of force whilst dodging
+    /// </summary>
     private void Dodge()
     {
         velocity += new Vector3(dodgePower * transform.localScale.x * speed * Time.deltaTime, appliedDodgeUpPower * Time.deltaTime);
         bDodgable = false;
     }
 
-    // End the Dodge process
+    /// <summary>
+    /// End the Dodge process
+    /// </summary>
     private void EndDodge()
     {
         anim.SetBool("Dodging", false);
@@ -580,7 +639,10 @@ public class CharController : MonoBehaviour {
         StartCoroutine(DodgeCooldown());
     }
 
-    // Wait for the dodge to be available again
+    /// <summary>
+    /// Wait for the dodge to be available again
+    /// </summary>
+    /// <returns></returns>
     IEnumerator DodgeCooldown()
     {
         yield return new WaitForSeconds(dodgeCooldown);
@@ -591,7 +653,9 @@ public class CharController : MonoBehaviour {
 
     #region Jump
 
-    // Start the Jump process
+    /// <summary>
+    /// Start the Jump process
+    /// </summary>
     private void CheckForJump()
     {
         if (input.Jump == 2 && bGrounded || input.Jump == 2 && bOnWall)
@@ -610,7 +674,9 @@ public class CharController : MonoBehaviour {
         }
     }
 
-    // The application of the main jumping force
+    /// <summary>
+    /// The application of the main jumping force
+    /// </summary>
     private void Jump()
     {
         if(bGrounded)
@@ -623,7 +689,11 @@ public class CharController : MonoBehaviour {
 
     #region Damage Calculation
 
-    // Damages the player 
+    /// <summary>
+    /// Damages the player and sets the knockback
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <param name="knockBack"></param>
     public void TakeDamage(int damage, Vector3 knockBack)
     {
         if (playerState != State.attacking && playerState != State.dodging)
@@ -641,18 +711,24 @@ public class CharController : MonoBehaviour {
         }
     }
 
-    // Wait until able to move freely again
+    /// <summary>
+    /// Wait until able to move freely again
+    /// </summary>
+    /// <param name="seconds"></param>
+    /// <returns></returns>
     IEnumerator UntilKnockBackStops(float seconds)
     {
         yield return new WaitForSeconds(seconds);
         bKnockedBack = false;
     }
 
-#endregion
+    #endregion
 
     #region Grounded
 
-    // Checks if the player is on the ground or not
+    /// <summary>
+    /// Checks if the player is on the ground or not
+    /// </summary>
     private void CheckGrounded()
     {
         // When the bottom left collider hit something tagged as ground

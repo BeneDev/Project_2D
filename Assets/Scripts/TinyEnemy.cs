@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The specific Class for the Tiny Enemy Type
+/// </summary>
 public class TinyEnemy : GeneralEnemy {
-
-	// Use this for initialization
+    
 	void Start () {
+        // Call the General Initialization, inherited from the GeneralEnemy Script
         GeneralInitialization();
 	}
 	
-	// Update is called once per frame
 	void Update () {
+        // Call the General Behavior, inherited from the GeneralEnemy Script
         GeneralBehavior();
 	}
 }

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The Script of which all enemies inherit, providing them with general methods and attributes, necessary for an enemy to work properly
+/// </summary>
 public class GeneralEnemy : MonoBehaviour {
 
     #region Properties
@@ -56,24 +59,18 @@ public class GeneralEnemy : MonoBehaviour {
 
     #endregion
 
-    void Start ()
-    {
-        GeneralInitialization();
-    }
-
-    void Update ()
-    {
-        GeneralBehavior();
-    }
-
-    #region Helper Functions
-
+    /// <summary>
+    /// The general things an enemy should do in his start or awake method
+    /// </summary>
     public virtual void GeneralInitialization()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody2D>();
     }
 
+    /// <summary>
+    /// The general things an enemy should do in his update method
+    /// </summary>
     public virtual void GeneralBehavior()
     {
         // Store the vector towards the player
@@ -83,11 +80,14 @@ public class GeneralEnemy : MonoBehaviour {
         if (toPlayer.magnitude <= hitRange)
         {
             player.GetComponent<CharController>().TakeDamage(attack, CalculateKnockback());
-            // TODO play the right animation and maybe make dedicated attack for enemies
         }
     }
 
-    // TODO Play also right animation
+    #region Helper Functions
+
+    /// <summary>
+    /// This makes the enemy disappear and spawn juiceParticles for the player to fill up his Health Juice again
+    /// </summary>
     public virtual void Die()
     {
         if (juiceParticle)
@@ -100,7 +100,11 @@ public class GeneralEnemy : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    // Subtract damage and knockback to the enemy
+    /// <summary>
+    /// Subtract damage and apply knockback to the enemy
+    /// </summary>
+    /// <param name="damageToTake"></param>
+    /// <param name="knockback"></param>
     public virtual void TakeDamage(int damageToTake, Vector3 knockback)
     {
         // When the damage is greater than defense, do that remaining damage
@@ -140,9 +144,15 @@ public class GeneralEnemy : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Calculated the force which has to be given into the Take Damage function of the player, to cause the knockback for the player
+    /// </summary>
+    /// <returns></returns>
     public Vector3 CalculateKnockback()
     {
+        // Sets normal knockback
         Vector3 knockBack = toPlayer.normalized * knockBackStrength;
+        // When the player is too close on the x-axis(most of the times because the player is right on top of the enemy) make the knockback stronger
         if(GetOnlyValue(toPlayer.x) <= 0.065f)
         {
             if(toPlayer.x > 0)
@@ -157,6 +167,11 @@ public class GeneralEnemy : MonoBehaviour {
         return knockBack;
     }
 
+    /// <summary>
+    /// Returns only the value of a number given in. This gets rid of the algebraic sign before a number
+    /// </summary>
+    /// <param name="number"></param>
+    /// <returns></returns>
     public float GetOnlyValue(float number)
     {
         if(number > 0)
