@@ -151,6 +151,7 @@ public class CharController : MonoBehaviour {
 
     private void Update()
     {
+        // Count down invincibility counter when he is over 0
         if(invincibilityCounter > 0)
         {
             invincibilityCounter -= Time.deltaTime;
@@ -250,18 +251,7 @@ public class CharController : MonoBehaviour {
             {
                 knockBackForce.y = knockBackCapY;
             }
-            if (!Physics2D.Raycast(transform.position, knockBackForce, knockBackForce.magnitude, layersToCollideWith))
-            {
-                velocity = knockBackForce * Time.deltaTime;
-            }
-            else
-            {
-                // Get Knocked back onto the wall
-                while (!Physics2D.Raycast(transform.position, knockBackForce, knockBackForce.magnitude / 10, layersToCollideWith))
-                {
-                    velocity = knockBackForce / 10 * Time.deltaTime;
-                }
-            }
+            velocity = knockBackForce * Time.deltaTime;
         }
 
         if(AnyRaycastForTag("Juice") != null)
@@ -355,7 +345,7 @@ public class CharController : MonoBehaviour {
     {
         if (transform.localScale.x < 0)
         {
-            if (RaycastForTag("Ground", raycasts.upperLeft, raycasts.lowerLeft))//raycasts.upperLeft.collider || raycasts.lowerLeft.collider)
+            if (RaycastForTag("Ground", raycasts.upperLeft, raycasts.lowerLeft))
             {
                 bOnWall = true;
                 return true;
@@ -363,7 +353,7 @@ public class CharController : MonoBehaviour {
         }
         else if (transform.localScale.x > 0)
         {
-            if (RaycastForTag("Ground", raycasts.upperRight, raycasts.lowerRight))//raycasts.upperRight.collider || raycasts.lowerRight.collider)
+            if (RaycastForTag("Ground", raycasts.upperRight, raycasts.lowerRight))
             {
                 bOnWall = true;
                 return true;
@@ -651,13 +641,16 @@ public class CharController : MonoBehaviour {
     // Damages the player 
     public void TakeDamage(int damage, Vector3 knockBack)
     {
-        if (playerState != State.attacking && playerState != State.dodging && invincibilityCounter == 0f)
+        if (playerState != State.attacking && playerState != State.dodging)
         {
             // Wait for the knockback to stop and giving the player free to move again
             StartCoroutine(UntilKnockBackStops(0.05f));
             bKnockedBack = true;
-            Health -= damage;
-            invincibilityCounter = invincibilityTime;
+            if (invincibilityCounter == 0)
+            {
+                Health -= damage;
+                invincibilityCounter = invincibilityTime;
+            }
             // Set the knockback force to be applied
             knockBackForce = knockBack;
         }
