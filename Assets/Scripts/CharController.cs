@@ -210,11 +210,19 @@ public class CharController : MonoBehaviour {
         // Apply attack velocity when attacking
         if (playerState == State.attacking)
         {
-            velocity = Vector2.zero;
-            velocity += appliedAttackVelo;
-            appliedAttackVelo.x -= appliedAttackVelo.x / 100;
-            appliedAttackVelo.y -= appliedAttackVelo.y / 100;
-            AttackHitboxOut(attackDirection);
+            if (bAlreadyHit)
+            {
+                velocity = Vector2.zero;
+                playerState = State.freeToMove;
+            }
+            else
+            {
+                velocity = Vector2.zero;
+                velocity += appliedAttackVelo;
+                appliedAttackVelo.x -= appliedAttackVelo.x / 100;
+                appliedAttackVelo.y -= appliedAttackVelo.y / 100;
+                AttackHitboxOut(attackDirection);
+            }
         }
 
         // Apply knockback when the player is currently getting knocked back

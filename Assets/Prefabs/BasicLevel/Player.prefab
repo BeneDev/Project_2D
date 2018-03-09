@@ -96,8 +96,8 @@ MonoBehaviour:
   knockBackCapY: 2
   dodgePower: 2
   dodgeUpPower: 0.3
-  dodgeCooldown: 0.2
-  attackReach: 0.2
+  dodgeCooldown: 0.1
+  attackReach: 0.02
   attackVelo: {x: 5, y: 2}
   attackCooldown: 0.1
   knockBackStrength: 0.3
