@@ -26,6 +26,7 @@ public class DamageNumberController : MonoBehaviour {
     {
         damageNumberText.text = number;
         objectToFollow = obj;
+        transform.position = obj.transform.position;
     }
 
     private void Update()
@@ -41,7 +42,8 @@ public class DamageNumberController : MonoBehaviour {
         }
         // Make the text shrink every frame
         damageNumberText.transform.localScale -= new Vector3(damageNumberText.transform.localScale.x * Time.deltaTime, damageNumberText.transform.localScale.y * Time.deltaTime);
-        // TODO Make text fade out
+        // Make text fade out
+        damageNumberText.CrossFadeAlpha(0f, secondsToLast/2, true);
     }
 
     /// <summary>
