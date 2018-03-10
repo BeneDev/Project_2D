@@ -25,6 +25,7 @@ public class TinyEnemy : GeneralEnemy {
             {
                 transform.localScale = new Vector3(1f, 1f, 1f);
             }
+            bLookLeft = value;
         }
     }
 
@@ -41,8 +42,6 @@ public class TinyEnemy : GeneralEnemy {
     private Raycasts rays;
 
     private bool bLookLeft = true;
-
-    private Vector3 moveDirection;
 
     [SerializeField] float moveSpeed = 0.1f;
 
@@ -61,42 +60,61 @@ public class TinyEnemy : GeneralEnemy {
 
         // Call the General Behavior, inherited from the GeneralEnemy Script
         GeneralBehavior();
-        Move();
+        SimpleMove();
 	}
 
-    private void Move()
+    //private void Move()
+    //{
+    //    if(BLookLeft == true)
+    //    {
+    //        if(rays.bottomMid && rays.bottomRight)
+    //        {
+    //            moveDirection = -transform.right * moveSpeed;
+    //        }
+    //        else
+    //        {
+    //            moveDirection = Vector3.zero;
+    //            if (transform.rotation.z < 90f)
+    //            {
+    //                transform.Rotate(new Vector3(0f, 0f, 1f));
+    //            }
+    //        }
+    //    }
+    //    else if(BLookLeft == false)
+    //    {
+    //        if(rays.bottomMid && rays.bottomLeft)
+    //        {
+    //            moveDirection = -transform.right * moveSpeed;
+    //        }
+    //        else
+    //        {
+    //            moveDirection = Vector3.zero;
+    //            if (transform.rotation.z > -90f)
+    //            {
+    //                transform.Rotate(new Vector3(0f, 0f, -1f));
+    //            }
+    //        }
+    //    }
+    //    transform.position += moveDirection;
+    //}
+
+    private void SimpleMove()
     {
-        if(BLookLeft == true)
+        if (BLookLeft == true)
         {
-            if(rays.bottomMid && rays.bottomRight)
+            if(!rays.bottomLeft)
             {
-                moveDirection = -transform.right * moveSpeed;
-            }
-            else
-            {
-                moveDirection = Vector3.zero;
-                if (transform.rotation.z < 90f)
-                {
-                    transform.Rotate(new Vector3(0f, 0f, 1f));
-                }
+                BLookLeft = false;
             }
         }
-        else if(BLookLeft == false)
+        else if (BLookLeft == false)
         {
-            if(rays.bottomMid && rays.bottomLeft)
+            if(!rays.bottomRight)
             {
-                moveDirection = -transform.right * moveSpeed;
-            }
-            else
-            {
-                moveDirection = Vector3.zero;
-                if (transform.rotation.z > -90f)
-                {
-                    transform.Rotate(new Vector3(0f, 0f, -1f));
-                }
+                BLookLeft = true;
             }
         }
-        transform.position += moveDirection;
+        transform.position += new Vector3(moveSpeed, 0f) * transform.localScale.x;
     }
 
     //private void OnDrawGizmos()
