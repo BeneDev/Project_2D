@@ -131,6 +131,7 @@ MonoBehaviour:
   damageNumberText: {fileID: 114147500188930488}
   upwardsSpeed: 0.003
   secondsToLast: 1
+  horizontalSpeed: 0.006
 --- !u!222 &222761233924905668
 CanvasRenderer:
   m_ObjectHideFlags: 1

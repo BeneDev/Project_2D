@@ -14,6 +14,10 @@ public class DamageNumberController : MonoBehaviour {
     [SerializeField] float upwardsSpeed = 0.1f; // How fast the text flys up
     [SerializeField] float secondsToLast = 1f; // How long the text lasts on screen
 
+    private float offsetX = 0f;
+    [SerializeField] float horizontalSpeed = 0.1f; // This sets the Range of the random calculation for the offset grouwth for the x-axis
+    private float offsetXGrouwth = 0;
+
     private GameObject objectToFollow; // The object to follow regarding the x-axis
     #endregion
 
@@ -27,19 +31,21 @@ public class DamageNumberController : MonoBehaviour {
         damageNumberText.text = number;
         objectToFollow = obj;
         transform.position = obj.transform.position;
+        offsetXGrouwth = Random.Range(-horizontalSpeed, horizontalSpeed);
     }
 
     private void Update()
     {
         // Start the counter to destroy the object
         StartCoroutine(WaitForEnd());
-        // Make the canvas fly upwards
-        transform.position += new Vector3(0f, upwardsSpeed);
+        offsetX += offsetXGrouwth;
         // Follow the given object on the x-axis
         if (objectToFollow)
         {
-            transform.position = new Vector3(objectToFollow.transform.position.x, transform.position.y);
+            transform.position = new Vector3(objectToFollow.transform.position.x + offsetX, transform.position.y);
         }
+        // Make the canvas fly upwards
+        transform.position += new Vector3(0f, upwardsSpeed);
         // Make the text shrink every frame
         damageNumberText.transform.localScale -= new Vector3(damageNumberText.transform.localScale.x * Time.deltaTime, damageNumberText.transform.localScale.y * Time.deltaTime);
         // Make text fade out
