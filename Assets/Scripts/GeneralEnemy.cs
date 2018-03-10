@@ -45,6 +45,9 @@ public class GeneralEnemy : MonoBehaviour {
     // The canvas used to show damage numbers
     [SerializeField] DamageNumberController damageNumber;
 
+    // The heaviness of the camera shake
+    [SerializeField] float cameraShakeAmount = 0.02f;
+
     // The amount of seconds, the sprite is shown planely in white
     [SerializeField] float flashDuration = 0.2f;
 
@@ -53,6 +56,7 @@ public class GeneralEnemy : MonoBehaviour {
     private Vector3 toPlayer;
 
     Rigidbody2D rb;
+    Camera cam;
 
     [SerializeField] float hitRange = 2f;
     [SerializeField] float knockBackStrength = 3f;
@@ -78,6 +82,8 @@ public class GeneralEnemy : MonoBehaviour {
 
         player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody2D>();
+
+        cam = Camera.main;
     }
 
     /// <summary>
@@ -133,6 +139,8 @@ public class GeneralEnemy : MonoBehaviour {
         rend.material.shader = shaderGUItext;
         rend.color = Color.white;
         StartCoroutine(SetBackToDefaultShader(flashDuration));
+        // Make the camera shake
+        cam.GetComponent<CameraShake>().shakeDuration = cameraShakeAmount;
         if (Health > 0)
         {
             // Dont let the enemy goes through collider when knockback is applied

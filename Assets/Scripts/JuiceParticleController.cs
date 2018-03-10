@@ -37,6 +37,10 @@ public class JuiceParticleController : MonoBehaviour {
                 actualSecondsFlyingUp -= Time.deltaTime;
             }
         }
+        else
+        {
+            actualSecondsFlyingUp = 0f;
+        }
         if(actualSecondsFlyingUp <= 0f)
         {
             if(ankerPoint == Vector3.zero)
