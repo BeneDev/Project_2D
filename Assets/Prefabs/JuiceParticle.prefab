@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4258803020457890}
   - component: {fileID: 212191541461293972}
   - component: {fileID: 58758835991317718}
+  - component: {fileID: 114129651430502412}
   m_Layer: 0
   m_Name: JuiceParticle
   m_TagString: Juice
@@ -56,6 +57,23 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.02
+--- !u!114 &114129651430502412
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1330060540211550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de95dcb81ee9234fbe3e26616dc1717, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layersToCollide:
+    serializedVersion: 2
+    m_Bits: 512
+  upwardsVelocity: 0.003
+  maxHorizontalVelocity: 0.001
+  maxSecondsFlyingUp: 1.5
 --- !u!212 &212191541461293972
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -65,6 +83,7 @@ SpriteRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -80,6 +99,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
