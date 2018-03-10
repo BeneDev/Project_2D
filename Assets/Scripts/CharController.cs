@@ -156,6 +156,8 @@ public class CharController : MonoBehaviour {
 
         // Make the player have full health Juice
         HealthJuice = maxHealthJuice;
+
+        attack = baseAttack;
     }
 
     /// <summary>

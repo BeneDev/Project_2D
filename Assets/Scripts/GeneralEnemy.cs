@@ -94,11 +94,6 @@ public class GeneralEnemy : MonoBehaviour {
         {
             for (int i = 0; i < particleCountAtDeath; i++)
             {
-                //do
-                //{
-                //    spawnPos = new Vector3(Random.Range(-spawnOffset, spawnOffset), Random.Range(0f, spawnOffset));
-                //}
-                //while (Physics2D.Raycast(transform.position + spawnPos + new Vector3(0f, 0f, 0.1f), transform.position + spawnPos + new Vector3(0f, 0f, -0.1f), 1f, layersToCollideWith));
                 Instantiate(juiceParticle, transform.position, transform.rotation);
             }
         }
