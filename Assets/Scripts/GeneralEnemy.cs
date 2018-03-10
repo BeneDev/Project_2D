@@ -47,6 +47,8 @@ public class GeneralEnemy : MonoBehaviour {
 
     // The heaviness of the camera shake
     [SerializeField] float cameraShakeAmount = 0.02f;
+    // The amount of freeze frames, taking place when the enemy is hit
+    [SerializeField] int amountFreezeFrames = 8;
 
     // The amount of seconds, the sprite is shown planely in white
     [SerializeField] float flashDuration = 0.2f;
@@ -99,6 +101,10 @@ public class GeneralEnemy : MonoBehaviour {
         {
             player.GetComponent<CharController>().TakeDamage(attack, CalculateKnockback());
         }
+        if (Health <= 0 && Time.timeScale == 1f)
+        {
+            Die();
+        }
     }
 
     #region Helper Functions
@@ -141,6 +147,7 @@ public class GeneralEnemy : MonoBehaviour {
         StartCoroutine(SetBackToDefaultShader(flashDuration));
         // Make the camera shake
         cam.GetComponent<CameraShake>().shakeDuration = cameraShakeAmount;
+        StartCoroutine(StopTimeForFrames(amountFreezeFrames));
         if (Health > 0)
         {
             // Dont let the enemy goes through collider when knockback is applied
@@ -156,16 +163,23 @@ public class GeneralEnemy : MonoBehaviour {
                     transform.position += knockback / 10;
                 }
                 Health -= damageToTake;
-                if(Health <= 0)
-                {
-                    Die();
-                }
             }
         }
-        else
+    }
+
+    /// <summary>
+    /// Stop the time and make it run again after n frames
+    /// </summary>
+    /// <param name="frameAmount"></param>
+    /// <returns></returns>
+    IEnumerator StopTimeForFrames(int frameAmount)
+    {
+        Time.timeScale = 0f;
+        for (int i = 0; i < frameAmount; i++)
         {
-            Die();
+            yield return new WaitForEndOfFrame();
         }
+        Time.timeScale = 1f;
     }
 
     /// <summary>
