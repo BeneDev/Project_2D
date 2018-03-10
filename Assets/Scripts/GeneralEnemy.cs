@@ -145,25 +145,33 @@ public class GeneralEnemy : MonoBehaviour {
         rend.material.shader = shaderGUItext;
         rend.color = Color.white;
         StartCoroutine(SetBackToDefaultShader(flashDuration));
-        // Make the camera shake
-        cam.GetComponent<CameraShake>().shakeDuration = cameraShakeAmount;
-        StartCoroutine(StopTimeForFrames(amountFreezeFrames));
-        if (Health > 0)
+        // Dont let the enemy goes through collider when knockback is applied
+        if (!Physics2D.Raycast(transform.position, knockback, knockback.magnitude, layersToCollideWith))
         {
-            // Dont let the enemy goes through collider when knockback is applied
-            if(!Physics2D.Raycast(transform.position, knockback, knockback.magnitude, layersToCollideWith))
+            transform.position += knockback;
+        }
+        else
+        {
+            // Get Knocked back onto the wall
+            while(!Physics2D.Raycast(transform.position, knockback, knockback.magnitude / 10, layersToCollideWith))
             {
-                transform.position += knockback;
+                transform.position += knockback / 10;
             }
-            else
-            {
-                // Get Knocked back onto the wall
-                while(!Physics2D.Raycast(transform.position, knockback, knockback.magnitude / 10, layersToCollideWith))
-                {
-                    transform.position += knockback / 10;
-                }
-                Health -= damageToTake;
-            }
+            Health -= damageToTake;
+        }
+        if(health > 0)
+        {
+            // Make time freeze for some frames
+            StartCoroutine(StopTimeForFrames(amountFreezeFrames));
+            // Make the camera shake
+            cam.GetComponent<CameraShake>().shakeDuration = cameraShakeAmount;
+        }
+        else
+        {
+            // Make time freeze for more frames
+            StartCoroutine(StopTimeForFrames(amountFreezeFrames + 10));
+            // Make the camera shake more
+            cam.GetComponent<CameraShake>().shakeDuration = cameraShakeAmount*10f;
         }
     }
 
