@@ -37,10 +37,12 @@ public class JuiceParticleController : MonoBehaviour {
                 actualSecondsFlyingUp -= Time.deltaTime;
             }
         }
+        // When the particle reached a collider, go immediately into floating mode
         else
         {
             actualSecondsFlyingUp = 0f;
         }
+        // When flying up time is over, go into floating mode
         if(actualSecondsFlyingUp <= 0f)
         {
             if(ankerPoint == Vector3.zero)

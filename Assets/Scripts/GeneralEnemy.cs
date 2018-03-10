@@ -168,6 +168,11 @@ public class GeneralEnemy : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Make the Sprite show the normal colors again after a set amount of time
+    /// </summary>
+    /// <param name="sec"></param>
+    /// <returns></returns>
     IEnumerator SetBackToDefaultShader(float sec)
     {
         yield return new WaitForSeconds(sec);
