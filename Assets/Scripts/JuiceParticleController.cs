@@ -51,7 +51,7 @@ public class JuiceParticleController : MonoBehaviour {
     /// <summary>
     /// Make the Particle fly up and down to simulate some kind of floating in the air
     /// </summary>
-    private void Floating()
+    private void Floating() // TODO make this floating effect more realistic (maybe use lerp)
     {
         // When the particle is above the anker point build up negative velocity
         if (transform.position.y >= ankerPoint.y + floatingVeloctiy)

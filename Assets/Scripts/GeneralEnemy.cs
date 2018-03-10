@@ -45,6 +45,9 @@ public class GeneralEnemy : MonoBehaviour {
     // The canvas used to show damage numbers
     [SerializeField] DamageNumberController damageNumber;
 
+    // The amount of seconds, the sprite is shown planely in white
+    [SerializeField] float flashDuration = 0.2f;
+
     // Variables to find the player
     private GameObject player;
     private Vector3 toPlayer;
@@ -57,6 +60,10 @@ public class GeneralEnemy : MonoBehaviour {
     // The layer mask used to collide with only walls
     [SerializeField] LayerMask layersToCollideWith;
 
+    private SpriteRenderer rend;
+    private Shader shaderGUItext;
+    private Shader shaderSpritesDefault;
+
     #endregion
 
     /// <summary>
@@ -64,6 +71,11 @@ public class GeneralEnemy : MonoBehaviour {
     /// </summary>
     public virtual void GeneralInitialization()
     {
+        // Find the renderer, the gui shader and the default sprite shader
+        rend = gameObject.GetComponent<SpriteRenderer>();
+        shaderGUItext = Shader.Find("GUI/Text Shader");
+        shaderSpritesDefault = Shader.Find("Sprites/Default");
+
         player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody2D>();
     }
@@ -117,6 +129,10 @@ public class GeneralEnemy : MonoBehaviour {
         {
             Health--;
         }
+        // Let the enemy sprite flash up white
+        rend.material.shader = shaderGUItext;
+        rend.color = Color.white;
+        StartCoroutine(SetBackToDefaultShader(flashDuration));
         if (Health > 0)
         {
             // Dont let the enemy goes through collider when knockback is applied
@@ -142,6 +158,13 @@ public class GeneralEnemy : MonoBehaviour {
         {
             Die();
         }
+    }
+
+    IEnumerator SetBackToDefaultShader(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        rend.material.shader = shaderSpritesDefault;
+        rend.color = Color.white;
     }
 
     /// <summary>
