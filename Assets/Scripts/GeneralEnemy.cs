@@ -54,17 +54,17 @@ public class GeneralEnemy : MonoBehaviour {
     [SerializeField] float flashDuration = 0.2f;
 
     // Variables to find the player
-    private GameObject player;
-    private Vector3 toPlayer;
+    protected GameObject player;
+    protected Vector3 toPlayer;
 
-    Rigidbody2D rb;
+    protected Rigidbody2D rb;
     Camera cam;
 
     [SerializeField] float hitRange = 2f;
     [SerializeField] float knockBackStrength = 3f;
 
     // The layer mask used to collide with only walls
-    [SerializeField] LayerMask layersToCollideWith;
+    [SerializeField] protected LayerMask layersToCollideWith;
 
     private SpriteRenderer rend;
     private Shader shaderGUItext;
