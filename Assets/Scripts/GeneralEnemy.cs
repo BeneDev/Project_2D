@@ -190,6 +190,7 @@ public class GeneralEnemy : MonoBehaviour {
         if (!Physics2D.Raycast(transform.position, new Vector2(knockBackForce.x, 0f), knockBackForce.magnitude, layersToCollideWith))
         {
             transform.position += new Vector3(knockBackForce.x + knockBackForce.y, 0f);
+            knockBackForce = new Vector3(knockBackForce.x * 0.9f, knockBackForce.y * 0.8f);
         }
         else
         {
