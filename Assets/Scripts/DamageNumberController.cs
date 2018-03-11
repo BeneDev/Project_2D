@@ -26,9 +26,10 @@ public class DamageNumberController : MonoBehaviour {
     /// </summary>
     /// <param name="number"></param>
     /// <param name="obj"></param>
-    public void Init(string number, GameObject obj)
+    public void Init(int number, GameObject obj)
     {
-        damageNumberText.text = number;
+        damageNumberText.text = number.ToString();
+        transform.localScale = new Vector3(transform.localScale.x + number * 0.01f, transform.localScale.y + number * 0.01f, transform.localScale.z + number * 0.01f);
         objectToFollow = obj;
         transform.position = obj.transform.position;
         offsetXGrouwth = Random.Range(-horizontalSpeed, horizontalSpeed);

@@ -20,7 +20,7 @@ public class GeneralEnemy : MonoBehaviour {
             if(damageNumber)
             {
                 DamageNumberController number = Instantiate(damageNumber, transform.position, transform.rotation);
-                number.Init((health - value).ToString(), gameObject);
+                number.Init((health - value), gameObject);
             }
             health = value;
         }
