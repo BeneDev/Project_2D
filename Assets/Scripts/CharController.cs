@@ -51,10 +51,6 @@ public class CharController : MonoBehaviour {
         set
         {
             exp = value;
-            if(exp >= expToNextLevel)
-            {
-                LevelUp();
-            }
             if(OnExpChanged != null)
             {
                 OnExpChanged(exp, expToNextLevel);
@@ -142,7 +138,7 @@ public class CharController : MonoBehaviour {
 
     private int level = 1;
 
-    private int expToNextLevel = 0;
+    private int expToNextLevel = 1;
     private int exp = 0;
 
     #endregion
@@ -226,7 +222,7 @@ public class CharController : MonoBehaviour {
         // Make the player have the base attack value at start
         attack = baseAttack;
 
-        expToNextLevel = level ^2;
+        ExpToNextLevel = 1;
         Exp = 0;
 
         Level = 1;
@@ -245,6 +241,10 @@ public class CharController : MonoBehaviour {
         else if(invincibilityCounter != 0)
         {
             invincibilityCounter = 0;
+        }
+        if(Exp >= ExpToNextLevel)
+        {
+            LevelUp();
         }
     }
 
@@ -432,9 +432,9 @@ public class CharController : MonoBehaviour {
     {
         Level++;
         Exp -= expToNextLevel;
+        ExpToNextLevel = (int)Mathf.Pow(level, 2);
         defense += defensePerLevelUp;
         attack += attackPerLevelUp;
-        expToNextLevel = (int)Mathf.Pow(level, 2);
     }
 
     /// <summary>
