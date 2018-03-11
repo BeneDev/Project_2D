@@ -54,6 +54,7 @@ public class GeneralEnemy : MonoBehaviour {
     [SerializeField] float flashDuration = 0.2f;
     // The amount of seconds the enemy will be stunned after the knockback
     [SerializeField] float knockedBackDuration = 0.2f;
+    protected float stunDuration;
     // The force the enemy gets knocked back
     protected Vector3 knockBackForce;
 
@@ -154,7 +155,6 @@ public class GeneralEnemy : MonoBehaviour {
         rend.color = Color.white;
         StartCoroutine(SetBackToDefaultShader(flashDuration));
         bKnockedBack = true;
-        StartCoroutine(WaitForEndKnockBack());
         if(health > 0)
         {
             // Make time freeze for some frames
@@ -177,17 +177,21 @@ public class GeneralEnemy : MonoBehaviour {
         {
             transform.position += new Vector3(knockBackForce.x + knockBackForce.y, 0f);
             knockBackForce = new Vector3(knockBackForce.x * 0.9f, knockBackForce.y * 0.8f);
+            stunDuration = knockedBackDuration * 12;
+            StartCoroutine(WaitForEndKnockBack());
         }
         else
         {
             Health -= defense;
             bKnockedBack = false;
             bStunned = true;
-            StartCoroutine(WaitForEndStunned(knockedBackDuration * 50));
+            print("stunned longer");
+            stunDuration = knockedBackDuration * 30;
+            StartCoroutine(WaitForEndStunned());
         }
     }
 
-    IEnumerator WaitForEndStunned(float stunDuration)
+    IEnumerator WaitForEndStunned()
     {
         yield return new WaitForSeconds(stunDuration);
         bStunned = false;
@@ -202,7 +206,7 @@ public class GeneralEnemy : MonoBehaviour {
         yield return new WaitForSeconds(knockedBackDuration);
         bKnockedBack = false;
         bStunned = true;
-        StartCoroutine(WaitForEndStunned(knockedBackDuration * 20));
+        StartCoroutine(WaitForEndStunned());
     }
 
     /// <summary>
