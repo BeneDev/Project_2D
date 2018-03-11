@@ -110,6 +110,7 @@ public class CharController : MonoBehaviour {
     [SerializeField] LayerMask layersToCollideWith;
 
     bool bGrounded = false; // Stores if the player is on the ground or not
+    bool bDodgeStill = false;
     bool bOnWall = false; // Stores if the player is on a wall or not
     bool bKnockedBack = false; // Stores when the player is knocked back to prevent him from moving
     bool bAlreadyHit = false; // Makes sure, the player only hits one time with one attack
@@ -302,7 +303,7 @@ public class CharController : MonoBehaviour {
             }
             // Start the jumping process if wanted
             CheckForJump();
-            if (!bOnWall)
+            if (bGrounded || bDodgeStill)
             {
                 // Start the dodging process if wanted
                 CheckForDodge();
@@ -785,6 +786,10 @@ public class CharController : MonoBehaviour {
     {
         yield return new WaitForSeconds(dodgeCooldown);
         bDodgable = true;
+        if (bDodgeStill)
+        {
+            bDodgeStill = false;
+        }
     }
 
     #endregion
@@ -881,6 +886,7 @@ public class CharController : MonoBehaviour {
         if (RaycastForTag("Ground", raycasts.bottomLeft) || RaycastForTag("Ground", raycasts.bottomRight))
         {
             bGrounded = true;
+            bDodgeStill = true;
             velocity.y = 0f;
             anim.SetBool("Grounded", true);
         }
