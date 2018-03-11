@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 114808618702958712}
   - component: {fileID: 95410615359101532}
   - component: {fileID: 212588372083321244}
+  - component: {fileID: 82119236521212086}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -43,6 +44,86 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &82119236521212086
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1636671919393970}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.89444447
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!95 &95410615359101532
 Animator:
   serializedVersion: 3
@@ -89,7 +170,9 @@ MonoBehaviour:
   maxHealth: 100
   maxHealthJuice: 100
   baseAttack: 5
+  attackPerLevelUp: 3
   baseDefense: 5
+  defensePerLevelUp: 3
   playerState: 0
   speed: 1
   jumpPower: 3.2
@@ -109,6 +192,8 @@ MonoBehaviour:
   juiceRegenValue: 10
   invincibilityTime: 1
   wallSlideSpeed: 0.0001
+  audioClips:
+  - {fileID: 8300000, guid: a9990e0ed89c7d44c87d64136f872bb8, type: 3}
 --- !u!212 &212588372083321244
 SpriteRenderer:
   m_ObjectHideFlags: 1

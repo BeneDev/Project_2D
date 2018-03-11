@@ -177,6 +177,7 @@ public class CharController : MonoBehaviour {
 
     [SerializeField] float knockBackCapY = 2f; // the highest velocity the player can be vertically knocked back
     [SerializeField] float knockBackDuration = 0.05f; // The amount of seconds, the player will be knocked back
+    [SerializeField] int framesFreezedAfterHit = 8; // The amount of frames the player will be forced to stand still when he is being hit
 
     // Fields to manipulate the Dodge
     [SerializeField] float dodgePower = 100f; // Force forward when dodging
@@ -296,7 +297,7 @@ public class CharController : MonoBehaviour {
         {
             if (playerState != State.healing)
             {
-                // Checking for actions, the player can do
+                // Check for the side the player has to look or if the player should be idling
                 CheckForInput();
             }
             // Start the jumping process if wanted
@@ -380,6 +381,7 @@ public class CharController : MonoBehaviour {
             }
         }
 
+        // Collect Juice Particles when the player comes close to them
         if(WhichRaycastForTag("Juice", anyRaycast) != null)
         {
             if(HealthJuice + juiceRegenValue < maxHealthJuice)
@@ -388,7 +390,7 @@ public class CharController : MonoBehaviour {
                 RaycastHit2D hitJuiceParticle = (RaycastHit2D)WhichRaycastForTag("Juice", anyRaycast);
                 Destroy(hitJuiceParticle.collider.gameObject);
             }
-            else if(HealthJuice != maxHealth)
+            else if(HealthJuice != maxHealthJuice)
             {
                 HealthJuice = maxHealthJuice;
                 RaycastHit2D hitJuiceParticle = (RaycastHit2D)WhichRaycastForTag("Juice", anyRaycast);
@@ -567,6 +569,25 @@ public class CharController : MonoBehaviour {
         return null;
     }
 
+    /// <summary>
+    /// Stop the time and make it run again after n frames
+    /// </summary>
+    /// <param name="frameAmount"></param>
+    /// <returns></returns>
+    IEnumerator StopTimeForFrames(int frameAmount)
+    {
+        Time.timeScale = 0f;
+        for (int i = 0; i < frameAmount; i++)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        Time.timeScale = 1f;
+    }
+
+    /// <summary>
+    /// Play the element of the audioclip array at the indice given in as a parameter
+    /// </summary>
+    /// <param name="indice"></param>
     private void PlayClip(int indice)
     {
         audioSource.clip = audioClips[indice];
@@ -811,6 +832,7 @@ public class CharController : MonoBehaviour {
     {
         if (playerState != State.attacking && playerState != State.dodging)
         {
+            StartCoroutine(StopTimeForFrames(framesFreezedAfterHit));
             // Wait for the knockback to stop and giving the player free to move again
             StartCoroutine(UntilKnockBackStops(knockBackDuration));
             bKnockedBack = true;
