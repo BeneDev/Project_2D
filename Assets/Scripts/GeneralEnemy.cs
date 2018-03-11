@@ -52,6 +52,8 @@ public class GeneralEnemy : MonoBehaviour {
 
     // The amount of seconds, the sprite is shown planely in white
     [SerializeField] float flashDuration = 0.2f;
+    // The amount of seconds the enemy will be stunned after the knockback
+    [SerializeField] float knockedBackDuration = 0.2f;
 
     // Variables to find the player
     protected GameObject player;
@@ -60,6 +62,7 @@ public class GeneralEnemy : MonoBehaviour {
     protected Rigidbody2D rb;
     Camera cam;
 
+    protected bool bKnockedBack = false;
     [SerializeField] float hitRange = 2f;
     [SerializeField] float knockBackStrength = 3f;
 
@@ -145,6 +148,8 @@ public class GeneralEnemy : MonoBehaviour {
         rend.material.shader = shaderGUItext;
         rend.color = Color.white;
         StartCoroutine(SetBackToDefaultShader(flashDuration));
+        bKnockedBack = true;
+        StartCoroutine(WaitForEndKnockBack());
         // Dont let the enemy goes through collider when knockback is applied
         if (!Physics2D.Raycast(transform.position, knockback, knockback.magnitude, layersToCollideWith))
         {
@@ -173,6 +178,12 @@ public class GeneralEnemy : MonoBehaviour {
             // Make the camera shake more
             cam.GetComponent<CameraShake>().shakeDuration = cameraShakeAmount*10f;
         }
+    }
+
+    IEnumerator WaitForEndKnockBack()
+    {
+        yield return new WaitForSeconds(knockedBackDuration);
+        bKnockedBack = false;
     }
 
     /// <summary>

@@ -58,16 +58,22 @@ public class TinyEnemy : GeneralEnemy {
         rays.bottomMid = Physics2D.Raycast(transform.position + new Vector3(0f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
         rays.bottomLeft = Physics2D.Raycast(transform.position + new Vector3(0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
 
-        // Call the General Behavior, inherited from the GeneralEnemy Script
-        GeneralBehavior();
-        SimpleMove();
-	}
+        if (!bKnockedBack)
+        {
+            // Call the General Behavior, inherited from the GeneralEnemy Script
+            GeneralBehavior();
+            SimpleMove();
+        }
+    }
 
+    ///// <summary>
+    ///// Make the enemy Move around the platform. The generally applied gravity would be a problem for this. Postponed for undefined time.
+    ///// </summary>
     //private void Move()
     //{
-    //    if(BLookLeft == true)
+    //    if (BLookLeft == true)
     //    {
-    //        if(rays.bottomMid && rays.bottomRight)
+    //        if (rays.bottomMid && rays.bottomRight)
     //        {
     //            moveDirection = -transform.right * moveSpeed;
     //        }
@@ -80,9 +86,9 @@ public class TinyEnemy : GeneralEnemy {
     //            }
     //        }
     //    }
-    //    else if(BLookLeft == false)
+    //    else if (BLookLeft == false)
     //    {
-    //        if(rays.bottomMid && rays.bottomLeft)
+    //        if (rays.bottomMid && rays.bottomLeft)
     //        {
     //            moveDirection = -transform.right * moveSpeed;
     //        }
@@ -98,21 +104,14 @@ public class TinyEnemy : GeneralEnemy {
     //    transform.position += moveDirection;
     //}
 
+    /// <summary>
+    /// Make the enemy turn around, whenever he faces the end of the platform he's walking on
+    /// </summary>
     private void SimpleMove()
     {
-        if (BLookLeft == true)
+        if(!rays.bottomMid)
         {
-            if(!rays.bottomLeft)
-            {
-                BLookLeft = false;
-            }
-        }
-        else if (BLookLeft == false)
-        {
-            if(!rays.bottomRight)
-            {
-                BLookLeft = true;
-            }
+            BLookLeft = !bLookLeft;
         }
         transform.position += new Vector3(moveSpeed, 0f) * transform.localScale.x;
     }
