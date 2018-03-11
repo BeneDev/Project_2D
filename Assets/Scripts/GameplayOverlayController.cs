@@ -11,6 +11,8 @@ public class GameplayOverlayController : MonoBehaviour {
     #region Fields
     [SerializeField] Text healthText;
     [SerializeField] Text healthJuiceText;
+    [SerializeField] Text expText;
+    [SerializeField] Text levelText;
 
     private GameObject player;
     #endregion
@@ -22,6 +24,8 @@ public class GameplayOverlayController : MonoBehaviour {
         // Sign up for the players delegates
         player.GetComponent<CharController>().OnHealthChanged += UpdateHealthText;
         player.GetComponent<CharController>().OnHealthJuiceChanged += UpdateHealthJuiceText;
+        player.GetComponent<CharController>().OnExpChanged += UpdateExpText;
+        player.GetComponent<CharController>().OnLevelChanged += UpdateLevelText;
     }
 
     /// <summary>
@@ -40,5 +44,15 @@ public class GameplayOverlayController : MonoBehaviour {
     private void UpdateHealthJuiceText(int newHealthJuice)
     {
         healthJuiceText.text = "Health Juice: " + newHealthJuice;
+    }
+
+    private void UpdateExpText(int exp, int expToLevel)
+    {
+        expText.text = "Exp: " + exp + "/" + expToLevel;
+    }
+
+    private void UpdateLevelText(int level)
+    {
+        levelText.text = "Level: " + level;
     }
 }

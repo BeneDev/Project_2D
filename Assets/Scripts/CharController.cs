@@ -42,6 +42,55 @@ public class CharController : MonoBehaviour {
             }
         }
     }
+    public int Exp
+    {
+        get
+        {
+            return exp;
+        }
+        set
+        {
+            exp = value;
+            if(exp >= expToNextLevel)
+            {
+                LevelUp();
+            }
+            if(OnExpChanged != null)
+            {
+                OnExpChanged(exp, expToNextLevel);
+            }
+        }
+    }
+    public int ExpToNextLevel
+    {
+        get
+        {
+            return expToNextLevel;
+        }
+        set
+        {
+            expToNextLevel = value;
+            if(OnExpChanged != null)
+            {
+                OnExpChanged(exp, expToNextLevel);
+            }
+        }
+    }
+    public int Level
+    {
+        get
+        {
+            return level;
+        }
+        set
+        {
+            level = value;
+            if(OnLevelChanged != null)
+            {
+                OnLevelChanged(level);
+            }
+        }
+    }
 
     #endregion
 
@@ -50,8 +99,14 @@ public class CharController : MonoBehaviour {
     // Delegate for Health changes
     public event System.Action<int> OnHealthChanged;
 
-    // Delegate for Healht  Juice changes
+    // Delegate for Health  Juice changes
     public event System.Action<int> OnHealthJuiceChanged;
+
+    // Delegate for Exp changes
+    public event System.Action<int, int> OnExpChanged;
+
+    // Delegate for Level changes
+    public event System.Action<int> OnLevelChanged;
 
     PlayerInput input; // Stores the input giving class
     Animator anim;
@@ -69,6 +124,8 @@ public class CharController : MonoBehaviour {
     RaycastHit2D hit; // The ray cast hit in which the enemy under attack gets stored in 
 
     // The attributes of the player
+    #region Stats and Attributes
+
     [SerializeField] int maxHealth = 100;
     private int health = 100;
 
@@ -76,10 +133,19 @@ public class CharController : MonoBehaviour {
     private int healthJuice = 100;
 
     [SerializeField] int baseAttack = 5;
+    [SerializeField] int attackPerLevelUp = 3;
     private int attack = 5;
 
     [SerializeField] int baseDefense = 5;
+    [SerializeField] int defensePerLevelUp = 3;
     private int defense = 5;
+
+    private int level = 1;
+
+    private int expToNextLevel = 0;
+    private int exp = 0;
+
+    #endregion
 
     struct PlayerRaycasts // To store the informations of raycasts around the player to calculate physics
     {
@@ -159,6 +225,11 @@ public class CharController : MonoBehaviour {
 
         // Make the player have the base attack value at start
         attack = baseAttack;
+
+        expToNextLevel = level ^2;
+        Exp = 0;
+
+        Level = 1;
     }
 
     /// <summary>
@@ -352,6 +423,18 @@ public class CharController : MonoBehaviour {
         bKnockedBack = false;
         Health = maxHealth;
         HealthJuice = maxHealthJuice;
+    }
+
+    /// <summary>
+    /// Changes the players attributes for the level up
+    /// </summary>
+    private void LevelUp()
+    {
+        Level++;
+        Exp -= expToNextLevel;
+        defense += defensePerLevelUp;
+        attack += attackPerLevelUp;
+        expToNextLevel = (int)Mathf.Pow(level, 2);
     }
 
     /// <summary>
@@ -706,7 +789,14 @@ public class CharController : MonoBehaviour {
             bKnockedBack = true;
             if (invincibilityCounter == 0)
             {
-                Health -= damage;
+                if (damage - defense > 0)
+                {
+                    Health -= damage - defense;
+                }
+                else
+                {
+                    Health--;
+                }
                 invincibilityCounter = invincibilityTime;
             }
             // Set the knockback force to be applied

@@ -34,6 +34,7 @@ public class GeneralEnemy : MonoBehaviour {
     [SerializeField] protected int health = 20;
     [SerializeField] protected int attack = 2;
     [SerializeField] protected int defense = 2;
+    [SerializeField] protected int expToGive = 3;
 
     // The amount of particles getting instantiated when the enemy dies
     [SerializeField] int particleCountAtDeath = 1;
@@ -129,6 +130,7 @@ public class GeneralEnemy : MonoBehaviour {
                 Instantiate(juiceParticle, transform.position, transform.rotation);
             }
         }
+        player.GetComponent<CharController>().Exp += expToGive;
         Destroy(gameObject);
     }
 
