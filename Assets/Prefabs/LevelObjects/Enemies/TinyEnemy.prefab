@@ -111,7 +111,7 @@ MonoBehaviour:
   cameraShakeAmount: 0.02
   amountFreezeFrames: 8
   flashDuration: 0.2
-  knockedBackDuration: 0.4
+  knockedBackDuration: 0.04
   hitRange: 0.1
   knockBackStrength: 0.003
   layersToCollideWith:

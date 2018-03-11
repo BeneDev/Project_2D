@@ -54,6 +54,8 @@ public class GeneralEnemy : MonoBehaviour {
     [SerializeField] float flashDuration = 0.2f;
     // The amount of seconds the enemy will be stunned after the knockback
     [SerializeField] float knockedBackDuration = 0.2f;
+    // The force the enemy gets knocked back
+    protected Vector3 knockBackForce;
 
     // Variables to find the player
     protected GameObject player;
@@ -63,6 +65,8 @@ public class GeneralEnemy : MonoBehaviour {
     Camera cam;
 
     protected bool bKnockedBack = false;
+    protected bool bStunned = false;
+
     [SerializeField] float hitRange = 2f;
     [SerializeField] float knockBackStrength = 3f;
 
@@ -78,7 +82,7 @@ public class GeneralEnemy : MonoBehaviour {
     /// <summary>
     /// The general things an enemy should do in his start or awake method
     /// </summary>
-    public virtual void GeneralInitialization()
+    protected virtual void GeneralInitialization()
     {
         // Find the renderer, the gui shader and the default sprite shader
         rend = gameObject.GetComponent<SpriteRenderer>();
@@ -94,7 +98,7 @@ public class GeneralEnemy : MonoBehaviour {
     /// <summary>
     /// The general things an enemy should do in his update method
     /// </summary>
-    public virtual void GeneralBehavior()
+    protected virtual void GeneralBehavior()
     {
         // Store the vector towards the player
         toPlayer = player.transform.position - transform.position;
@@ -115,7 +119,7 @@ public class GeneralEnemy : MonoBehaviour {
     /// <summary>
     /// This makes the enemy disappear and spawn juiceParticles for the player to fill up his Health Juice again
     /// </summary>
-    public virtual void Die()
+    protected virtual void Die()
     {
         if (juiceParticle)
         {
@@ -134,6 +138,7 @@ public class GeneralEnemy : MonoBehaviour {
     /// <param name="knockback"></param>
     public virtual void TakeDamage(int damageToTake, Vector3 knockback)
     {
+        knockBackForce = knockback;
         // When the damage is greater than defense, do that remaining damage
         if (damageToTake - defense > 0)
         {
@@ -150,20 +155,6 @@ public class GeneralEnemy : MonoBehaviour {
         StartCoroutine(SetBackToDefaultShader(flashDuration));
         bKnockedBack = true;
         StartCoroutine(WaitForEndKnockBack());
-        // Dont let the enemy goes through collider when knockback is applied
-        if (!Physics2D.Raycast(transform.position, knockback, knockback.magnitude, layersToCollideWith))
-        {
-            transform.position += knockback;
-        }
-        else
-        {
-            // Get Knocked back onto the wall
-            while(!Physics2D.Raycast(transform.position, knockback, knockback.magnitude / 10, layersToCollideWith))
-            {
-                transform.position += knockback / 10;
-            }
-            Health -= damageToTake;
-        }
         if(health > 0)
         {
             // Make time freeze for some frames
@@ -180,10 +171,50 @@ public class GeneralEnemy : MonoBehaviour {
         }
     }
 
+    protected void ApplyKnockBack()
+    {
+        // Dont let the enemy goes through collider when knockback is applied
+        //if (!Physics2D.Raycast(transform.position, new Vector2(knockBackForce.x, 0f), knockBackForce.magnitude, layersToCollideWith))
+        //{
+        //    transform.position += new Vector3(knockBackForce.x, 0f) * Time.deltaTime;
+        //}
+        //else
+        //{
+        //    // Get Knocked back onto the wall
+        //    if (!Physics2D.Raycast(transform.position, new Vector2(knockBackForce.x, 0f), knockBackForce.magnitude / 10, layersToCollideWith))
+        //    {
+        //        transform.position += new Vector3(knockBackForce.x / 10, 0f) * Time.deltaTime;
+        //    }
+        //    Health -= defense;
+        //}
+        if (!Physics2D.Raycast(transform.position, new Vector2(knockBackForce.x, 0f), knockBackForce.magnitude, layersToCollideWith))
+        {
+            transform.position += new Vector3(knockBackForce.x + knockBackForce.y, 0f);
+        }
+        else
+        {
+            bKnockedBack = false;
+            bStunned = true;
+            StartCoroutine(WaitForEndStunned());
+        }
+    }
+
+    IEnumerator WaitForEndStunned()
+    {
+        yield return new WaitForSeconds(knockedBackDuration* 25);
+        bStunned = false;
+    }
+
+    /// <summary>
+    /// Wait for the end of applying the knockback
+    /// </summary>
+    /// <returns></returns>
     IEnumerator WaitForEndKnockBack()
     {
         yield return new WaitForSeconds(knockedBackDuration);
         bKnockedBack = false;
+        bStunned = true;
+        StartCoroutine(WaitForEndStunned());
     }
 
     /// <summary>
@@ -217,7 +248,7 @@ public class GeneralEnemy : MonoBehaviour {
     /// Calculated the force which has to be given into the Take Damage function of the player, to cause the knockback for the player
     /// </summary>
     /// <returns></returns>
-    public Vector3 CalculateKnockback()
+    protected Vector3 CalculateKnockback()
     {
         // Sets normal knockback
         Vector3 knockBack = toPlayer.normalized * knockBackStrength;
@@ -241,7 +272,7 @@ public class GeneralEnemy : MonoBehaviour {
     /// </summary>
     /// <param name="number"></param>
     /// <returns></returns>
-    public float GetOnlyValue(float number)
+    protected float GetOnlyValue(float number)
     {
         if(number > 0)
         {

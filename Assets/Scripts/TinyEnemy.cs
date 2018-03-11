@@ -58,11 +58,15 @@ public class TinyEnemy : GeneralEnemy {
         rays.bottomMid = Physics2D.Raycast(transform.position + new Vector3(0f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
         rays.bottomLeft = Physics2D.Raycast(transform.position + new Vector3(0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
 
-        if (!bKnockedBack)
+        if (!bKnockedBack && !bStunned)
         {
             // Call the General Behavior, inherited from the GeneralEnemy Script
             GeneralBehavior();
             SimpleMove();
+        }
+        else if(bKnockedBack)
+        {
+            ApplyKnockBack();
         }
     }
 
