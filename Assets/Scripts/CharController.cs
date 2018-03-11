@@ -302,8 +302,11 @@ public class CharController : MonoBehaviour {
             }
             // Start the jumping process if wanted
             CheckForJump();
-            // Start the dodging process if wanted
-            CheckForDodge();
+            if (!bOnWall)
+            {
+                // Start the dodging process if wanted
+                CheckForDodge();
+            }
             // Checks if the player wants to attack of not
             if (input.Attack && bAttackable == true)
             {
@@ -410,6 +413,7 @@ public class CharController : MonoBehaviour {
             Respawn();
         }
 
+        // Detect Checkpoint in range and activate him
         if(WhichRaycastForTag("Checkpoint", anyRaycast) != null)
         {
             RaycastHit2D newCheckpoint = (RaycastHit2D)WhichRaycastForTag("Checkpoint", anyRaycast);
