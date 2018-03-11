@@ -204,6 +204,14 @@ public class CharController : MonoBehaviour {
 
     [SerializeField] float wallSlideSpeed = 3f; // How fast the player slides down a wall while holding towards it
 
+    #region Audio
+
+    private AudioSource audioSource;
+
+    [SerializeField] AudioClip[] audioClips;
+
+    #endregion
+
     #endregion
 
     /// <summary>
@@ -212,6 +220,7 @@ public class CharController : MonoBehaviour {
     void Start () {
         input = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         // Make the player have full health
         Health = maxHealth;
@@ -558,6 +567,15 @@ public class CharController : MonoBehaviour {
         return null;
     }
 
+    private void PlayClip(int indice)
+    {
+        audioSource.clip = audioClips[indice];
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+    }
+
     #endregion
 
     #region Debugging Tools
@@ -587,15 +605,24 @@ public class CharController : MonoBehaviour {
         {
             transform.localScale = new Vector3(-1f, 1f, 1f);
             anim.SetBool("Idling", false);
+            if (bGrounded)
+            {
+                PlayClip(0);
+            }
         }
         else if(input.Horizontal > 0)
         {
             transform.localScale = new Vector3(1f, 1f, 1f);
             anim.SetBool("Idling", false);
+            if (bGrounded)
+            {
+                PlayClip(0);
+            }
         }
         else
         {
             anim.SetBool("Idling", true);
+            audioSource.Stop();
         }
     }
 
