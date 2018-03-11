@@ -173,20 +173,6 @@ public class GeneralEnemy : MonoBehaviour {
 
     protected void ApplyKnockBack()
     {
-        // Dont let the enemy goes through collider when knockback is applied
-        //if (!Physics2D.Raycast(transform.position, new Vector2(knockBackForce.x, 0f), knockBackForce.magnitude, layersToCollideWith))
-        //{
-        //    transform.position += new Vector3(knockBackForce.x, 0f) * Time.deltaTime;
-        //}
-        //else
-        //{
-        //    // Get Knocked back onto the wall
-        //    if (!Physics2D.Raycast(transform.position, new Vector2(knockBackForce.x, 0f), knockBackForce.magnitude / 10, layersToCollideWith))
-        //    {
-        //        transform.position += new Vector3(knockBackForce.x / 10, 0f) * Time.deltaTime;
-        //    }
-        //    Health -= defense;
-        //}
         if (!Physics2D.Raycast(transform.position, new Vector2(knockBackForce.x, 0f), knockBackForce.magnitude, layersToCollideWith))
         {
             transform.position += new Vector3(knockBackForce.x + knockBackForce.y, 0f);
@@ -194,15 +180,16 @@ public class GeneralEnemy : MonoBehaviour {
         }
         else
         {
+            Health -= defense;
             bKnockedBack = false;
             bStunned = true;
-            StartCoroutine(WaitForEndStunned());
+            StartCoroutine(WaitForEndStunned(knockedBackDuration * 50));
         }
     }
 
-    IEnumerator WaitForEndStunned()
+    IEnumerator WaitForEndStunned(float stunDuration)
     {
-        yield return new WaitForSeconds(knockedBackDuration* 25);
+        yield return new WaitForSeconds(stunDuration);
         bStunned = false;
     }
 
@@ -215,7 +202,7 @@ public class GeneralEnemy : MonoBehaviour {
         yield return new WaitForSeconds(knockedBackDuration);
         bKnockedBack = false;
         bStunned = true;
-        StartCoroutine(WaitForEndStunned());
+        StartCoroutine(WaitForEndStunned(knockedBackDuration * 20));
     }
 
     /// <summary>
