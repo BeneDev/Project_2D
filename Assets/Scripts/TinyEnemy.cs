@@ -54,9 +54,9 @@ public class TinyEnemy : GeneralEnemy {
 	
 	void Update () {
         // Update all of the rays, used to check for ground under the enemy
-        rays.bottomLeft = Physics2D.Raycast(transform.position + new Vector3(-0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
+        rays.bottomRight = Physics2D.Raycast(transform.position + new Vector3(-0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
         rays.bottomMid = Physics2D.Raycast(transform.position + new Vector3(0f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
-        rays.bottomRight = Physics2D.Raycast(transform.position + new Vector3(0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
+        rays.bottomLeft = Physics2D.Raycast(transform.position + new Vector3(0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
 
         // Call the General Behavior, inherited from the GeneralEnemy Script
         GeneralBehavior();
