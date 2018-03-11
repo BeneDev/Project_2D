@@ -38,6 +38,8 @@ public class TinyEnemy : GeneralEnemy {
         public RaycastHit2D bottomLeft;
         public RaycastHit2D bottomMid;
         public RaycastHit2D bottomRight;
+        public RaycastHit2D left;
+        public RaycastHit2D right;
     }
     private Raycasts rays;
 
@@ -53,15 +55,21 @@ public class TinyEnemy : GeneralEnemy {
 	}
 	
 	void Update () {
+
+        #region Raycast Initialization
         // Update all of the rays, used to check for ground under the enemy
         rays.bottomRight = Physics2D.Raycast(transform.position + new Vector3(-0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
         rays.bottomMid = Physics2D.Raycast(transform.position + new Vector3(0f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
         rays.bottomLeft = Physics2D.Raycast(transform.position + new Vector3(0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
+        rays.left = Physics2D.Raycast(transform.position + new Vector3(0.04f, 0f), Vector2.right, 0.04f, layersToCollideWith);
+        rays.right = Physics2D.Raycast(transform.position + new Vector3(-0.04f, 0f), Vector2.left, 0.04f, layersToCollideWith);
+        #endregion
 
         if (!bKnockedBack && !bStunned)
         {
             // Call the General Behavior, inherited from the GeneralEnemy Script
             GeneralBehavior();
+            // Make the enemy move
             SimpleMove();
         }
         else if(bKnockedBack)
@@ -109,19 +117,56 @@ public class TinyEnemy : GeneralEnemy {
     //}
 
     /// <summary>
-    /// Make the enemy turn around, whenever he faces the end of the platform he's walking on
+    /// Make the enemy turn around, whenever he faces the end of the platform he's walking on or a wall in front of him
     /// </summary>
     private void SimpleMove()
     {
-        if(!rays.bottomMid)
+        // When the enemy if flying even though he shouldn't, a decision is made. This decision can be wrong. It gets checked by CheckIfStillBugged after 0.2 seconds
+        if(!rays.bottomRight && !rays.bottomLeft)
+        {
+            bLookLeft = true;
+            StartCoroutine(CheckIfStillBugged());
+        }
+        // When the enemy comes across the end of the platform he is moving on
+        else if(!rays.bottomMid)
         {
             BLookLeft = !bLookLeft;
         }
+        // When the enemy has walls either to the right or left side of him
+        if(bLookLeft)
+        {
+            if(rays.left)
+            {
+                BLookLeft = !bLookLeft;
+            }
+        }
+        else if(!bLookLeft)
+        {
+            if(rays.right)
+            {
+                BLookLeft = !bLookLeft;
+            }
+        }
+        // Applies the movement after all the checks above
         transform.position += new Vector3(moveSpeed, 0f) * transform.localScale.x;
+    }
+
+    /// <summary>
+    /// Check if the right decision was made in Simple Move as both the bottom left and bottom right raycast hit nothting. Change decision after 0.2 seconds if it was wrong
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator CheckIfStillBugged()
+    {
+        yield return new WaitForSeconds(0.2f);
+        if (!rays.bottomRight && !rays.bottomLeft)
+        {
+            bLookLeft = !BLookLeft;
+        }
     }
 
     //private void OnDrawGizmos()
     //{
-    //    Debug.DrawLine(transform.position, new Vector3(transform.position.x + 0.08f * Mathf.Cos(transform.rotation.z), transform.position.y + 0.08f * Mathf.Sin(transform.rotation.z)));
+    //    Debug.DrawRay(transform.position + new Vector3(-0.04f, 0f), Vector2.left * 0.04f);
+    //    Debug.DrawRay(transform.position + new Vector3(0.04f, 0f), Vector2.right *  0.04f);
     //}
 }
