@@ -335,7 +335,7 @@ public class CharController : MonoBehaviour {
             if(input.Heal && HealthJuice > 0 && Health < maxHealth)
             {
                 playerState = State.healing;
-                velocity = Vector3.zero;
+                velocity = new Vector3(0f, velocity.y);
                 // TODO set anim boolean to healing to change animation when there is one
                 Heal();
             }
