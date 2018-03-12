@@ -241,21 +241,21 @@ MonoBehaviour:
   defensePerLevelUp: 1
   playerState: 0
   speed: 1
-  jumpPower: 3.2
+  jumpPower: 2.8
   fallMultiplier: 0.005
-  gravity: 0.02
-  veloYLimit: -0.004
+  gravity: 0.015
+  veloYLimit: -0.0022
   knockBackCapY: 2
   knockBackDuration: 0.15
   framesFreezedAfterHit: 8
   dodgePower: 2
   dodgeUpPower: 0.3
-  dodgeCooldown: 0.1
+  dodgeCooldown: 0.03
   attackReach: 0.04
   attackVelo: {x: 5, y: 2}
-  attackCooldown: 0.1
+  attackCooldown: 0.03
   knockBackStrength: 0.05
-  upwardsVeloAfterHitDown: 0.6
+  upwardsVeloAfterHitDown: 0.45
   upwardsVeloAfterHitDownTime: 0.01
   healDuration: 30
   juiceRegenValue: 10
