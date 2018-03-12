@@ -80,7 +80,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5902073, y: 0.15902378}
     oldSize: {x: 0.122, y: 0.156}
-    newSize: {x: 0.08, y: 0.08}
+    newSize: {x: 1.04, y: 0.456}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -115,9 +115,6 @@ MonoBehaviour:
   knockedBackDuration: 0.1
   hitRange: 0.1
   knockBackStrength: 0.003
-  layersToCollideWith:
-    serializedVersion: 2
-    m_Bits: 512
   moveSpeed: 0.0018
 --- !u!212 &212492262211764102
 SpriteRenderer:
@@ -133,7 +130,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a279dcd6ab698f445b928d432f6370ed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -158,7 +155,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.08, y: 0.08}
+  m_Size: {x: 1.04, y: 0.456}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
