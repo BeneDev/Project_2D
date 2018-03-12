@@ -19,6 +19,8 @@ public class DamageNumberController : MonoBehaviour {
     private float offsetXGrouwth = 0;
 
     private GameObject objectToFollow; // The object to follow regarding the x-axis
+
+    [SerializeField] float scalingMultiplier = 0.003f; // The Multiplier with which the text will be scaled up depending on the damage value
     #endregion
 
     /// <summary>
@@ -29,7 +31,8 @@ public class DamageNumberController : MonoBehaviour {
     public void Init(int number, GameObject obj)
     {
         damageNumberText.text = number.ToString();
-        transform.localScale = new Vector3(transform.localScale.x + number * 0.01f, transform.localScale.y + number * 0.01f, transform.localScale.z + number * 0.01f);
+        // Make the text dependent on the damage value
+        transform.localScale = new Vector3(transform.localScale.x + number * scalingMultiplier, transform.localScale.y + number * scalingMultiplier, transform.localScale.z + number * scalingMultiplier);
         objectToFollow = obj;
         transform.position = obj.transform.position;
         offsetXGrouwth = Random.Range(-horizontalSpeed, horizontalSpeed);
