@@ -74,7 +74,7 @@ public class GeneralEnemy : MonoBehaviour {
     [SerializeField] float knockBackStrength = 3f;
 
     // The layer mask used to collide with only walls
-    [SerializeField] protected LayerMask layersToCollideWith;
+    protected LayerMask layersToCollideWith;
 
     private SpriteRenderer rend;
     private Shader shaderGUItext;
@@ -96,6 +96,10 @@ public class GeneralEnemy : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
 
         cam = Camera.main;
+
+        // Get the layerMask for collision
+        int layer = LayerMask.NameToLayer("Ground");
+        layersToCollideWith = 1 << layer;
     }
 
     /// <summary>
