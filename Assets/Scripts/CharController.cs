@@ -727,7 +727,7 @@ public class CharController : MonoBehaviour {
             {
                 // Calculate the direction, the player has to knock the opponent away
                 Vector3 knockDirection = hit.collider.gameObject.transform.position - transform.position;
-                hit.collider.gameObject.GetComponent<TinyEnemy>().TakeDamage(attack, knockDirection.normalized * knockBackStrength); // TODO dont search for tiny enemy, but script, inheriting from GeneralEnemy
+                hit.collider.gameObject.GetComponent<GeneralEnemy>().TakeDamage(attack, knockDirection.normalized * knockBackStrength); // TODO dont search for tiny enemy, but script, inheriting from GeneralEnemy
                 bAlreadyHit = true;
             }
         }
