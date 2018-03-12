@@ -106,6 +106,9 @@ public class CharController : MonoBehaviour {
 
     PlayerInput input; // Stores the input giving class
     Animator anim;
+    Camera cam;
+
+    float defaultSize; // the normal size of the camera
 
     [SerializeField] LayerMask layersToCollideWith;
 
@@ -198,7 +201,8 @@ public class CharController : MonoBehaviour {
 
     [SerializeField] int healDuration = 5; // The frames one has to wait in between one transfer of Health juice to health
     private int healCounter = 0; // The actual counter for the heal duration
-    [SerializeField] int juiceRegenValue = 10;
+    [SerializeField] int juiceRegenValue = 10; // The amount of Juice restored when collecting a juice particle
+    [SerializeField] float zoomAmountWhenHealing = 0.002f;
 
     [SerializeField] float invincibilityTime = 1f; // The amount of seconds, the player is invincible after getting hit
     private float invincibilityCounter = 0f; // This counts down until player can be hit again. Only if this value is 0, the player can be hit.
@@ -215,6 +219,12 @@ public class CharController : MonoBehaviour {
     #endregion
 
     #endregion
+
+    private void Awake()
+    {
+        cam = Camera.main;
+        defaultSize = cam.orthographicSize;
+    }
 
     /// <summary>
     /// Getting some references and setting the Health and HealthJuice values right
@@ -332,6 +342,10 @@ public class CharController : MonoBehaviour {
             else if(playerState == State.healing)
             {
                 playerState = State.freeToMove;
+                if (cam.orthographicSize != defaultSize)
+                {
+                    cam.orthographicSize = defaultSize;
+                }
             }
         }
 
@@ -661,15 +675,19 @@ public class CharController : MonoBehaviour {
     /// </summary>
     private void Heal()
     {
-        if(healCounter < healDuration)
+        if (Health < maxHealth)
         {
-            healCounter++;
-        }
-        else
-        {
-            healCounter = 0;
-            HealthJuice--;
-            Health++;
+            if (healCounter < healDuration)
+            {
+                healCounter++;
+            }
+            else
+            {
+                healCounter = 0;
+                HealthJuice--;
+                Health++;
+                cam.orthographicSize -= zoomAmountWhenHealing;
+            }
         }
     }
 
