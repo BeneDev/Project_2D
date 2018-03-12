@@ -169,10 +169,10 @@ MonoBehaviour:
     m_Bits: 512
   maxHealth: 100
   maxHealthJuice: 100
-  baseAttack: 5
-  attackPerLevelUp: 3
-  baseDefense: 5
-  defensePerLevelUp: 3
+  baseAttack: 3
+  attackPerLevelUp: 1
+  baseDefense: 3
+  defensePerLevelUp: 1
   playerState: 0
   speed: 1
   jumpPower: 3.2
