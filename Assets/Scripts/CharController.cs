@@ -198,6 +198,8 @@ public class CharController : MonoBehaviour {
     bool bAttackable = true; // Stores wether the player is able to attack or not
     [SerializeField] float knockBackStrength = 3f; // The amount of knockback the player is applying to hit enemies
     Vector2 attackDirection; // The direction for the raycast, checking for enemies to hit
+    [SerializeField] float upwardsVeloAfterHitDown = 0.06f; // The velocity with which the player gets pushed upwards after hitting an enemy under him with a successful attack
+    [SerializeField] float upwardsVeloAfterHitDownTime = 0.008f; // The duration the player gets pushed upwards after hitting an enemy under him with a successful attack
 
     [SerializeField] int healDuration = 5; // The frames one has to wait in between one transfer of Health juice to health
     private int healCounter = 0; // The actual counter for the heal duration
@@ -729,7 +731,20 @@ public class CharController : MonoBehaviour {
                 Vector3 knockDirection = hit.collider.gameObject.transform.position - transform.position;
                 hit.collider.gameObject.GetComponent<GeneralEnemy>().TakeDamage(attack, knockDirection.normalized * knockBackStrength); // TODO dont search for tiny enemy, but script, inheriting from GeneralEnemy
                 bAlreadyHit = true;
+                if(velocity.y < 0)
+                {
+                    StartCoroutine(ExtraUpVeloAfterHitDown(upwardsVeloAfterHitDownTime));
+                }
             }
+        }
+    }
+
+    IEnumerator ExtraUpVeloAfterHitDown(float duration)
+    {
+        for(float t = 0; t < duration; t += Time.fixedDeltaTime)
+        {
+            velocity.y += upwardsVeloAfterHitDown * Time.fixedDeltaTime;
+            yield return new WaitForEndOfFrame();
         }
     }
 
