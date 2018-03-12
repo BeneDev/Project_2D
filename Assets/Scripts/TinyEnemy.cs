@@ -65,16 +65,26 @@ public class TinyEnemy : GeneralEnemy {
         rays.right = Physics2D.Raycast(transform.position + new Vector3(-0.04f, 0f), Vector2.left, 0.04f, layersToCollideWith);
         #endregion
 
-        if (!bKnockedBack && !bStunned)
+        if (knockBackCounter <= 0f && stunnedCounter <= 0f)
         {
             // Call the General Behavior, inherited from the GeneralEnemy Script
             GeneralBehavior();
             // Make the enemy move
             SimpleMove();
         }
-        else if(bKnockedBack)
+        else if(knockBackCounter > 0)
         {
             ApplyKnockBack();
+        }
+
+        // Count down the knockbackTimer when he is above 0 and after that count down stunned timer
+        if (knockBackCounter > 0f)
+        {
+            knockBackCounter -= Time.deltaTime;
+        }
+        if (stunnedCounter > 0f && knockBackCounter <= 0f)
+        {
+            stunnedCounter -= Time.deltaTime;
         }
     }
 

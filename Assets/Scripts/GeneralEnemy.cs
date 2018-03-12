@@ -53,8 +53,9 @@ public class GeneralEnemy : MonoBehaviour {
 
     // The amount of seconds, the sprite is shown planely in white
     [SerializeField] float flashDuration = 0.2f;
-    // The amount of seconds the enemy will be stunned after the knockback
+    // The amount of seconds the knockback force will be applied
     [SerializeField] float knockedBackDuration = 0.2f;
+    // The amount of seconds the enemy will be stunned after the knockback
     protected float stunDuration;
     // The force the enemy gets knocked back
     protected Vector3 knockBackForce;
@@ -66,8 +67,8 @@ public class GeneralEnemy : MonoBehaviour {
     protected Rigidbody2D rb;
     Camera cam;
 
-    protected bool bKnockedBack = false;
-    protected bool bStunned = false;
+    protected float knockBackCounter = 0f;
+    protected float stunnedCounter = 0f;
 
     [SerializeField] float hitRange = 2f;
     [SerializeField] float knockBackStrength = 3f;
@@ -156,7 +157,7 @@ public class GeneralEnemy : MonoBehaviour {
         rend.material.shader = shaderGUItext;
         rend.color = Color.white;
         StartCoroutine(SetBackToDefaultShader(flashDuration));
-        bKnockedBack = true;
+        knockBackCounter = knockedBackDuration;
         if(health > 0)
         {
             // Make time freeze for some frames
@@ -180,35 +181,14 @@ public class GeneralEnemy : MonoBehaviour {
             transform.position += new Vector3(knockBackForce.x + knockBackForce.y, 0f);
             knockBackForce = new Vector3(knockBackForce.x * 0.9f, knockBackForce.y * 0.8f);
             stunDuration = knockedBackDuration * 12;
-            StartCoroutine(WaitForEndKnockBack());
         }
         else
         {
             Health -= defense;
-            bKnockedBack = false;
-            bStunned = true;
+            knockBackCounter = 0f;
+            stunnedCounter = knockedBackDuration * 30;
             print("stunned longer");
-            stunDuration = knockedBackDuration * 30;
-            StartCoroutine(WaitForEndStunned());
         }
-    }
-
-    IEnumerator WaitForEndStunned()
-    {
-        yield return new WaitForSeconds(stunDuration);
-        bStunned = false;
-    }
-
-    /// <summary>
-    /// Wait for the end of applying the knockback
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator WaitForEndKnockBack()
-    {
-        yield return new WaitForSeconds(knockedBackDuration);
-        bKnockedBack = false;
-        bStunned = true;
-        StartCoroutine(WaitForEndStunned());
     }
 
     /// <summary>
