@@ -306,7 +306,7 @@ public class CharController : MonoBehaviour {
 
         if (!bKnockedBack)
         {
-            if (playerState != State.healing)
+            if (playerState != State.healing && playerState != State.attacking)
             {
                 // Check for the side the player has to look or if the player should be idling
                 CheckForInput();
