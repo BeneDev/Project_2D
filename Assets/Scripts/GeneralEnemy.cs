@@ -191,7 +191,6 @@ public class GeneralEnemy : MonoBehaviour {
             knockBackCounter = 0f;
             if (Health > 0)
             {
-                print("Die immediately");
                 stunnedCounter = knockedBackDuration * 30;
             }
         }
