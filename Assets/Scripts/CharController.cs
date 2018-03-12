@@ -299,7 +299,7 @@ public class CharController : MonoBehaviour {
         // Setting the x velocity when player is not knocked back
         if (!bKnockedBack && playerState != State.attacking && playerState != State.healing)
         {
-            velocity = new Vector3(input.Horizontal * speed * Time.deltaTime, velocity.y);
+            velocity = new Vector3(input.Horizontal * speed * Time.fixedDeltaTime, velocity.y);
         }
 
         CheckGrounded();
@@ -324,11 +324,11 @@ public class CharController : MonoBehaviour {
                 Attack();
                 if (input.Horizontal != 0f || input.Vertical != 0f)
                 {
-                    appliedAttackVelo = new Vector3(input.Horizontal * appliedAttackVelo.x * Time.deltaTime, input.Vertical * appliedAttackVelo.y * Time.deltaTime);
+                    appliedAttackVelo = new Vector3(input.Horizontal * appliedAttackVelo.x * Time.fixedDeltaTime, input.Vertical * appliedAttackVelo.y * Time.fixedDeltaTime);
                 }
                 else
                 {
-                    appliedAttackVelo = new Vector3(transform.localScale.x * appliedAttackVelo.x * Time.deltaTime, 0f);
+                    appliedAttackVelo = new Vector3(transform.localScale.x * appliedAttackVelo.x * Time.fixedDeltaTime, 0f);
                 }
             }
             // Checks for input for healing
@@ -352,7 +352,7 @@ public class CharController : MonoBehaviour {
         // Apply gravity
         if (!bGrounded)
         {
-            velocity += new Vector3(0, -gravity * Time.deltaTime);
+            velocity += new Vector3(0, -gravity * Time.fixedDeltaTime);
         }
 
         // Apply attack velocity when attacking
@@ -782,7 +782,7 @@ public class CharController : MonoBehaviour {
     /// </summary>
     private void Dodge()
     {
-        velocity += new Vector3(dodgePower * transform.localScale.x * speed * Time.deltaTime, appliedDodgeUpPower * Time.deltaTime);
+        velocity += new Vector3(dodgePower * transform.localScale.x * speed * Time.fixedDeltaTime, appliedDodgeUpPower * Time.fixedDeltaTime);
         bDodgable = false;
     }
 
@@ -826,12 +826,12 @@ public class CharController : MonoBehaviour {
         // Make the player fall less fast when still holding the jump button
         if (input.Jump == 1 && !bGrounded)
         {
-            velocity += new Vector3(0f, fallMultiplier * Time.deltaTime);
+            velocity += new Vector3(0f, fallMultiplier * Time.fixedDeltaTime);
         }
         // Make the player fall faster when not holding the jump button anymore
         else if(!bGrounded)
         {
-            velocity -= new Vector3(0f, fallMultiplier * Time.deltaTime);
+            velocity -= new Vector3(0f, fallMultiplier * Time.fixedDeltaTime);
         }
     }
 
@@ -842,7 +842,7 @@ public class CharController : MonoBehaviour {
     {
         if(bGrounded)
         {
-            velocity += new Vector3(0f, jumpPower * Time.deltaTime);
+            velocity += new Vector3(0f, jumpPower * Time.fixedDeltaTime);
         }
     }
 
