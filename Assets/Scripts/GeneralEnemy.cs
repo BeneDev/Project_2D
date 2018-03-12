@@ -180,14 +180,20 @@ public class GeneralEnemy : MonoBehaviour {
         {
             transform.position += new Vector3(knockBackForce.x + knockBackForce.y, 0f);
             knockBackForce = new Vector3(knockBackForce.x * 0.9f, knockBackForce.y * 0.8f);
-            stunDuration = knockedBackDuration * 12;
+            if (Health > 0)
+            {
+                stunDuration = knockedBackDuration * 12;
+            }
         }
         else
         {
             Health -= defense;
             knockBackCounter = 0f;
-            stunnedCounter = knockedBackDuration * 30;
-            print("stunned longer");
+            if (Health > 0)
+            {
+                print("Die immediately");
+                stunnedCounter = knockedBackDuration * 30;
+            }
         }
     }
 
