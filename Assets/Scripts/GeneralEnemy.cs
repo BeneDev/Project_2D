@@ -60,6 +60,8 @@ public class GeneralEnemy : MonoBehaviour{
     // The force the enemy gets knocked back
     protected Vector3 knockBackForce;
 
+    protected bool bAlreadyDead = false;
+
     // Variables to find the player
     protected GameObject player;
     protected Vector3 toPlayer;
@@ -118,10 +120,10 @@ public class GeneralEnemy : MonoBehaviour{
         {
             player.GetComponent<CharController>().TakeDamage(attack, CalculateKnockback());
         }
-        if (Health <= 0 && Time.timeScale == 1f)
-        {
-            Die();
-        }
+        //if (Health <= 0)
+        //{
+        //    Die();
+        //}
     }
 
     #region Helper Functions
@@ -131,6 +133,11 @@ public class GeneralEnemy : MonoBehaviour{
     /// </summary>
     protected virtual void Die()
     {
+        bAlreadyDead = true;
+        // Make time freeze for more frames
+        StartCoroutine(StopTimeForFrames(amountFreezeFrames + 10));
+        // Make the camera shake more
+        cam.GetComponent<CameraShake>().shakeDuration = cameraShakeAmount * 10f;
         if (juiceParticle)
         {
             for (int i = 0; i < particleCountAtDeath; i++)
@@ -139,7 +146,6 @@ public class GeneralEnemy : MonoBehaviour{
             }
         }
         player.GetComponent<CharController>().Exp += expToGive;
-        Destroy(gameObject);
     }
 
     /// <summary>
@@ -172,13 +178,6 @@ public class GeneralEnemy : MonoBehaviour{
             // Make the camera shake
             cam.GetComponent<CameraShake>().shakeDuration = cameraShakeAmount;
         }
-        else
-        {
-            // Make time freeze for more frames
-            StartCoroutine(StopTimeForFrames(amountFreezeFrames + 10));
-            // Make the camera shake more
-            cam.GetComponent<CameraShake>().shakeDuration = cameraShakeAmount*10f;
-        }
     }
 
     protected void ApplyKnockBack()
@@ -189,7 +188,7 @@ public class GeneralEnemy : MonoBehaviour{
             knockBackForce = new Vector3(knockBackForce.x * 0.9f, knockBackForce.y * 0.8f);
             if (Health > 0)
             {
-                stunDuration = knockedBackDuration * 12;
+                stunnedCounter = knockedBackDuration * 8;
             }
         }
         else
@@ -198,7 +197,7 @@ public class GeneralEnemy : MonoBehaviour{
             knockBackCounter = 0f;
             if (Health > 0)
             {
-                stunnedCounter = knockedBackDuration * 30;
+                stunnedCounter = knockedBackDuration * 20;
             }
         }
     }

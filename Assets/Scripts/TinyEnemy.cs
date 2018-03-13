@@ -63,22 +63,33 @@ public class TinyEnemy : GeneralEnemy {
         rays.bottomRight = Physics2D.Raycast(transform.position + new Vector3(-0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
         rays.bottomMid = Physics2D.Raycast(transform.position + new Vector3(0f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
         rays.bottomLeft = Physics2D.Raycast(transform.position + new Vector3(0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
-        rays.left = Physics2D.Raycast(transform.position + new Vector3(0.04f, coll.bounds.extents.x), Vector2.right, 0.02f, layersToCollideWith);
-        rays.right = Physics2D.Raycast(transform.position + new Vector3(-0.04f, coll.bounds.extents.x), Vector2.left, 0.02f, layersToCollideWith);
-        rays.upperLeft = Physics2D.Raycast(transform.position + new Vector3(0.04f, coll.bounds.extents.x), Vector2.right, 0.02f, layersToCollideWith);
-        rays.upperRight = Physics2D.Raycast(transform.position + new Vector3(-0.04f, coll.bounds.extents.x), Vector2.left, 0.02f, layersToCollideWith);
+        rays.left = Physics2D.Raycast(transform.position + new Vector3(coll.bounds.extents.x, 0.06f), Vector2.right, 0.02f, layersToCollideWith);
+        rays.right = Physics2D.Raycast(transform.position + new Vector3(-coll.bounds.extents.x, 0.06f), Vector2.left, 0.02f, layersToCollideWith);
+        rays.upperLeft = Physics2D.Raycast(transform.position + new Vector3(coll.bounds.extents.x, 0.12f), Vector2.right, 0.02f, layersToCollideWith);
+        rays.upperRight = Physics2D.Raycast(transform.position + new Vector3(-coll.bounds.extents.x, 0.12f), Vector2.left, 0.02f, layersToCollideWith);
         #endregion
 
         if (knockBackCounter <= 0f && stunnedCounter <= 0f)
         {
             // Call the General Behavior, inherited from the GeneralEnemy Script
             GeneralBehavior();
-            // Make the enemy move
-            SimpleMove();
+            if (health > 0)
+            {
+                // Make the enemy move
+                SimpleMove();
+            }
         }
-        else if(knockBackCounter > 0)
+        else if(knockBackCounter > 0 && health > 0)
         {
             ApplyKnockBack();
+        }
+        if (health <= 0 && !bAlreadyDead)
+        {
+            Die();
+        }
+        if (Time.timeScale == 1f && bAlreadyDead)
+        {
+            Destroy(gameObject);
         }
 
         // Count down the knockbackTimer when he is above 0 and after that count down stunned timer
@@ -91,44 +102,6 @@ public class TinyEnemy : GeneralEnemy {
             stunnedCounter -= Time.deltaTime;
         }
     }
-
-    ///// <summary>
-    ///// Make the enemy Move around the platform. The generally applied gravity would be a problem for this. Postponed for undefined time.
-    ///// </summary>
-    //private void Move()
-    //{
-    //    if (BLookLeft == true)
-    //    {
-    //        if (rays.bottomMid && rays.bottomRight)
-    //        {
-    //            moveDirection = -transform.right * moveSpeed;
-    //        }
-    //        else
-    //        {
-    //            moveDirection = Vector3.zero;
-    //            if (transform.rotation.z < 90f)
-    //            {
-    //                transform.Rotate(new Vector3(0f, 0f, 1f));
-    //            }
-    //        }
-    //    }
-    //    else if (BLookLeft == false)
-    //    {
-    //        if (rays.bottomMid && rays.bottomLeft)
-    //        {
-    //            moveDirection = -transform.right * moveSpeed;
-    //        }
-    //        else
-    //        {
-    //            moveDirection = Vector3.zero;
-    //            if (transform.rotation.z > -90f)
-    //            {
-    //                transform.Rotate(new Vector3(0f, 0f, -1f));
-    //            }
-    //        }
-    //    }
-    //    transform.position += moveDirection;
-    //}
 
     /// <summary>
     /// Make the enemy turn around, whenever he faces the end of the platform he's walking on or a wall in front of him
@@ -180,7 +153,7 @@ public class TinyEnemy : GeneralEnemy {
 
     //private void OnDrawGizmos()
     //{
-    //    Debug.DrawRay(transform.position + new Vector3(-0.08f, coll.bounds.extents.x), Vector2.left * 0.02f);
-    //    Debug.DrawRay(transform.position + new Vector3(0.04f, coll.bounds.extents.x), Vector2.right * 0.02f);
+    //    Debug.DrawRay(transform.position + new Vector3(coll.bounds.extents.x, ), Vector2.left * 0.02f);
+    //    Debug.DrawRay(transform.position + new Vector3(coll.bounds.extents.x, ), Vector2.right * 0.02f);
     //}
 }
