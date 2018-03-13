@@ -90,7 +90,7 @@ public class GeneralEnemy : MonoBehaviour{
         // Find the renderer, the gui shader and the default sprite shader
         rend = gameObject.GetComponent<SpriteRenderer>();
         shaderGUItext = Shader.Find("GUI/Text Shader");
-        shaderSpritesDefault = Shader.Find("Sprites/Default");
+        shaderSpritesDefault = Shader.Find("Sprites/Diffuse");
 
         player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody2D>();
