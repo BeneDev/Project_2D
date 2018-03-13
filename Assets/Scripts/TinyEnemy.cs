@@ -40,6 +40,8 @@ public class TinyEnemy : GeneralEnemy {
         public RaycastHit2D bottomRight;
         public RaycastHit2D left;
         public RaycastHit2D right;
+        public RaycastHit2D upperLeft;
+        public RaycastHit2D upperRight;
     }
     private Raycasts rays;
 
@@ -61,8 +63,10 @@ public class TinyEnemy : GeneralEnemy {
         rays.bottomRight = Physics2D.Raycast(transform.position + new Vector3(-0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
         rays.bottomMid = Physics2D.Raycast(transform.position + new Vector3(0f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
         rays.bottomLeft = Physics2D.Raycast(transform.position + new Vector3(0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
-        rays.left = Physics2D.Raycast(transform.position + new Vector3(0.04f, 0f), Vector2.right, 0.04f, layersToCollideWith);
-        rays.right = Physics2D.Raycast(transform.position + new Vector3(-0.04f, 0f), Vector2.left, 0.04f, layersToCollideWith);
+        rays.left = Physics2D.Raycast(transform.position + new Vector3(0.04f, 0.06f), Vector2.right, 0.04f, layersToCollideWith);
+        rays.right = Physics2D.Raycast(transform.position + new Vector3(-0.04f, 0.06f), Vector2.left, 0.04f, layersToCollideWith);
+        rays.upperLeft = Physics2D.Raycast(transform.position + new Vector3(0.04f, 0.12f), Vector2.right, 0.04f, layersToCollideWith);
+        rays.upperRight = Physics2D.Raycast(transform.position + new Vector3(-0.04f, 0.12f), Vector2.left, 0.04f, layersToCollideWith);
         #endregion
 
         if (knockBackCounter <= 0f && stunnedCounter <= 0f)
@@ -145,14 +149,14 @@ public class TinyEnemy : GeneralEnemy {
         // When the enemy has walls either to the right or left side of him
         if(bLookLeft)
         {
-            if(rays.left)
+            if(rays.left || rays.upperLeft)
             {
                 BLookLeft = !bLookLeft;
             }
         }
         else if(!bLookLeft)
         {
-            if(rays.right)
+            if(rays.right || rays.upperRight)
             {
                 BLookLeft = !bLookLeft;
             }
@@ -174,9 +178,9 @@ public class TinyEnemy : GeneralEnemy {
         }
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    Debug.DrawRay(transform.position + new Vector3(-0.04f, 0f), Vector2.left * 0.04f);
-    //    Debug.DrawRay(transform.position + new Vector3(0.04f, 0f), Vector2.right *  0.04f);
-    //}
+    private void OnDrawGizmos()
+    {
+        Debug.DrawRay(transform.position + new Vector3(-0.04f, 0.12f), Vector2.left * 0.04f);
+        Debug.DrawRay(transform.position + new Vector3(0.04f, 0.12f), Vector2.right * 0.04f);
+    }
 }
