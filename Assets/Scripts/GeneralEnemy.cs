@@ -75,6 +75,7 @@ public class GeneralEnemy : MonoBehaviour{
 
     // The layer mask used to collide with only walls
     protected LayerMask layersToCollideWith;
+    protected Collider2D coll;
 
     private SpriteRenderer rend;
     private Shader shaderGUItext;
@@ -100,6 +101,8 @@ public class GeneralEnemy : MonoBehaviour{
         // Get the layerMask for collision
         int layer = LayerMask.NameToLayer("Ground");
         layersToCollideWith = 1 << layer;
+
+        coll = GetComponent<BoxCollider2D>();
     }
 
     /// <summary>

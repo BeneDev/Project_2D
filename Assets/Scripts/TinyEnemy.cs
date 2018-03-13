@@ -63,10 +63,10 @@ public class TinyEnemy : GeneralEnemy {
         rays.bottomRight = Physics2D.Raycast(transform.position + new Vector3(-0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
         rays.bottomMid = Physics2D.Raycast(transform.position + new Vector3(0f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
         rays.bottomLeft = Physics2D.Raycast(transform.position + new Vector3(0.04f, -0.02f), Vector2.down, 0.04f, layersToCollideWith);
-        rays.left = Physics2D.Raycast(transform.position + new Vector3(0.04f, 0.06f), Vector2.right, 0.04f, layersToCollideWith);
-        rays.right = Physics2D.Raycast(transform.position + new Vector3(-0.04f, 0.06f), Vector2.left, 0.04f, layersToCollideWith);
-        rays.upperLeft = Physics2D.Raycast(transform.position + new Vector3(0.04f, 0.12f), Vector2.right, 0.04f, layersToCollideWith);
-        rays.upperRight = Physics2D.Raycast(transform.position + new Vector3(-0.04f, 0.12f), Vector2.left, 0.04f, layersToCollideWith);
+        rays.left = Physics2D.Raycast(transform.position + new Vector3(0.04f, coll.bounds.extents.x), Vector2.right, 0.02f, layersToCollideWith);
+        rays.right = Physics2D.Raycast(transform.position + new Vector3(-0.04f, coll.bounds.extents.x), Vector2.left, 0.02f, layersToCollideWith);
+        rays.upperLeft = Physics2D.Raycast(transform.position + new Vector3(0.04f, coll.bounds.extents.x), Vector2.right, 0.02f, layersToCollideWith);
+        rays.upperRight = Physics2D.Raycast(transform.position + new Vector3(-0.04f, coll.bounds.extents.x), Vector2.left, 0.02f, layersToCollideWith);
         #endregion
 
         if (knockBackCounter <= 0f && stunnedCounter <= 0f)
@@ -178,9 +178,9 @@ public class TinyEnemy : GeneralEnemy {
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Debug.DrawRay(transform.position + new Vector3(-0.04f, 0.12f), Vector2.left * 0.04f);
-        Debug.DrawRay(transform.position + new Vector3(0.04f, 0.12f), Vector2.right * 0.04f);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Debug.DrawRay(transform.position + new Vector3(-0.08f, coll.bounds.extents.x), Vector2.left * 0.02f);
+    //    Debug.DrawRay(transform.position + new Vector3(0.04f, coll.bounds.extents.x), Vector2.right * 0.02f);
+    //}
 }
