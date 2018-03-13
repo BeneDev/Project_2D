@@ -251,9 +251,9 @@ MonoBehaviour:
   dodgePower: 2
   dodgeUpPower: 0.3
   dodgeCooldown: 0.03
-  attackReach: 0.04
-  attackVelo: {x: 5, y: 2}
-  attackCooldown: 0.03
+  attackReach: 0.08
+  attackVelo: {x: 5, y: 1}
+  attackCooldown: 0.06
   knockBackStrength: 0.05
   upwardsVeloAfterHitDown: 0.45
   upwardsVeloAfterHitDownTime: 0.01
