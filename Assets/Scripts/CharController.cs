@@ -652,19 +652,11 @@ public class CharController : MonoBehaviour {
         {
             transform.localScale = new Vector3(-1f, 1f, 1f);
             anim.SetBool("Idling", false);
-            if (bGrounded)
-            {
-                PlayClip(0);
-            }
         }
         else if(input.Horizontal > 0)
         {
             transform.localScale = new Vector3(1f, 1f, 1f);
             anim.SetBool("Idling", false);
-            if (bGrounded)
-            {
-                PlayClip(0);
-            }
         }
         else
         {
