@@ -108,9 +108,9 @@ public class CharController : MonoBehaviour {
     Animator anim;
     Camera cam;
 
-    float defaultSize; // the normal size of the camera
+    float defaultCamSize; // the normal size of the camera
 
-    [SerializeField] LayerMask layersToCollideWith;
+    LayerMask layersToCollideWith;
 
     bool bGrounded = false; // Stores if the player is on the ground or not
     bool bDodgeStill = false;
@@ -126,7 +126,7 @@ public class CharController : MonoBehaviour {
     // The attributes of the player
     #region Stats and Attributes
 
-    [SerializeField] int maxHealth = 100;
+    [Header("Stats"), SerializeField] int maxHealth = 100;
     private int health = 100;
 
     [SerializeField] int maxHealthJuice = 100;
@@ -170,28 +170,26 @@ public class CharController : MonoBehaviour {
     }; // State machine for the player
     public State playerState = State.freeToMove; // Stores the current state of the player
 
-    // Walking speed of the Player
-    [SerializeField] float speed = 1;
-
     // Fields to manipulate the jump
-    [SerializeField] float jumpPower = 10;
+    [Header("Jump & Physics"), SerializeField] float jumpPower = 10;
     [SerializeField] float fallMultiplier = 2f; // The higher this value, the slower the player will fall after jumping up, when still holding jump and the faster he will fall when not holding it
     [SerializeField] float gravity = 2f;
     [SerializeField] float veloYLimit = 10f; // The player cannot fall faster than this value to prevent him falling through hitboxes
 
-    [SerializeField] float knockBackCapY = 2f; // the highest velocity the player can be vertically knocked back
+    // Fields to manipulate the knockback Applied to the player
+    [Header("Knockback"), SerializeField] float knockBackCapY = 2f; // the highest velocity the player can be vertically knocked back
     [SerializeField] float knockBackDuration = 0.05f; // The amount of seconds, the player will be knocked back
     [SerializeField] int framesFreezedAfterHit = 8; // The amount of frames the player will be forced to stand still when he is being hit
 
     // Fields to manipulate the Dodge
-    [SerializeField] float dodgePower = 100f; // Force forward when dodging
+    [Header("Dodge"), SerializeField] float dodgePower = 100f; // Force forward when dodging
     [SerializeField] float dodgeUpPower = 20f; // This defines the applied Dodge Up Power
     private float appliedDodgeUpPower; // The actual force getting applied upwards when dodging
     [SerializeField] float dodgeCooldown = 1f;
     bool bDodgable = true; // Stores wether the player is able to dodge or not
 
     // Fields to manipulate the attack
-    [SerializeField] float attackReach = 0.2f; // How far the attack hitbox reaches
+    [Header("Attack"), SerializeField] float attackReach = 0.2f; // How far the attack hitbox reaches
     [SerializeField] Vector2 attackVelo; // this defines how big the actually applied force while attatcking will be
     Vector3 appliedAttackVelo; // the actual velocity which is applied to the player when attacking
     [SerializeField] float attackCooldown = 1f;
@@ -201,14 +199,17 @@ public class CharController : MonoBehaviour {
     [SerializeField] float upwardsVeloAfterHitDown = 0.06f; // The velocity with which the player gets pushed upwards after hitting an enemy under him with a successful attack
     [SerializeField] float upwardsVeloAfterHitDownTime = 0.008f; // The duration the player gets pushed upwards after hitting an enemy under him with a successful attack
 
-    [SerializeField] int healDuration = 5; // The frames one has to wait in between one transfer of Health juice to health
+    // Fields to manipulate the healing
+    [Header("Healing"), SerializeField] int healDuration = 5; // The frames one has to wait in between one transfer of Health juice to health
     private int healCounter = 0; // The actual counter for the heal duration
     [SerializeField] int juiceRegenValue = 10; // The amount of Juice restored when collecting a juice particle
     [SerializeField] float zoomAmountWhenHealing = 0.002f;
 
-    [SerializeField] float invincibilityTime = 1f; // The amount of seconds, the player is invincible after getting hit
+    [Header("General"), SerializeField] float invincibilityTime = 1f; // The amount of seconds, the player is invincible after getting hit
     private float invincibilityCounter = 0f; // This counts down until player can be hit again. Only if this value is 0, the player can be hit.
 
+    // Walking speed of the Player
+    [SerializeField] float speed = 1;
 
     [SerializeField] float wallSlideSpeed = 3f; // How fast the player slides down a wall while holding towards it
 
@@ -225,7 +226,11 @@ public class CharController : MonoBehaviour {
     private void Awake()
     {
         cam = Camera.main;
-        defaultSize = cam.orthographicSize;
+        defaultCamSize = cam.orthographicSize;
+
+        // Get the layerMask for collision
+        int layer = LayerMask.NameToLayer("Ground");
+        layersToCollideWith = 1 << layer;
     }
 
     /// <summary>
@@ -344,9 +349,9 @@ public class CharController : MonoBehaviour {
             else if(playerState == State.healing)
             {
                 playerState = State.freeToMove;
-                if (cam.orthographicSize != defaultSize)
+                if (cam.orthographicSize != defaultCamSize)
                 {
-                    cam.orthographicSize = defaultSize;
+                    cam.orthographicSize = defaultCamSize;
                 }
             }
         }
