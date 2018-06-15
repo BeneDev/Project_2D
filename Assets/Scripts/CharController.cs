@@ -190,8 +190,6 @@ public class CharController : MonoBehaviour {
 
     // Fields to manipulate the attack
     [Header("Attack"), SerializeField] float attackReach = 0.2f; // How far the attack hitbox reaches
-    [SerializeField] Vector2 attackVelo; // this defines how big the actually applied force while attatcking will be
-    Vector3 appliedAttackVelo; // the actual velocity which is applied to the player when attacking
     [SerializeField] float attackCooldown = 1f;
     bool bAttackable = true; // Stores wether the player is able to attack or not
     [SerializeField] float knockBackStrength = 3f; // The amount of knockback the player is applying to hit enemies
@@ -304,7 +302,7 @@ public class CharController : MonoBehaviour {
         #endregion
 
         // Setting the x velocity when player is not knocked back
-        if (!bKnockedBack && playerState != State.attacking && playerState != State.healing)
+        if (!bKnockedBack && playerState != State.healing)
         {
             velocity = new Vector3(input.Horizontal * speed * Time.fixedDeltaTime, velocity.y);
         }
@@ -329,14 +327,6 @@ public class CharController : MonoBehaviour {
             if (input.Attack && bAttackable == true)
             {
                 Attack();
-                if (input.Horizontal != 0f || input.Vertical != 0f)
-                {
-                    appliedAttackVelo = new Vector3(input.Horizontal * appliedAttackVelo.x * Time.fixedDeltaTime, input.Vertical * appliedAttackVelo.y * Time.fixedDeltaTime);
-                }
-                else
-                {
-                    appliedAttackVelo = new Vector3(transform.localScale.x * appliedAttackVelo.x * Time.fixedDeltaTime, 0f);
-                }
             }
             // Checks for input for healing
             if(input.Heal && HealthJuice > 0 && Health < maxHealth)
@@ -372,10 +362,6 @@ public class CharController : MonoBehaviour {
             }
             else
             {
-                velocity = Vector2.zero;
-                velocity += appliedAttackVelo;
-                appliedAttackVelo.x -= appliedAttackVelo.x / 100;
-                appliedAttackVelo.y -= appliedAttackVelo.y / 100;
                 AttackHitboxOut(attackDirection);
             }
         }
@@ -707,7 +693,6 @@ public class CharController : MonoBehaviour {
         {
             attackDirection = new Vector2(transform.localScale.x, 0f);
         }
-        appliedAttackVelo = attackVelo;
         bAttackable = false;
         anim.SetBool("Attacking", true);
         playerState = State.attacking;
@@ -836,12 +821,7 @@ public class CharController : MonoBehaviour {
             Jump();
         }
         // Make the player fall less fast when still holding the jump button
-        if (input.Jump == 1 && !bGrounded)
-        {
-            velocity += new Vector3(0f, fallMultiplier * Time.fixedDeltaTime);
-        }
-        // Make the player fall faster when not holding the jump button anymore
-        else if(!bGrounded)
+        if (input.Jump != 1 && !bGrounded)
         {
             velocity -= new Vector3(0f, fallMultiplier * Time.fixedDeltaTime);
         }

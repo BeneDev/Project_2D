@@ -230,9 +230,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 811e684c12cee1f46b729fd855823b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layersToCollideWith:
-    serializedVersion: 2
-    m_Bits: 512
   maxHealth: 100
   maxHealthJuice: 100
   baseAttack: 3
@@ -240,27 +237,27 @@ MonoBehaviour:
   baseDefense: 3
   defensePerLevelUp: 1
   playerState: 0
-  speed: 1
-  jumpPower: 2.8
-  fallMultiplier: 0.005
-  gravity: 0.015
+  jumpPower: 2
+  fallMultiplier: 0.002
+  gravity: 0.006
   veloYLimit: -0.0022
   knockBackCapY: 2
   knockBackDuration: 0.15
   framesFreezedAfterHit: 8
-  dodgePower: 2
-  dodgeUpPower: 0.3
+  dodgePower: 1.5
+  dodgeUpPower: 0.15
   dodgeCooldown: 0.03
   attackReach: 0.08
   attackVelo: {x: 5, y: 1}
   attackCooldown: 0.06
   knockBackStrength: 0.05
-  upwardsVeloAfterHitDown: 0.45
+  upwardsVeloAfterHitDown: 0.25
   upwardsVeloAfterHitDownTime: 0.01
   healDuration: 30
   juiceRegenValue: 10
   zoomAmountWhenHealing: 0.0004
   invincibilityTime: 1
+  speed: 1
   wallSlideSpeed: 0.0001
   audioClips:
   - {fileID: 8300000, guid: a9990e0ed89c7d44c87d64136f872bb8, type: 3}
